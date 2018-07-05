@@ -1,4 +1,4 @@
-Package: INWTRSync
+Package: rsync
 Type: Package
 Title: Provides functionality of RSync 
 Version: 0.1.0

@@ -1,14 +1,16 @@
 library(yaml)
 
-context("INWTrsync")
+context("RsyncServer")
 
+modules::extend(RsyncServer, {
   expectTrue <- function(a) testthat::expect_true(a)
 
-  serverTesting$host =      read_yaml("~/.rsync/rsync.yaml")[[1]]
-  serverTesting$name =      read_yaml("~/.rsync/rsync.yaml")[[2]]
-  serverTesting$password =  read_yaml("~/.rsync/rsync.yaml")[[3]]
-  serverTesting$url =       read_yaml("~/.rsync/rsync.yaml")[[4]]
-
+  serverTesting <- RsyncServer$const(
+    host =   read_yaml("~/.rsync/rsync.yaml")[[1]],
+    name =   read_yaml("~/.rsync/rsync.yaml")[[2]],
+    password =  read_yaml("~/.rsync/rsync.yaml")[[3]],
+    url =   read_yaml("~/.rsync/rsync.yaml")[[4]]
+  )
 
   expectTrue(grepl("rsync://", serverTesting$host))
   expectTrue(is.character(serverTesting$host))
@@ -75,3 +77,6 @@ context("INWTrsync")
   expectTrue(nrow(ls(sendFile(serverTesting, paste0(dirName, "/", "lst.json")))) == 1)
   expectTrue(base::identical(lst, get(serverTesting, "lst.json")))
   expectTrue(nrow(ls(deleteAllEntries(serverTesting))) == 0)
+
+
+})

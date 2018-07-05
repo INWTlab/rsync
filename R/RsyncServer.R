@@ -102,7 +102,7 @@ RsyncServer <- modules::module(topEncl = .GlobalEnv, {
   rsyncFile <- function(db, file, args) {
     pre <- sprintf("RSYNC_PASSWORD=\"%s\"", db$password)
     to <- paste0(db$host, db$name)
-    INWTRSync::rsync(file, to, args = args, pre = pre)
+    rsync::rsync(file, to, args = args, pre = pre)
   }
 
   rsyncSuccessful <- function(localFile, remoteFile) {

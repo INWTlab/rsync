@@ -1,4 +1,4 @@
 library(testthat)
 
 
-test_check("INWTRSync")
+test_check("rsync")
