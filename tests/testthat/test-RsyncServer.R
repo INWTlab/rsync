@@ -3,6 +3,8 @@ context("RsyncServer")
 modules::extend(RsyncServer, {
   expectTrue <- function(a) testthat::expect_true(a)
 
+  source("../config.R")
+
   serverTesting <- RsyncServer$const(
     host = hostURL,
     name = nameServer,
