@@ -1,15 +1,15 @@
+library(yaml)
+
 context("RsyncServer")
 
 modules::extend(RsyncServer, {
   expectTrue <- function(a) testthat::expect_true(a)
 
-  source("../config.R")
-
   serverTesting <- RsyncServer$const(
-    host = hostURL,
-    name = nameServer,
-    password = passwordServer,
-    url = urlServer
+    host =   read_yaml("~/.rsync/rsync.yaml")[[1]],
+    name =   read_yaml("~/.rsync/rsync.yaml")[[2]],
+    password =  read_yaml("~/.rsync/rsync.yaml")[[3]],
+    url =   read_yaml("~/.rsync/rsync.yaml")[[4]]
   )
 
   expectTrue(grepl("rsync://", serverTesting$host))
