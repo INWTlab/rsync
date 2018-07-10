@@ -2,11 +2,16 @@
 #'
 #' API to use rsync as persistent file and object storage.
 #'
+#' @param host (character) the url, where the host file is stored
+#' @param name (character) the name of the target server
+#' @param password (character) the password to the corresponding target server
+#' @param url (character) the url to the corresponding target server
+#'
+#' @details
 #' \describe{
-#' \item{connection(host, name, password, url)}{
-#'   Connection for a RsyncServer. All arguments are characters.
+#'  Connection for a RsyncServer. All arguments are characters.
 #' }
-#' }
+#'
 #'
 #' @export
 connection <- function(host, name, password, url) {
@@ -22,10 +27,11 @@ connection <- function(host, name, password, url) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
+#' @param db RsyncServer object , returning: 'name', 'lastModified' and 'size'
+#'
+#' @details
 #' \describe{
-#' \item{ls(db)}{
-#'   Returns a data.frame with the elements in the rsync storage.
-#' }
+#' Returns a data.frame with the elements in the rsync storage.
 #' }
 #'
 #' @export
@@ -49,10 +55,13 @@ ls <- function(db) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
+#' @param db RsyncServer object , returning: 'name', 'lastModified' and 'size'
+#' @param entryName Name of the entry to be deleted
+#' @param verbose (logical) default = FALSE
+#'
+#' @details
 #' \describe{
-#' \item{delete(db, entryName)}{
 #'   The entryName is specified as returned by ls.
-#' }
 #' }
 #'
 #' @export
@@ -74,10 +83,13 @@ delete <- function(db, entryName, verbose = FALSE) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
+#' @param db RsyncServer object , returning: 'name', 'lastModified' and 'size'
+#' @param verbose (logical) default = FALSE
+#'
+#'
+#' @details
 #' \describe{
-#' \item{deleteAllEntries(db)}{
 #'   ...
-#' }
 #' }
 #'
 #' @export
@@ -91,13 +103,17 @@ deleteAllEntries <- function(db, verbose = FALSE) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
+#' @param db RsyncServer object , returning: 'name', 'lastModified' and 'size'
+#' @param file file to be sent (i.e .txt file, .R file, etc.)
+#' @param validate (logical) default: TRUE,
+#' @param verbose (logical) default: FALSE
+#'
+#' @details
 #' \describe{
-#' \item{sendFile(db, file, validate = TRUE, verbose = TRUE)}{
 #'   Sends a file (file in local file system) to db. If validate is TRUE the
 #'   hash-sum of the remote file is compared to the local version. A warning is
 #'   issued should the differ. The return status of the command line rsync is
 #'   returned by this function.
-#' }
 #' }
 #'
 #' @export
@@ -113,10 +129,13 @@ sendFile <- function(db, file, validate = TRUE, verbose = FALSE) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
+#' @param db RsyncServer object , returning: 'name', 'lastModified' and 'size'
+#' @param file file to be synced (i.e .txt file, .R file, etc.)
+#' @param args (character) more arguments
+#'
+#' @details
 #' \describe{
-#' \item{rsyncFile(db, file, args)}{
 #'   Syncs a file to a db
-#' }
 #' }
 #'
 #' @export
@@ -130,10 +149,12 @@ rsyncFile <- function(db, file, args) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
+#' @param localFile source file
+#' @param remoteFile target file
+#'
+#' @details
 #' \describe{
-#' \item{deleteAllEntries(db)}{
-#'   Tests if two files are exactly identical. It returns TRUE in this case, FALSE in every other case.
-#' }
+#'   Tests if two files are synced successfully. It returns TRUE in this case, FALSE in every other case.
 #' }
 #'
 #' @export
@@ -145,10 +166,12 @@ rsyncSuccessful <- function(localFile, remoteFile) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
+#' @param localFile source file
+#' @param remoteFile target file
+#'
+#' @details
 #' \describe{
-#' \item{identical(localFile, remoteFile)}{
-#'   ...
-#' }
+#' Tests if two files are exactly identical. It returns TRUE in this case, FALSE in every other case.
 #' }
 #'
 #' @export
@@ -164,11 +187,15 @@ identical <- function(localFile, remoteFile) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
+#' @param db RsyncServer object , returning: 'name', 'lastModified' and 'size'
+#' @param obj R object to be sent to db
+#' @param objName name of 'obj'
+#' @param ... more arguments
+#'
+#' @details
 #' \describe{
-#' \item{sendObject(db, obj, ...)}{
 #'   Send an R object to db. This is a wrapper around \code{sendFile}.
 #'   \code{...} are passed to \code{sendFile}.
-#' }
 #' }
 #'
 #' @export
@@ -183,12 +210,18 @@ sendObject <- function(db, obj, objName = as.character(substitute(obj)), ...) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
+#' @param db RsyncServer object , returning: 'name', 'lastModified' and 'size'
+#' @param folder folder, of which the content shall be sent
+#' @param ... more arguments
+#' @param validate (logical) default = TRUE
+#' @param verbose (logical) default = TRUE
+#'
+#'
+#' @details
 #' \describe{
-#' \item{sendFolder(db, folder, ..., validate = TRUE, verbose = TRUE)}{
 #'   Sends the content of a folder to db using \code{sendFile}. \code{...} are
 #'   passed to \link{dir}. \code{validate} and \code{verbose} are as in
 #'   \code{sendFile}.
-#' }
 #' }
 #'
 #' @export
@@ -202,14 +235,18 @@ sendFolder <- function(db, folder, ..., validate = TRUE, verbose = FALSE) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
+#' @param db RsyncServer object , returning: 'name', 'lastModified' and 'size'
+#' @param entryName Name of the entry in db
+#' @param file (character)  default= NULL
+#' @param ... more arguments
+#'
+#' @details
 #' \describe{
-#' \item{get(db, entryName, file = NULL, ..., loader)}{
 #'   If \code{file} is a character the entry is saved there first. Then it is
 #'   tried to load that file into R and return it from this function. This is
 #'   implemented for csv, json and Rdata files. \code{...} are passed to
 #'   \link{download.file} which is only used in case \code{file} is not
 #'   \code{NULL}.
-#' }
 #' }
 #'
 #' @export
@@ -231,10 +268,11 @@ get <- function(db, entryName, file = NULL, ...) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
+#' @param address from where the object shall be loaded
+#'
+#' @details
 #' \describe{
-#' \item{loadrdata(address)}{
-#'   ...
-#' }
+#'   loads a R data object
 #' }
 #'
 #' @export
@@ -249,10 +287,12 @@ loadrdata <- function(address) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
+#' @param file file of type .csv
+#' @param ... more arguments
+#'
+#' @details
 #' \describe{
-#' \item{loadcsv(file, ...)}{
-#'   ...
-#' }
+#' loads a csv file
 #' }
 #'
 #' @export
@@ -265,10 +305,12 @@ loadcsv <- function(file, ...) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
+#' @param file file of type json
+#' @param ... more arguments
+#'
+#' @details
 #' \describe{
-#' \item{loadjson(file, ...)}{
-#'   ...
-#' }
+#' loads a json file
 #' }
 #'
 #' @export
@@ -282,10 +324,12 @@ loadjson <- function(file, ...) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
+#' @param x RsyncServer object
+#' @param ... more arguments
+#'
+#' @details
 #' \describe{
-#' \item{print.RsyncServer(x, ...)}{
-#'   ...
-#' }
+#' prints the RsyncServer object
 #' }
 #'
 #' @export
@@ -302,10 +346,12 @@ print.RsyncServer <- function(x, ...) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
+#' @param x RsyncServer object
+#' @param ... more arguments
+#'
+#' @details
 #' \describe{
-#' \item{as.character.RsyncServer(x, ...)}{
-#'   ...
-#' }
+#' converts a RsynsServer object to a character
 #' }
 #'
 #' @export

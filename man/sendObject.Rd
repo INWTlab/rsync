@@ -6,14 +6,21 @@
 \usage{
 sendObject(db, obj, objName = as.character(substitute(obj)), ...)
 }
+\arguments{
+\item{db}{RsyncServer object , returning: 'name', 'lastModified' and 'size'}
+
+\item{obj}{R object to be sent to db}
+
+\item{objName}{name of 'obj'}
+
+\item{...}{more arguments}
+}
 \description{
 API to use rsync as persistent file and object storage.
 }
 \details{
 \describe{
-\item{sendObject(db, obj, ...)}{
   Send an R object to db. This is a wrapper around \code{sendFile}.
   \code{...} are passed to \code{sendFile}.
-}
 }
 }

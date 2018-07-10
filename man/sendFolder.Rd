@@ -6,15 +6,24 @@
 \usage{
 sendFolder(db, folder, ..., validate = TRUE, verbose = FALSE)
 }
+\arguments{
+\item{db}{RsyncServer object , returning: 'name', 'lastModified' and 'size'}
+
+\item{folder}{folder, of which the content shall be sent}
+
+\item{...}{more arguments}
+
+\item{validate}{(logical) default = TRUE}
+
+\item{verbose}{(logical) default = TRUE}
+}
 \description{
 API to use rsync as persistent file and object storage.
 }
 \details{
 \describe{
-\item{sendFolder(db, folder, ..., validate = TRUE, verbose = TRUE)}{
   Sends the content of a folder to db using \code{sendFile}. \code{...} are
   passed to \link{dir}. \code{validate} and \code{verbose} are as in
   \code{sendFile}.
-}
 }
 }
