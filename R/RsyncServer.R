@@ -40,12 +40,7 @@
 #' }
 #'
 #' @export
-RsyncServer <- modules::module(topEncl = .GlobalEnv, {
 
-  export(
-    "const", "ls", "delete", "deleteAllEntries", "sendFile",
-    "sendFolder", "sendObject", "get"
-  )
 
   const <- function(host, name, password, url) {
     # validate input here
@@ -159,7 +154,7 @@ RsyncServer <- modules::module(topEncl = .GlobalEnv, {
     jsonlite::read_json(file, simplifyVector = TRUE, ...)
   }
 
-})
+
 
 #' @export
 print.RsyncServer <- function(x, ...) {
@@ -178,3 +173,4 @@ as.character.RsyncServer <- function(x, ...) {
   names(ret) <- names(x)
   ret
 }
+
