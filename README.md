@@ -1,14 +1,18 @@
 ## RSync-Package of INWT
 
-In this project we provide functionalites of Rsync for INWT project. 
+In this project we provide functionalites of Rsync for INWT project.
 
 
 ## Why using Rsync:
 
-....
+Rsync is a tool, which is used with Unix systems and allows efficient transferring and synchronizing of files across computer systems. 
 
 
 ## How to use Rsync:
+
+The Rsync functionality can be used in two ways: 
+1) directely transferring / synchronizing files or 
+2) using Rsync in combination with a server
 
 Use the `rsync`function in the following way: 
 
