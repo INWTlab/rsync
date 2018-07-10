@@ -15,9 +15,10 @@ Imports:
     rvest (>= 0.3.2),
     tibble (>= 1.4.2),
     xml2 (>= 1.2.0),
-    utils (>= 3.4.4)
+    utils (>= 3.4.4) 
 Copyright: (c) 2018 INWT Statistics GmbH. All Rights Reserved.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
+
