@@ -1,3 +1,6 @@
+[![Travis-CI Build Status](https://travis-ci.org//INWTlab/rsync.svg?branch=master)](https://travis-ci.org/INWTlab/rsync)
+
+
 ## RSync-Package of INWT
 
 In this project we provide functionalites of Rsync for INWT project.
