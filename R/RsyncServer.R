@@ -154,7 +154,7 @@ rsyncFile <- function(db, file, args) {
 #'
 #' @details
 #' \describe{
-#'   Tests if two files are synced successfully. It returns TRUE in this case, FALSE in every other case.
+#'   Tests if the sync process was successfull. It returns TRUE in this case, FALSE in every other case.
 #' }
 #'
 #' @export

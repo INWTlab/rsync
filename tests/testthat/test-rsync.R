@@ -1,4 +1,5 @@
 library(yaml)
+library(testthat)
 
 context("RsyncServer")
 
