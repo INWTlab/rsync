@@ -69,16 +69,25 @@ urlServer: "https://url-to-Server.de"
 
 The remote version of `rsync` makes use of multiple function:
 
-`rsync::connection()` establishes a connection to the remote server. All arguments `host`, `name`, `password`, `url` are characters.
+`rsync::connection()` establishes a connection to the remote server. All arguments `host`, `name`, `password`, `url` are characters. This function must access the credentials information stored in the previously created config file `rsync.yaml`.
 ```
 rsync::connection(host, name, password, url)
-
+```
+Example:
+```
+rsync::connection(
+    host     = read_yaml("~/.rsync/rsync.yaml")[[1]],
+    name     = read_yaml("~/.rsync/rsync.yaml")[[2]],
+    password = read_yaml("~/.rsync/rsync.yaml")[[3]],
+    url      = read_yaml("~/.rsync/rsync.yaml")[[4]]
+    ) 
 ```
 
-`rsync::ls(db)` calls the objects in the rsync storage from the data base and returns them as a data frame.
+
+
+`rsync::ls(db)` calls the objects in the rsync storage from the data base and returns them as a data frame. `db`
 ```
 rsync::ls(db)
-
 ```
 
 
