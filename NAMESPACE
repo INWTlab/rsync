@@ -2,7 +2,6 @@
 
 S3method(as.character,RsyncServer)
 S3method(print,RsyncServer)
-export(RsyncServer)
 export(connection)
 export(delete)
 export(deleteAllEntries)

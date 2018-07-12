@@ -4,7 +4,7 @@
 ## RSync-Package of INWT
 
 In this project we provide functionalites of Rsync for INWT project.
-
+For further information see this link: https://rsync.samba.org/
 
 ## Why using Rsync:
 

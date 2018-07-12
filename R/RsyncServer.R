@@ -339,7 +339,7 @@ print.RsyncServer <- function(x, ...) {
   xchar <- paste0("\n  ", xchar)
   xchar <- paste(xchar, collapse = "")
   cat("Rsync server:", xchar, "\n")
-  print(RsyncServer$ls(x), ...)
+  print(ls(x), ...)
 }
 
 #' Rsync API
