@@ -35,7 +35,7 @@ The rsync functionality can be used in two ways:
   1) directely transferring / synchronizing files locally
       
       
-  2) transferring files from a local host to a remote host
+  2) transferring / synchronizing files from a local host to a remote host
     
 
 ## Installation:
