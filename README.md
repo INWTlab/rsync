@@ -79,16 +79,106 @@ rsync::connection(
     host     = read_yaml("~/.rsync/rsync.yaml")[[1]],
     name     = read_yaml("~/.rsync/rsync.yaml")[[2]],
     password = read_yaml("~/.rsync/rsync.yaml")[[3]],
-    url      = read_yaml("~/.rsync/rsync.yaml")[[4]]
-    ) 
+    url      = read_yaml("~/.rsync/rsync.yaml")[[4]]) 
+```
+Outout:
+```
+Rsync server: 
+  host: rsync://example-url-of-host.de/
+  name: exampleServerName
+  password: ****
+  url: https://url-to-Server.de/
 ```
 
 
-
-`rsync::ls(db)` calls the objects in the rsync storage from the data base and returns them as a data frame. `db`
+`rsync::ls()` calls the objects in the rsync storage from the data base and returns them as a data frame. `db`
 ```
 rsync::ls(db)
 ```
+
+`rsync::delete()` deletes an entry in the data base.
+```
+rsync::delete(db, entryName, verbose = FALSE)
+```
+
+`rsync::deleteAllEntries()` deletes all entries in the data base
+```
+rsync::deleteAllEntries(db, verbose = FALSE)
+``` 
+
+`rsync::sendFile()` sends a locally stored file to a data base. If validate is TRUE the hash-sum of the remote file is compared to the local version. A warning is issued should the differ.
+
+```
+rsync::sendFile(db, file, validate = TRUE, verbose = FALSE)
+```
+
+
+`rsync::rsyncFile()` syncs a (local) file to the server that is specified in the config file. 
+```
+rsync::rsyncFile(db, file, args)
+```
+
+`rsync::rsyncSuccessful()` tests if the sync process was successfull. It returns TRUE in this case, FALSE in every other case.
+```
+rsync::rsyncSuccessful(localFile, remoteFile)
+```
+
+`rsync::identical()` tests if two files are synced successfully. It returns TRUE in this case, FALSE in every other case.
+```
+rsync::identical(localFile, remoteFile)
+```
+
+`rsync::sendObject()` Send an R object to db. This is a wrapper around \code{sendFile}
+```
+rsync::sendObject(db, obj, objName = as.character(substitute(obj)), ...)
+```
+
+
+
+`rsync::sendFolder()` Sends the content of a folder to a data base using \code{sendFile}
+```
+rsync::sendFolder(db, folder, ..., validate = TRUE, verbose = FALSE)
+```
+
+`rsync::get()` If \code{file} is a character the entry is saved there first. Then it is
+   tried to load that file into R and return it from this function. This is
+   implemented for csv, json and Rdata files. \code{...} are passed to
+   \link{download.file} which is only used in case \code{file} is not
+   \code{NULL}.
+   
+```
+rsync::get(db, entryName, file = NULL, ...)
+```
+
+
+`rsync::loadrdata()` loads a R data object
+```
+rsync::loadrdata(address)
+```
+
+
+`rsync::loadcsv()` loads a csv file
+```
+rsync::loadcsv(address)
+```
+
+
+`rsync::loadjson()` loads a json file
+```
+rsync::loadjson(address)
+```
+
+
+`rsync::print.RsyncServer()` prints the name of the RsyncServer object
+```
+rsync::print.RsyncServer(x)
+```
+
+`rsync::print.as.character.RsyncServer()` converts a RsynsServer object to a character
+```
+rsync::print.as.character.RsyncServer(x)
+```
+
 
 
 
