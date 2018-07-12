@@ -44,18 +44,20 @@ source("https://github.com/INWTlab/rsync")  #NOCH ZU ÄNDERN (oder tar.gz Datei 
 
 ## How to use Rsync:
 
-For using `rsync` locally use the following function:
+#### Local
+For using `rsync` locally, use the following function:
 ```
 rsync(from = "SyncTest/Testfile1.R", to = "SyncDestination/")
 ```
 It takes two arguments, namely `from` which specifies the  source destination and `to`, which defines the final destination. This functions behaves more like an improved copy command. 
 
+#### Global
 
-For using `rsync` remotely a set of functions is relevant:
-The remote-version requires some preparation.Credentials regarding the remote server must be stored in a config file in a user's home directory.
+For using `rsync` remotely a preparational step is neccessary. Credentials regarding the remote server must be stored in a config file in a user's home directory.
 Within the home directory a hidden folder must be created, following the name `.rsync`. Within this folder a file must be stored that is named `rsync.yaml`.
 
-The `rsync.yaml` file needs to have the following structure, where the right side of the `:` must be replaced by the corresponding information of the user's server.
+The `rsync.yaml` file needs to have the following structure, where the right side of the `:` in each row must be replaced by the corresponding information of the user's server.
+
 
 ```
 hostURL: "rsync://example-url-of-host.de"
@@ -65,8 +67,19 @@ urlServer: "https://url-to-Server.de"
 ```
 
 
+The remote version of `rsync` makes use of multiple function:
 
+`rsync::connection()` establishes a connection to the remote server. All arguments `host`, `name`, `password`, `url` are characters.
+```
+rsync::connection(host, name, password, url)
 
+```
+
+`rsync::ls(db)` calls the objects in the rsync storage from the data base and returns them as a data frame.
+```
+rsync::ls(db)
+
+```
 
 
 
