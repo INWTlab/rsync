@@ -23,7 +23,7 @@ Working with Rsync offers nice benefits, as it is:
 
 For further information about the original source of Rsync, please see this link: https://rsync.samba.org/
 
-##Features:
+## Features:
 The rsync functionality can be used in two ways: 
   1) directely transferring / synchronizing files locally
      `rsync:` 
@@ -35,25 +35,27 @@ The rsync functionality can be used in two ways:
     `rsync::...`
     
 
-##Installation:
+## Installation:
 The rsync package can be downloaded and installed by running the following command from within R:
 ```
-source("https://github.com/INWTlab/rsync")  #NOCH ZU ÄNDERN
+source("https://github.com/INWTlab/rsync")  #NOCH ZU ÄNDERN (oder tar.gz Datei laden?)
 ```
 
 
 ## How to use Rsync:
 
-
-
-Use the `rsync`function in the following way: 
-
+For using `rsync` locally use the following function:
 ```
 rsync(from = "SyncTest/Testfile1.R", to = "SyncDestination/")
 ```
+It takes two arguments, namely `from` which specifies the  source destination and `to`, which defines the final destination. This functions behaves more like an improved copy command. 
 
-In order to use rsync with a server, credentials must be stored in the home directory under the folder `.rsync` and the file name `rsync.yaml`.
-The `rsync.yaml` file needs to have the following structure:
+
+For using `rsync` remotely a set of functions is relevant:
+The remote-version requires some preparation.Credentials regarding the remote server must be stored in a config file in a user's home directory.
+Within the home directory a hidden folder must be created, following the name `.rsync`. Within this folder a file must be stored that is named `rsync.yaml`.
+
+The `rsync.yaml` file needs to have the following structure, where the right side of the `:` must be replaced by the corresponding information of the user's server.
 
 ```
 hostURL: "rsync://example-url-of-host.de"
