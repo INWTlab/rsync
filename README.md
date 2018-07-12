@@ -1,4 +1,4 @@
-
+  
 [![Travis-CI Build Status](https://travis-ci.org//INWTlab/rsync.svg?branch=master)](https://travis-ci.org/INWTlab/rsync)
 
 
@@ -40,14 +40,16 @@ source("https://github.com/INWTlab/rsync")  #NOCH ZU ÄNDERN (oder tar.gz Datei 
 
 ## How to use Rsync:
 
-#### Local
+### Local
 For using `rsync` locally, use the following function:
 ```
 rsync(from = "SyncTest/Testfile1.R", to = "SyncDestination/")
 ```
 It takes two arguments, namely `from` which specifies the  source destination and `to`, which defines the final destination. This functions behaves more like an improved copy command. 
 
-#### Global
+### Global
+
+#### Preparation
 
 For using `rsync` remotely a preparational step is neccessary. Credentials regarding the remote server must be stored in a config file in a user's home directory.
 Within the home directory a hidden folder must be created, following the name `.rsync`. Within this folder a file must be stored that is named `rsync.yaml`.
@@ -62,6 +64,7 @@ passwordServer:  "examplePassword1234"
 urlServer: "https://url-to-Server.de"
 ```
 
+#### Usage
 
 The remote version of `rsync` makes use of multiple function:
 
@@ -87,7 +90,7 @@ Rsync server:
 ```
 
 
-`rsync::ls()` calls the objects in the rsync storage from the data base and returns them as a data frame. `db`
+`rsync::ls()` calls the objects in the rsync storage from the data base and returns them as a data frame.
 ```
 rsync::ls(db)
 ```
@@ -124,23 +127,23 @@ rsync::rsyncSuccessful(localFile, remoteFile)
 rsync::identical(localFile, remoteFile)
 ```
 
-`rsync::sendObject()` Send an R object to db. This is a wrapper around \code{sendFile}
+`rsync::sendObject()` Send an R object to db. This is a wrapper around `sendFile`
 ```
 rsync::sendObject(db, obj, objName = as.character(substitute(obj)), ...)
 ```
 
 
 
-`rsync::sendFolder()` Sends the content of a folder to a data base using \code{sendFile}
+`rsync::sendFolder()` Sends the content of a folder to a data base using `sendFile`
 ```
 rsync::sendFolder(db, folder, ..., validate = TRUE, verbose = FALSE)
 ```
 
-`rsync::get()` If \code{file} is a character the entry is saved there first. Then it is
+`rsync::get()` If `file` is a character the entry is saved there first. Then it is
    tried to load that file into R and return it from this function. This is
-   implemented for csv, json and Rdata files. \code{...} are passed to
-   \link{download.file} which is only used in case \code{file} is not
-   \code{NULL}.
+   implemented for csv, json and Rdata files. `...` are passed to
+   `download.file` which is only used in case `file` is not
+   `NULL`.
    
 ```
 rsync::get(db, entryName, file = NULL, ...)
