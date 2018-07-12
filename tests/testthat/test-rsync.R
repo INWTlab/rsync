@@ -13,6 +13,9 @@ context("RsyncServer")
     url =   read_yaml("~/.rsync/rsync.yaml")[[4]]
   )
 
+  #test if file exists
+  expectTrue(length(read.config(file="~/.rsync/rsync.yaml")) != 0)
+
   expectTrue(grepl("rsync://", serverTesting$host))
   expectTrue(is.character(serverTesting$host))
   expectTrue(grepl("https://", serverTesting$url))

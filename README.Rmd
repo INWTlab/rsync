@@ -33,13 +33,9 @@ For further information about the original source of Rsync, please see this link
 ## Features:
 The rsync functionality can be used in two ways: 
   1) directely transferring / synchronizing files locally
-     `rsync:` 
+      
       
   2) transferring files from a local host to a remote host
-    `rsync::...`
-    `rsync::...`
-    `rsync::...`
-    `rsync::...`
     
 
 ## Installation:

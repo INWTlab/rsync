@@ -21,7 +21,6 @@ Suggests:
     testthat,
     knitr,
     rmarkdown
-Copyright: (c) 2018 INWT Statistics GmbH. All Rights Reserved.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

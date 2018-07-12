@@ -17,19 +17,15 @@ Working with Rsync offers nice benefits, as it is:
   - minimizes data transfer, as it only transfers the changes within the files 
   - supports copying links, devices, owners, groups, and permissions
 
-For further information about the original source of Rsync, please see this link: https://rsync.samba.org/
+For further information about the original source of rsync, please see this link: https://rsync.samba.org/
 
 ## Features:
 The rsync functionality can be used in two ways: 
   1) directely transferring / synchronizing files locally
-     `rsync:` 
+     
       
   2) transferring files from a local host to a remote host
-    `rsync::...`
-    `rsync::...`
-    `rsync::...`
-    `rsync::...`
-    
+   
 
 ## Installation:
 The rsync package can be downloaded and installed by running the following command from within R:
