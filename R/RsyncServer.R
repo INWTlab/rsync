@@ -23,6 +23,10 @@ connection <- function(host, name, password, url) {
 }
 
 
+
+#Github Test!
+
+
 #' Rsync API
 #'
 #' API to use rsync as persistent file and object storage.
