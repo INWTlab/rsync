@@ -2,7 +2,11 @@
 % Please edit documentation in R/RsyncServer.R
 \name{rsyncSuccessful}
 \alias{rsyncSuccessful}
-\title{Rsync API}
+\title{#' @export
+rsyncFile <- function(db, ...) {
+  UseMethod("rsyncFile", db)
+}
+Rsync API}
 \usage{
 rsyncSuccessful(localFile, remoteFile)
 }
@@ -10,11 +14,38 @@ rsyncSuccessful(localFile, remoteFile)
 \item{localFile}{source file}
 
 \item{remoteFile}{target file}
+
+\item{db}{RsyncServer object , returning: 'name', 'lastModified' and 'size'}
+
+\item{file}{file to be synced (i.e .txt file, .R file, etc.)}
+
+\item{args}{(character) more arguments}
 }
 \description{
 API to use rsync as persistent file and object storage.
 }
 \details{
+\describe{
+  Syncs a file to a db
+}
+
+#' @export
+rsyncFile.L2R <- function(db, file, args) {
+  pre <- sprintf("RSYNC_PASSWORD=\"%s\"", db$password)
+  to <- paste0(db$host, db$name)
+  rsync::rsync(file, to, args = args, pre = pre)
+}
+#' @export
+rsyncFile.R2L <- function(db, file, localDir, args) {
+  #pre <- sprintf("RSYNC_PASSWORD=\"%s\"", db$password)
+  file <- paste0(db$url,"/", file)
+  to <- localDir
+  rsync::rsync(file, to, args = args) #pre = pre
+}
+Rsync API
+
+API to use rsync as persistent file and object storage.
+
 \describe{
   Tests if the sync process was successfull. It returns TRUE in this case, FALSE in every other case.
 }

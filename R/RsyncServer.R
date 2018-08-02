@@ -1,3 +1,20 @@
+
+
+#' @export
+connection <-function(type, host, name, password, url) {
+  # validate input here
+  host <- paste0(sub("/$", "", host), "/")
+  name <- sub("^/", "", name)
+  url <- paste0(sub("/$", "", url), "/")
+
+  if(type == "R2L") aoos::retList("R2L")
+  else if(type == "L2R") aoos::retList("L2R")
+  else if(type == "L2L") print("not yet built")
+  else warning("unknown connection type")
+}
+
+
+
 #' Rsync API
 #'
 #' API to use rsync as persistent file and object storage.
@@ -13,19 +30,28 @@
 #' }
 #'
 #'
+#' #' @export
+#' connectionOld <- function(host, name, password, url) {
+#'   # validate input here
+#'   host <- paste0(sub("/$", "", host), "/")
+#'   name <- sub("^/", "", name)
+#'   url <- paste0(sub("/$", "", url), "/")
+#'   aoos::retList("RsyncServer")
+#' }
+
+#' #' @export
+#' connectionL2R <- function(host, name, password, url) {
+#'   # validate input here
+#'   host <- paste0(sub("/$", "", host), "/")
+#'   name <- sub("^/", "", name)
+#'   url <- paste0(sub("/$", "", url), "/")
+#'   aoos::retList("L2R")
+#' }
+
 #' @export
-connection <- function(host, name, password, url) {
-  # validate input here
-  host <- paste0(sub("/$", "", host), "/")
-  name <- sub("^/", "", name)
-  url <- paste0(sub("/$", "", url), "/")
-  aoos::retList("RsyncServer")
+listEntries <- function(db, ...) {
+  UseMethod("listEntries", db)
 }
-
-
-
-#Github Test!
-
 
 #' Rsync API
 #'
@@ -39,7 +65,7 @@ connection <- function(host, name, password, url) {
 #' }
 #'
 #' @export
-ls <- function(db) {
+listEntries.L2R <- function(db) {
   ## db (RsyncServer)
   ## return data.frame(name, lastModified, size)
   dat <- xml2::read_html(db$url)
@@ -55,6 +81,31 @@ ls <- function(db) {
   tibble::as.tibble(dat)
 }
 
+
+#' @export
+listEntries.R2L <- function(db) {
+  ## db (RsyncServer)
+  ## return data.frame(name, lastModified, size)
+  dat <- xml2::read_html(db$url)
+  dat <- rvest::html_table(dat)
+  dat <- as.data.frame(dat)
+  dat <- dat[, c("Name", "Last.modified", "Size")]
+  names(dat) <- c("name", "lastModified", "size")
+  dat <- dat[dat$name != "Parent Directory", ]
+  dat <- dat[dat$name != "", ]
+  dat <- dat[order(dat$lastModified, decreasing = TRUE), ]
+  row.names(dat) <- NULL
+  dat$lastModified <- as.POSIXct(dat$lastModified)
+  tibble::as.tibble(dat)
+}
+
+
+#' @export
+deleteEntry <- function(db, ...) {
+  UseMethod("deleteEntry", db)
+}
+
+
 #' Rsync API
 #'
 #' API to use rsync as persistent file and object storage.
@@ -69,7 +120,7 @@ ls <- function(db) {
 #' }
 #'
 #' @export
-delete <- function(db, entryName, verbose = FALSE) {
+deleteEntry.L2R <- function(db, entryName, verbose = FALSE) {
   if (length(entryName) == 0) return(db)
   on.exit(try(file.remove(emptyDir), silent = TRUE))
   entryName <- basename(entryName)
@@ -81,6 +132,28 @@ delete <- function(db, entryName, verbose = FALSE) {
   dir.create(emptyDir)
   rsyncFile(db, emptyDir, args = args)
   db
+}
+
+
+#' @export
+deleteEntry.R2L <- function(db, entryName, verbose = FALSE) {
+  if (length(entryName) == 0) return(db)
+  on.exit(try(file.remove(emptyDir), silent = TRUE))
+  entryName <- basename(entryName)
+  args <- if (verbose) "-rvv --delete" else "-r --delete"
+  includes <- paste(paste0("--include", " \"", entryName, "\""), collapse = " ")
+  excludes <- "--exclude \"*\""
+  args <- paste(args, includes, excludes)
+  emptyDir <- paste0(tempdir(), "/empty/")
+  dir.create(emptyDir)
+  rsyncFile(db, emptyDir, args = args)
+  db
+}
+
+
+#' @export
+deleteAllEntries <- function(db, ...) {
+  UseMethod("deleteAllEntries", db)
 }
 
 #' Rsync API
@@ -97,10 +170,25 @@ delete <- function(db, entryName, verbose = FALSE) {
 #' }
 #'
 #' @export
-deleteAllEntries <- function(db, verbose = FALSE) {
-  dat <- ls(db)
-  lapply(dat$name, delete, db = db, verbose = verbose)
+deleteAllEntries.L2R <- function(db, verbose = FALSE) {
+  dat <- listEntries(db)
+  lapply(dat$name, deleteEntry, db = db, verbose = verbose)
   db
+}
+
+
+
+#' @export
+deleteAllEntries.R2L <- function(db, verbose = FALSE) {
+  dat <- listEntries(db)
+  lapply(dat$name, deleteEntry, db = db, verbose = verbose)
+  db
+}
+
+
+#' @export
+sendFile <- function(db, ...) {
+  UseMethod("sendFile", db)
 }
 
 #' Rsync API
@@ -121,13 +209,39 @@ deleteAllEntries <- function(db, verbose = FALSE) {
 #' }
 #'
 #' @export
-sendFile <- function(db, file, validate = TRUE, verbose = FALSE) {
+sendFile.L2R <- function(db, file, validate = TRUE, verbose = FALSE) {
   file <- normalizePath(file, mustWork = TRUE)
   args <- if (verbose) "-ltvvx" else "-ltx"
   lapply(file, rsyncFile, db = db, args = args)
-  if (validate) rsyncSuccessful(file, paste0(db$url, "/", basename(file)))
-  db
+ # if (validate) rsyncSuccessful(file, paste0(db$url, "/", basename(file)))
+ db
 }
+
+
+#' @export
+sendFile.R2L <- function(db, file, localDir, validate = TRUE, verbose = FALSE) {
+  file <- normalizePath(file, mustWork = TRUE)
+  args <- if (verbose) "-ltvvx" else "-ltx"
+  localDir <- localDir
+  db$localDir <- localDir
+  lapply(file, rsyncFile, db = db, args = args)
+  #if (validate) rsyncSuccessful(file, paste0(db$url, "/", basename(file)))
+  list.files(localDir)
+  db
+
+}
+
+#' @export
+rsyncFile <- function(db, file, args) {
+  pre <- sprintf("RSYNC_PASSWORD=\"%s\"", db$password)
+  to <-  paste0(db$host, db$name) #db$localDir
+  rsync::rsync(file, to, args = args, pre = pre)
+}
+
+      #' #' @export
+      #' rsyncFile <- function(db, ...) {
+      #'   UseMethod("rsyncFile", db)
+      #' }
 
 #' Rsync API
 #'
@@ -142,12 +256,20 @@ sendFile <- function(db, file, validate = TRUE, verbose = FALSE) {
 #'   Syncs a file to a db
 #' }
 #'
-#' @export
-rsyncFile <- function(db, file, args) {
-  pre <- sprintf("RSYNC_PASSWORD=\"%s\"", db$password)
-  to <- paste0(db$host, db$name)
-  rsync::rsync(file, to, args = args, pre = pre)
-}
+        #' #' @export
+        #' rsyncFile.L2R <- function(db, file, args) {
+        #'   pre <- sprintf("RSYNC_PASSWORD=\"%s\"", db$password)
+        #'   to <- paste0(db$host, db$name)
+        #'   rsync::rsync(file, to, args = args, pre = pre)
+        #' }
+
+        #' #' @export
+        #' rsyncFile.R2L <- function(db, file, localDir, args) {
+        #'   #pre <- sprintf("RSYNC_PASSWORD=\"%s\"", db$password)
+        #'   file <- paste0(db$url,"/", file)
+        #'   to <- localDir
+        #'   rsync::rsync(file, to, args = args) #pre = pre
+        #' }
 
 #' Rsync API
 #'
@@ -163,7 +285,7 @@ rsyncFile <- function(db, file, args) {
 #'
 #' @export
 rsyncSuccessful <- function(localFile, remoteFile) {
-  mapply(identical, localFile = localFile, remoteFile = remoteFile)
+  mapply(identicalEntries, localFile = localFile, remoteFile = remoteFile)
 }
 
 #' Rsync API
@@ -179,13 +301,20 @@ rsyncSuccessful <- function(localFile, remoteFile) {
 #' }
 #'
 #' @export
-identical <- function(localFile, remoteFile) {
+identicalEntries <- function(localFile, remoteFile) {
   on.exit({try(silent = TRUE, {close(loc); close(rem)})})
   loc <- file(localFile, open = "rb")
   rem <- url(remoteFile, open = "rb")
   if (!base::identical(openssl::sha256(loc), openssl::sha256(rem)))
     warning(sprintf("%s: Local and remote file are not the same!", localFile))
 }
+
+
+#' @export
+sendObject <- function(db, ...) {
+  UseMethod("sendObject", db)
+}
+
 
 #' Rsync API
 #'
@@ -203,7 +332,15 @@ identical <- function(localFile, remoteFile) {
 #' }
 #'
 #' @export
-sendObject <- function(db, obj, objName = as.character(substitute(obj)), ...) {
+sendObject.L2R <- function(db, obj, objName = as.character(substitute(obj)), ...) {
+  assign(objName, obj)
+  save(list = objName, file = file <- paste0(tempdir(), "/", objName, ".Rdata"), compress = TRUE)
+  sendFile(db, file, ...)
+  db
+}
+
+#' @export
+sendObject.R2L <- function(db, obj, objName = as.character(substitute(obj)), ...) {
   assign(objName, obj)
   save(list = objName, file = file <- paste0(tempdir(), "/", objName, ".Rdata"), compress = TRUE)
   sendFile(db, file, ...)
@@ -254,7 +391,7 @@ sendFolder <- function(db, folder, ..., validate = TRUE, verbose = FALSE) {
 #' }
 #'
 #' @export
-get <- function(db, entryName, file = NULL, ...) {
+getEntry <- function(db, entryName, file = NULL, ...) {
   ## retrun: in case of csv: data.frame; in case of rdata or json: list
   address <- paste0(db$url, entryName)
   if (!is.null(file)) return(download.file(address, file))
@@ -343,8 +480,30 @@ print.RsyncServer <- function(x, ...) {
   xchar <- paste0("\n  ", xchar)
   xchar <- paste(xchar, collapse = "")
   cat("Rsync server:", xchar, "\n")
-  print(ls(x), ...)
+  print(listEntries(x), ...)
 }
+
+
+#' @export
+print.L2R <- function(x, ...) {
+  xchar <- as.character(x)
+  xchar <- paste(names(xchar), xchar, sep = ": ")
+  xchar <- paste0("\n  ", xchar)
+  xchar <- paste(xchar, collapse = "")
+  cat("Rsync server:", xchar, "\n")
+  print(listEntries(x), ...)
+}
+
+#' @export
+print.R2L <- function(x, ...) {
+  xchar <- as.character(x)
+  xchar <- paste(names(xchar), xchar, sep = ": ")
+  xchar <- paste0("\n  ", xchar)
+  xchar <- paste(xchar, collapse = "")
+  cat("Rsync server:", xchar, "\n")
+  print(listEntries(x), ...)
+}
+
 
 #' Rsync API
 #'
@@ -365,4 +524,23 @@ as.character.RsyncServer <- function(x, ...) {
   names(ret) <- names(x)
   ret
 }
+
+
+#' @export
+as.character.L2R <- function(x, ...) {
+  x$password <- "****"
+  ret <- as.character.default(x)
+  names(ret) <- names(x)
+  ret
+}
+
+
+#' @export
+as.character.R2L <- function(x, ...) {
+  x$password <- "****"
+  ret <- as.character.default(x)
+  names(ret) <- names(x)
+  ret
+}
+
 
