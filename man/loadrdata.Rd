@@ -4,7 +4,7 @@
 \alias{loadrdata}
 \title{Rsync API}
 \usage{
-loadrdata(address)
+loadrdata(db, ...)
 }
 \arguments{
 \item{address}{from where the object shall be loaded}

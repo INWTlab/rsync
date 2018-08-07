@@ -4,7 +4,7 @@ library(testthat)
 context("RsyncServer")
 
 
-serverTestingL2R <- rsync::connection( type = "L2R",
+serverTestingRsyncDHTTP <- rsync::connection( type = "RsyncDHTTP",
                        host =   read_yaml("~/.inwt/rsync/config.yaml")[[1]],
                        name =   read_yaml("~/.inwt/rsync/config.yaml")[[2]],
                        password =  read_yaml("~/.inwt/rsync/config.yaml")[[3]],
@@ -12,38 +12,22 @@ serverTestingL2R <- rsync::connection( type = "L2R",
 
 
 
-serverTestingR2L <- rsync::connection( type = "R2L",
+serverTestingRsyncD <- rsync::connection( type = "RsyncD",
                              host =   read_yaml("~/.inwt/rsync/config.yaml")[[1]],
                              name =   read_yaml("~/.inwt/rsync/config.yaml")[[2]],
                              password =  read_yaml("~/.inwt/rsync/config.yaml")[[3]],
-                             url =   read_yaml("~/.inwt/rsync/config.yaml")[[4]])
+                             url =  "" ) #read_yaml("~/.inwt/rsync/config.yaml")[[4]]
 
   expectTrue <- function(a) testthat::expect_true(a)
 
-  #old
 
-                  #  serverTesting <- connectionL2R(
-                  #   host =   read_yaml("~/.inwt/rsync/config.yaml")[[1]],
-                  #   name =   read_yaml("~/.inwt/rsync/config.yaml")[[2]],
-                  #   password =  read_yaml("~/.inwt/rsync/config.yaml")[[3]],
-                  #   url =   read_yaml("~/.inwt/rsync/config.yaml")[[4]]
-                  # )
+#Tests for RsyncDHTTP
 
-                  # serverTestingOld <- connectionOld(
-                  #   host =   read_yaml("~/.inwt/rsync/config.yaml")[[1]],
-                  #   name =   read_yaml("~/.inwt/rsync/config.yaml")[[2]],
-                  #   password =  read_yaml("~/.inwt/rsync/config.yaml")[[3]],
-                  #   url =   read_yaml("~/.inwt/rsync/config.yaml")[[4]]
-                  # )
-
-
-#Tests for L2R
-
-  expectTrue(grepl("rsync://", serverTestingL2R$host))
-  expectTrue(is.character(serverTestingL2R$host))
-  expectTrue(grepl("https://", serverTestingL2R$url))
-  expectTrue(is.character(serverTestingL2R$url))
-  expectTrue(is.character(serverTestingL2R$name))
+  expectTrue(grepl("rsync://", serverTestingRsyncDHTTP$host))
+  expectTrue(is.character(serverTestingRsyncDHTTP$host))
+  expectTrue(grepl("https://", serverTestingRsyncDHTTP$url))
+  expectTrue(is.character(serverTestingRsyncDHTTP$url))
+  expectTrue(is.character(serverTestingRsyncDHTTP$name))
 
 
 
@@ -55,18 +39,18 @@ serverTestingR2L <- rsync::connection( type = "R2L",
   save(list = "x", file = paste0(dirName, "/", "x.Rdata"))
   save(list = "y", file = paste0(dirName, "/", "y.Rdata"))
 
-  expectTrue(nrow(listEntries(rsync::deleteAllEntries(serverTestingL2R))) == 0)
+  expectTrue(nrow(listEntries(rsync::deleteAllEntries(serverTestingRsyncDHTTP))) == 0)
 
-  expectTrue(nrow(listEntries(rsync::sendFile(serverTestingL2R, paste0(dirName, "/", "y.Rdata")))) == 1)
+  expectTrue(nrow(listEntries(rsync::sendFile(serverTestingRsyncDHTTP, paste0(dirName, "/", "y.Rdata")))) == 1)
 
-  # expectTrue(nrow(listEntries(rsync::sendFile(serverTestingL2R, paste0(dirName, "/", "xy.Rdata")))) == 1)
+  # expectTrue(nrow(listEntries(rsync::sendFile(serverTestingRsyncDHTTP, paste0(dirName, "/", "xy.Rdata")))) == 1)
 
-  expectTrue(nrow(listEntries(rsync::sendFolder(serverTestingL2R, dirName, pattern = "*.Rdata"))) == 2)
-  expectTrue(rsync::getEntry(serverTestingL2R, "x.Rdata")$x == 1)
+  expectTrue(nrow(listEntries(rsync::sendFolder(serverTestingRsyncDHTTP, dirName, pattern = "*.Rdata"))) == 2)
+  expectTrue(rsync::getEntry(serverTestingRsyncDHTTP, "x.Rdata")$x == 1)
 
   # validate
   local <- function(file) paste0(dirName, "/", file)
-  remote <- function(file) paste0(serverTestingL2R$url, file)
+  remote <- function(file) paste0(serverTestingRsyncDHTTP$url, file)
 
   testthat::expect_warning(
     rsyncSuccessful(local("x.Rdata"), remote("y.Rdata")),
@@ -75,17 +59,17 @@ serverTestingR2L <- rsync::connection( type = "R2L",
   testthat::expect_null(unlist(rsyncSuccessful(local("y.Rdata"), remote("y.Rdata"))))
 
   # delete
-  expectTrue(nrow(listEntries(deleteEntry(serverTestingL2R, "x.Rdata"))) == 1)
-  expectTrue(nrow(listEntries(deleteAllEntries(serverTestingL2R))) == 0)
+  expectTrue(nrow(listEntries(deleteEntry(serverTestingRsyncDHTTP, "x.Rdata"))) == 1)
+  expectTrue(nrow(listEntries(deleteAllEntries(serverTestingRsyncDHTTP))) == 0)
 
   # send two files at once, validate results
-  expectTrue(nrow(listEntries(sendFile(serverTestingL2R, paste0(dirName, "/", c("x", "y"), ".Rdata")))) == 2)
-  expectTrue(nrow(listEntries(deleteAllEntries(serverTestingL2R))) == 0)
+  expectTrue(nrow(listEntries(sendFile(serverTestingRsyncDHTTP, paste0(dirName, "/", c("x", "y"), ".Rdata")))) == 2)
+  expectTrue(nrow(listEntries(deleteAllEntries(serverTestingRsyncDHTTP))) == 0)
 
   z <- 3
-  expectTrue(nrow(listEntries(sendObject(serverTestingL2R, z))) == 1)
-  expectTrue(getEntry(serverTestingL2R, "z.Rdata")$z == 3)
-  expectTrue(nrow(listEntries(deleteEntry(serverTestingL2R, "z.Rdata"))) == 0)
+  expectTrue(nrow(listEntries(sendObject(serverTestingRsyncDHTTP, z))) == 1)
+  expectTrue(getEntry(serverTestingRsyncDHTTP, "z.Rdata")$z == 3)
+  expectTrue(nrow(listEntries(deleteEntry(serverTestingRsyncDHTTP, "z.Rdata"))) == 0)
 
   # check for csv
   dat <- data.frame(
@@ -95,9 +79,9 @@ serverTestingR2L <- rsync::connection( type = "R2L",
     stringsAsFactors = FALSE
   )
   data.table::fwrite(dat, file = paste0(dirName, "/", "dat.csv"))
-  expectTrue(nrow(listEntries(sendFile(serverTestingL2R, paste0(dirName, "/", "dat.csv")))) == 1)
-  expectTrue(base::identical(dat, getEntry(serverTestingL2R, "dat.csv")))
-  expectTrue(nrow(listEntries(deleteAllEntries(serverTestingL2R))) == 0)
+  expectTrue(nrow(listEntries(sendFile(serverTestingRsyncDHTTP, paste0(dirName, "/", "dat.csv")))) == 1)
+  expectTrue(base::identical(dat, getEntry(serverTestingRsyncDHTTP, "dat.csv")))
+  expectTrue(nrow(listEntries(deleteAllEntries(serverTestingRsyncDHTTP))) == 0)
 
   # check for json
   lst <- list(
@@ -105,9 +89,9 @@ serverTestingR2L <- rsync::connection( type = "R2L",
     date = "2017-01-01"
   )
   jsonlite::write_json(lst, path = paste0(dirName, "/", "lst.json"))
-  expectTrue(nrow(listEntries(sendFile(serverTestingL2R, paste0(dirName, "/", "lst.json")))) == 1)
-  expectTrue(base::identical(lst, getEntry(serverTestingL2R, "lst.json")))
-  expectTrue(nrow(listEntries(deleteAllEntries(serverTestingL2R))) == 0)
+  expectTrue(nrow(listEntries(sendFile(serverTestingRsyncDHTTP, paste0(dirName, "/", "lst.json")))) == 1)
+  expectTrue(base::identical(lst, getEntry(serverTestingRsyncDHTTP, "lst.json")))
+  expectTrue(nrow(listEntries(deleteAllEntries(serverTestingRsyncDHTTP))) == 0)
 
 
 
@@ -115,18 +99,21 @@ serverTestingR2L <- rsync::connection( type = "R2L",
 
 
 
-#test R2L connection
-  #create serverR2LHelper to make sure a file to send exists
+#test RsyncD connection
+  #small mistake as in ls function
+
+
+  #create serverRsyncDHelper to make sure a file to send exists
   dirName <- tempdir()
 
-  serverR2LHelper <- connection( type = "L2R",
-                                 host = serverTestingR2L$host,
-                                 name = serverTestingR2L$name,
-                                 password = serverTestingR2L$password,
-                                 url =   serverTestingR2L$url)
+  serverRsyncDHelper <- connection( type = "RsyncDHTTP",
+                                 host = serverTestingRsyncD$host,
+                                 name = serverTestingRsyncD$name,
+                                 password = serverTestingRsyncD$password,
+                                 url =   "")
 
 
-  expectTrue(nrow(listEntries(deleteAllEntries(serverR2LHelper))) == 0)
+  expectTrue(nrow(listEntries(deleteAllEntries(serverRsyncDHelper))) == 0)
 
   x <- 1
   y <- 2
@@ -134,25 +121,87 @@ serverTestingR2L <- rsync::connection( type = "R2L",
   save(list = "y", file = paste0(dirName, "/", "y.Rdata"))
 
 
-  expectTrue(nrow(listEntries(rsync::sendFile(serverR2LHelper, paste0(dirName, "/", "y.Rdata")))) == 1)
-  expectTrue(nrow(listEntries(rsync::sendFolder(serverR2LHelper, dirName, pattern = "*.Rdata"))) == 3)
+  expectTrue(nrow(listEntries(rsync::sendFile(serverRsyncDHelper, paste0(dirName, "/", "y.Rdata")))) == 1)
+  expectTrue(nrow(listEntries(rsync::sendFolder(serverRsyncDHelper, dirName, pattern = "*.Rdata"))) == 3)
 
 
 
-  # #actual test for R2L
-  # #Baustelle
-  # # expectTrue(nrow(listEntries(rsync::sendFile(serverTestingR2L, paste0(dirName, "/", "y.Rdata")))) == 1)
-  # rsync::sendFile(serverTestingR2L, paste0(dirName, "/", "y.Rdata"))
-  #
-  # #works:
-  # rsync::rsync(from = paste0(dirName, "/", "y.Rdata") , to = "~/Netzfreigaben/Git_TEX/PlayWith/SyncDestination/")
-  #
-  #
-  # rsync::sendFile(db = serverTestingR2L, localDir = "~/Netzfreigaben/Git_TEX/PlayWith/SyncDestination/", file = paste0(dirName, "/",  "y.Rdata"))
-  # expectTrue(file.exists(file = paste0( "~/Netzfreigaben/Git_TEX/PlayWith/SyncDestination/",  "y.Rdata")))
-#
-#   expectTrue(nrow(listEntries(rsync::sendFolder(serverTestingR2L, dirName, pattern = "*.Rdata"))) == 2)
+#####
+#make the section for RsyncLL first
+  dirName <- tempdir()
+  x <- 1
+  y <- 2
+  save(list = "x", file = paste0(dirName, "/", "x.Rdata"))
+  save(list = "y", file = paste0(dirName, "/", "y.Rdata"))
 
+  serverTestingRsyncL <- rsync::connection( type = "RsyncL",
+                                            from = paste0(dirName, "/", "x.Rdata"),
+                                            to = paste0(dirName, "/", "neu/"))
+
+
+  #delete all Entries:
+  expectTrue(length(listEntries(rsync::deleteAllEntries(serverTestingRsyncL))) == 0)
+  #sendFile
+  expectTrue(length(listEntries(rsync::sendFile(serverTestingRsyncL))) == 1)
+
+
+  #sendFolder
+  serverTestingRsyncL$from <- paste0(dirName, "/", "y.Rdata")
+  expectTrue(length(listEntries(rsync::sendFile(serverTestingRsyncL))) == 2)
+  expectTrue(length(listEntries(rsync::sendFolder(serverTestingRsyncL, dirName, pattern = "*.Rdata"))) == 2)  #here length instead of nrow neccessary
+
+  #get
+  expectTrue(rsync::getEntry(serverTestingRsyncL, "y.Rdata")$y == 2)
+
+
+
+
+
+
+
+#Baustelle
+
+########
+#tests for rsyncD
+
+  dirName <- tempdir()
+  # In case we run these Tests multiple times in a row:
+  file.remove(dir(dirName, "Rdata|csv|json", full.names = TRUE))
+  x <- 1
+  y <- 2
+  save(list = "x", file = paste0(dirName, "/", "x.Rdata"))
+  save(list = "y", file = paste0(dirName, "/", "y.Rdata"))
+
+  # expectTrue(nrow(listEntries(rsync::deleteAllEntries(serverTestingRsyncD))) == 0)
+  # expectTrue(nrow(listEntries(rsync::sendFile(serverTestingRsyncDHTTP, paste0(dirName, "/", "y.Rdata")))) == 1)
+
+  #Baustelle:
+#list files
+  to <- "/home/dberscheid/Netzfreigaben/Git_TEX/PlayWith/SyncDestination"
+  system(paste("ls", to))
+
+
+#sende Datei von ordner zu R deamon
+  sendFile(serverTestingRsyncD, file = "/home/dberscheid/Netzfreigaben/Git_TEX/PlayWith/SyncDestination/Testfile2.R")
+
+  listEntries(serverTestingRsyncD)
+
+  command <- " RSYNC_PASSWORD=\"usf8atgsat7865Gzd.sfrsr52ru\" rsync -av /home/dberscheid/Netzfreigaben/Git_TEX/PlayWith/SyncDestination/Testfile2.R rsync://tipico-rsync@inwt-vmeh2.inwt.de/Sports-Testing"
+
+  system(command, intern = FALSE, wait = TRUE, ignore.stdout = FALSE, ignore.stderr = FALSE)
+
+
+
+#sende Datei zurück
+  command <- " RSYNC_PASSWORD=\"usf8atgsat7865Gzd.sfrsr52ru\" rsync  -rtv  rsync://tipico-rsync@inwt-vmeh2.inwt.de/Sports-Testing/y.Rdata /home/dberscheid/Netzfreigaben/Git_TEX/PlayWith/SyncDestination"
+  system(command, intern = FALSE, wait = TRUE, ignore.stdout = FALSE, ignore.stderr = FALSE)
+
+
+  rsync::sendFile((serverTestingRsyncD, paste0(dirName, "/", "y.Rdata")))
+
+  rsync::deleteAllEntries((serverTestingRsyncD))
+
+  length(listEntries(serverTestingRsyncD)) == 1 #listEntries is working
 
 
 

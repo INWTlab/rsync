@@ -4,16 +4,16 @@
 \alias{getEntry}
 \title{Rsync API}
 \usage{
-getEntry(db, entryName, file = NULL, ...)
+getEntry(db, ...)
 }
 \arguments{
 \item{db}{RsyncServer object , returning: 'name', 'lastModified' and 'size'}
 
+\item{...}{more arguments}
+
 \item{entryName}{Name of the entry in db}
 
 \item{file}{(character)  default= NULL}
-
-\item{...}{more arguments}
 }
 \description{
 API to use rsync as persistent file and object storage.
