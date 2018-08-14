@@ -4,12 +4,12 @@
 \alias{loadjson}
 \title{Rsync API}
 \usage{
-loadjson(file, ...)
+loadjson(db, ...)
 }
 \arguments{
-\item{file}{file of type json}
-
 \item{...}{more arguments}
+
+\item{file}{file of type json}
 }
 \description{
 API to use rsync as persistent file and object storage.
@@ -18,4 +18,6 @@ API to use rsync as persistent file and object storage.
 \describe{
 loads a json file
 }
+
+#' @export
 }

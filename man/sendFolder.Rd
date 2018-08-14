@@ -4,14 +4,14 @@
 \alias{sendFolder}
 \title{Rsync API}
 \usage{
-sendFolder(db, folder, ..., validate = TRUE, verbose = FALSE)
+sendFolder(db, ...)
 }
 \arguments{
 \item{db}{RsyncServer object , returning: 'name', 'lastModified' and 'size'}
 
-\item{folder}{folder, of which the content shall be sent}
-
 \item{...}{more arguments}
+
+\item{folder}{folder, of which the content shall be sent}
 
 \item{validate}{(logical) default = TRUE}
 

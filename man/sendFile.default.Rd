@@ -4,7 +4,8 @@
 \alias{sendFile.default}
 \title{Rsync API}
 \usage{
-\method{sendFile}{default}(db, file, validate = TRUE, verbose = FALSE)
+\method{sendFile}{default}(db, file, validate = TRUE, verbose = FALSE,
+  to = "")
 }
 \arguments{
 \item{db}{RsyncServer object , returning: 'name', 'lastModified' and 'size'}

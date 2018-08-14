@@ -4,12 +4,12 @@
 \alias{loadcsv}
 \title{Rsync API}
 \usage{
-loadcsv(file, ...)
+loadcsv(db, ...)
 }
 \arguments{
-\item{file}{file of type .csv}
-
 \item{...}{more arguments}
+
+\item{file}{file of type .csv}
 }
 \description{
 API to use rsync as persistent file and object storage.

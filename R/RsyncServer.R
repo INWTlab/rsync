@@ -83,27 +83,26 @@ listEntries.default <- function(db) {
   pre <- sprintf("RSYNC_PASSWORD=\"%s\"", db$password)
   to <-  paste0(db$host, db$name)
 
-  print("files of rsync deamon:")
+  # print("files of rsync deamon:")
   command <- paste(
     pre,
     "rsync",
     to
   )
   dat <- system(command, intern = TRUE, wait = TRUE, ignore.stdout = FALSE, ignore.stderr = FALSE)
-  browser()
+  # browser()
 
-
-  dat <- matrix(dat, nrow = length(dat))
   dat <- as.data.frame(dat)
-  names(dat) <- "Objects"
-  # dat <- separate(dat, "Objects", sep = "", into = c("code", "size","date","time","Object")) #
 
-  # dat <- strsplit(dat,"")
+  dat <- dat[2:4,1] #first line is dropped
+  dat <- as.data.frame(dat)
+  dat <- dat %>% separate(dat, into = c("shortcut", "size","date", "time", "name"), sep = "\\s+")
+  #####
 
 
-  # names(dat) <- c("code","size","date","time","name")
+  dat <- na.omit(dat)
   dat
-}
+  }
 
 
 #' @export
@@ -127,6 +126,7 @@ deleteEntry <- function(db, ...) {
 #'
 #' @export
 deleteEntry.default <- function(db, entryName, verbose = FALSE) {
+  # browser()
   if (length(entryName) == 0) return(db)
   on.exit(try(file.remove(emptyDir), silent = TRUE))
   entryName <- basename(entryName)
@@ -136,8 +136,53 @@ deleteEntry.default <- function(db, entryName, verbose = FALSE) {
   args <- paste(args, includes, excludes)
   emptyDir <- paste0(tempdir(), "/empty/")
   dir.create(emptyDir)
-  rsyncFile(db, emptyDir, args = args)
-  db
+
+
+  objects <- listEntries(db)$name
+
+  #send all files vom deamon to local -> sendFile of RsynsD object
+  sendFile(db, objects, to = emptyDir) #works with one file
+  list.files(emptyDir) #worked
+
+  #remove entryName locally:
+  unlink(paste0(emptyDir,entryName)) #worked
+  list.files(emptyDir) #worked
+
+
+  rsyncHelper <- connection( type = "RsyncDHTTP",
+                             host = db$host,
+                             name = db$name,
+                             password = db$password,
+                             url =   "")
+
+
+
+
+  # #send local directory to deamon
+  listEntries.default(rsyncHelper)
+
+  #insted of calling rsync()
+
+  pre <- sprintf("RSYNC_PASSWORD=\"%s\"", db$password)
+  to <-  paste0(db$host, db$name)
+  from <- emptyDir
+
+  command <- paste(
+    pre,
+    "rsync",
+    args,
+    includes,
+    excludes,
+    from,
+    to
+  )
+
+   system(command, intern = FALSE, wait = TRUE, ignore.stdout = FALSE, ignore.stderr = FALSE)
+
+   dat  <- as.data.frame(listEntries(db))
+   dat <- na.omit(dat)
+   dat
+
 }
 
 
@@ -184,6 +229,7 @@ deleteAllEntries <- function(db, ...) {
 #'
 #' @export
 deleteAllEntries.default <- function(db, verbose = FALSE) { #lists entries of destination folder
+
   dat <- listEntries(db)
   lapply(dat$name, deleteEntry, db = db, verbose = verbose)
   db
@@ -199,7 +245,9 @@ deleteAllEntries.RsyncL <- function(db, verbose = FALSE) {
 
 #' @export
 deleteAllEntries.RsyncDHTTP <- function(db, verbose = FALSE) {
-  dat <- listEntries(db)
+  if(db$url != "/") dat <- listEntries(db)
+  else dat <- listEntries.default(db)
+
   lapply(dat$name, deleteEntry, db = db, verbose = verbose)
   db
 }

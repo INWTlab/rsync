@@ -1,6 +1,6 @@
 library(yaml)
 library(testthat)
-
+library(tidyr)
 context("RsyncServer")
 
 
@@ -167,7 +167,7 @@ serverTestingRsyncD <- rsync::connection( type = "RsyncD",
   expectTrue(nrow(listEntries(deleteAllEntries(serverTestingRsyncL))) == 0)
 
 
-#Baustelle
+
 
 
   #test RsyncD connection
@@ -175,7 +175,7 @@ serverTestingRsyncD <- rsync::connection( type = "RsyncD",
 
 
   #create serverRsyncDHelper to make sure a file to send exists
-# dirName <- tempdir()
+ dirName <- tempdir()
 
 
   serverRsyncDHelper <- connection( type = "RsyncDHTTP",
@@ -202,47 +202,43 @@ serverTestingRsyncD <- rsync::connection( type = "RsyncD",
 
 #jetzt dateien von rsync zu localer Dir senden:
 
-dirName <- "/home/dberscheid/Netzfreigaben/Git_TEX/PlayWith/SyncDestination"
-
-    nrow(listEntries(rsync::sendFile(serverTestingRsyncD, "z.Rdata", to = dirName))) #funktioniert
-
-listEntries(serverTestingRsyncD)
 
 
-  # expectTrue(nrow(listEntries(rsync::deleteAllEntries(serverTestingRsyncD))) == 0)
-
-
-
-
-
-  #ALTER Teil der Baustelle:
-
-#list files
-  to <- "/home/dberscheid/Netzfreigaben/Git_TEX/PlayWith/SyncDestination"
-  system(paste("ls", to))
-
-
-#sende Datei von ordner zu R deamon
-  sendFile(serverTestingRsyncD, file = "/home/dberscheid/Netzfreigaben/Git_TEX/PlayWith/SyncDestination/Testfile2.R")
 
   listEntries(serverTestingRsyncD)
 
-  command <- " RSYNC_PASSWORD=\"usf8atgsat7865Gzd.sfrsr52ru\" rsync -av /home/dberscheid/Netzfreigaben/Git_TEX/PlayWith/SyncDestination/Testfile2.R rsync://tipico-rsync@inwt-vmeh2.inwt.de/Sports-Testing"
+  suppressWarnings(expectTrue(nrow(deleteEntry(serverTestingRsyncD, entryName = "x.Rdata")) == 2))
 
-  system(command, intern = FALSE, wait = TRUE, ignore.stdout = FALSE, ignore.stderr = FALSE)
+  suppressWarnings(expectTrue(nrow(listEntries(deleteAllEntries(serverTestingRsyncD))) == 0))
 
+  #preparation send file with helper again to deamon
+  expectTrue(nrow(listEntries(rsync::sendFile(serverRsyncDHelper, paste0(dirName, "/", "y.Rdata")))) == 1)
 
-
-#sende Datei zurück
-  command <- " RSYNC_PASSWORD=\"usf8atgsat7865Gzd.sfrsr52ru\" rsync  -rtv  rsync://tipico-rsync@inwt-vmeh2.inwt.de/Sports-Testing/y.Rdata /home/dberscheid/Netzfreigaben/Git_TEX/PlayWith/SyncDestination"
-  system(command, intern = FALSE, wait = TRUE, ignore.stdout = FALSE, ignore.stderr = FALSE)
-
-
-  rsync::sendFile((serverTestingRsyncD, paste0(dirName, "/", "y.Rdata")))
-
-  rsync::deleteAllEntries((serverTestingRsyncD))
-
-  length(listEntries(serverTestingRsyncD)) == 1 #listEntries is working
+  nrow(listEntries(rsync::sendFile(serverTestingRsyncD, "y.Rdata", to = dirName))) == 1   #funktioniert
 
 
+  #sendFolder
 
+  #preparation send file with helper again to deamon
+  expectTrue(nrow(listEntries(rsync::sendFile(serverRsyncDHelper, paste0(dirName, "/", "y.Rdata")))) == 1)
+  expectTrue(nrow(listEntries(rsync::sendFile(serverRsyncDHelper, paste0(dirName, "/", "z.Rdata")))) == 2)
+  expectTrue(nrow(listEntries(rsync::sendFile(serverRsyncDHelper, paste0(dirName, "/", "x.Rdata")))) == 3)
+
+
+  #then to directory
+  listEntries(serverTestingRsyncD) #worked
+
+  #not working yet to send files from dir to deamon
+  expectTrue(nrow(listEntries(rsync::sendFolder(serverTestingRsyncD, dirName, pattern = "*.Rdata"))) == 3)
+
+
+  #get
+
+
+  #sendObject
+
+
+  # check for csv
+
+
+  # check for json
