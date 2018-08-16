@@ -4,8 +4,8 @@
 \alias{sendObject.default}
 \title{Rsync API}
 \usage{
-\method{sendObject}{default}(db, obj, objName = as.character(substitute(obj)),
-  ...)
+\method{sendObject}{default}(db, obj, to = "",
+  objName = as.character(substitute(obj)), ...)
 }
 \arguments{
 \item{db}{RsyncServer object , returning: 'name', 'lastModified' and 'size'}
