@@ -1,13 +1,15 @@
-
 #' Rsync API
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param type (character) the type of connection. Possible are RsyncDHTTP (default), RsyncD, RsyncL.
+#'
 #' @param host (character) the url, where the host file is stored
 #' @param name (character) the name of the target server
 #' @param password (character) the password to the corresponding target server
 #' @param url (character) the url to the corresponding target server
+#' @param type (character) the type of connection. Possible are RsyncDHTTP (default), RsyncD, RsyncL.
+#' @param from (character) only for type RsyncL;
+#' @param to (character) only for type RsyncL
 #'
 #' @details
 #' \describe{
@@ -90,7 +92,7 @@ listEntries.default <- function(db) {
     to
   )
   dat <- system(command, intern = TRUE, wait = TRUE, ignore.stdout = FALSE, ignore.stderr = FALSE)
-  # browser()
+
 
   dat <- as.data.frame(dat)
 
@@ -126,7 +128,6 @@ deleteEntry <- function(db, ...) {
 #'
 #' @export
 deleteEntry.default <- function(db, entryName, verbose = FALSE) {
-  # browser()
   if (length(entryName) == 0) return(db)
   on.exit(try(file.remove(emptyDir), silent = TRUE))
   entryName <- basename(entryName)
@@ -277,7 +278,6 @@ sendFile <- function(db, ...) {
 #'
 #' @export
 sendFile.default <- function(db, file, to = "", validate = TRUE, verbose = FALSE ) {
-  # browser()
   args <- if (verbose) "-ltvvx" else "-ltx"
   to <- to
   lapply(file, rsyncFile, db = db, args = args, to = to)
@@ -301,7 +301,6 @@ sendFile.RsyncL <- function(db, file = "", validate = TRUE, verbose = FALSE) {
 
 #' @export
 sendFile.RsyncDHTTP <- function(db, file, validate = TRUE, verbose = FALSE) {
-  # browser()
   file <- normalizePath(file, mustWork = TRUE)
   args <- if (verbose) "-ltvvx" else "-ltx"
   lapply(file, rsyncFile, db = db, args = args)
@@ -353,11 +352,9 @@ rsyncFile.RsyncL <- function(db, file, args) {
 rsyncFile.default <- function(db, file, to, args) {
   pre <- sprintf("RSYNC_PASSWORD=\"%s\"", db$password)
   # pre <- paste0("RSYNC_PASSWORD=", as.character(db$password))
-  # browser() #file sollte hier nur der filename sein, kein pfad
   from <-  paste0(db$host, db$name)
   file <- paste0(from, "/", basename(file))
 
-  # file <- paste0(from, "/", file)
 
 
   rsync::rsync(file, to, args = args, pre = pre)
@@ -429,7 +426,6 @@ sendObject <- function(db, ...) {
 #'
 #' @export
 sendObject.default <- function(db, obj, to = "", objName = as.character(substitute(obj)), ...) {
-  # browser()
   assign(objName, obj)
   save(list = objName, file = file <- paste0(tempdir(), "/", objName, ".Rdata"), compress = TRUE)
   sendFile(db, file, ...)
@@ -485,7 +481,6 @@ sendFolder <- function(db, ...) {
 
 #' @export
 sendFolder.default <- function(db, to, ..., validate = TRUE, verbose = FALSE) { #left out folder, therfore added argument "to"
-  # browser()
   files <- listEntries(db)$name #folder not needed so far
   files <- paste0(to, "/", files)
   to <- to
@@ -497,7 +492,6 @@ sendFolder.default <- function(db, to, ..., validate = TRUE, verbose = FALSE) { 
 
 #' @export
 sendFolder.RsyncDHTTP <- function(db, folder, ..., validate = TRUE, verbose = FALSE) {
-  # browser()
   files <- dir(folder, full.names = TRUE, ...)
   for (file in files) sendFile(db, file, validate) #verbose
   db
@@ -607,6 +601,7 @@ loadrdata.RsyncL <- function(db, address) {
 #' @export
 loadrdata.RsyncDHTTP <- function(db, address) {
   on.exit(try(close(con), silent = TRUE))
+
   con <- url(address)
   load(con, e <- new.env(parent = emptyenv()))
   as.list(e, all.names = TRUE)
@@ -616,13 +611,9 @@ loadrdata.RsyncDHTTP <- function(db, address) {
 loadrdata.default <- function(db, address) {
   on.exit(try(close(con), silent = TRUE))
 
-  browser()
   con <- file(address)
+  open(con)
   as.list(con, all.names = TRUE)
-
-
-  # load(con, e <- new.env(parent = emptyenv()))
-  # load(address, e <- new.env(parent = emptyenv()))
 
 }
 

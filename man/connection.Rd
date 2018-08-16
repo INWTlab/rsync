@@ -17,6 +17,10 @@ connection(host = "", name = "", password = "", url = "",
 \item{url}{(character) the url to the corresponding target server}
 
 \item{type}{(character) the type of connection. Possible are RsyncDHTTP (default), RsyncD, RsyncL.}
+
+\item{from}{(character) only for type RsyncL;}
+
+\item{to}{(character) only for type RsyncL}
 }
 \description{
 API to use rsync as persistent file and object storage.

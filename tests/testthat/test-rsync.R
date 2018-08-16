@@ -228,8 +228,7 @@ expectTrue(nrow(listDir(dirName)) == 2)
 
 
 
-#get
-# getEntry(serverTestingRsyncD, "x.Rdata")$x
+
 
 
 # expectTrue(rsync::getEntry(serverTestingRsyncD, "x.Rdata")$x == 1)
@@ -248,6 +247,10 @@ expectTrue(nrow(listDir(dirName)) == 0)
 
 expectTrue(nrow(listEntries(sendObject(serverTestingRsyncD, z, to = dirName))) == 3) #working
 expectTrue(nrow(listDir(dirName)) == 1)
+
+#get
+# getEntry(serverTestingRsyncD, "x.Rdata")$x
+expectTrue(getEntry(serverTestingRsyncD, "z.Rdata")$z == 3)
 
 # check for csv
 #preparation send file with helper again to deamon
