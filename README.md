@@ -1,12 +1,17 @@
+---
+output:
+  html_document: default
+  pdf_document: default
+---
   
-[![Travis-CI Build Status](https://travis-ci.org//INWTlab/rsync.svg?branch=master)](https://travis-ci.org/INWTlab/rsync)
+# [![Travis-CI Build Status](https://travis-ci.org//INWTlab/rsync.svg?branch=master)](https://travis-ci.org/INWTlab/rsync)
 
 
 ## rsync-Package of INWT:
 
-In this project we provide functionalites of rsync for INWT project.
+In this project we provide functionalites of rsync for INWT projects.
 rsync is a open source file-copying tool that is freely available under the GNU General Public License.
-We built an R package around it in order to describe features of rsync as well as make use of automatic testing. 
+We built an R package around it in order to use its features in R contexts as well as make use of automatic testing. 
 
 ## Why using rsync:
 
@@ -20,11 +25,14 @@ Working with Rsync offers nice benefits, as it is:
 For further information about the original source of rsync, please see this link: https://rsync.samba.org/
 
 ## Features:
-The rsync functionality can be used in two ways: 
-  1) directely transferring / synchronizing files locally
-     
-      
-  2) transferring files from a local host to a remote host
+The rsync functionality can be used in three settings:
+
+synchronizing files between...
+   1) local directories (RsyncL)
+   
+  2) an HTTP interface of an rsync daemon and a local directory (RsyncDHTTP)
+  
+  3) an rsync daemon and a local directory (RsyncD)
    
 
 ## Installation:
@@ -36,13 +44,76 @@ source("https://github.com/INWTlab/rsync")  #NOCH ZU ÄNDERN (oder tar.gz Datei 
 
 ## How to use Rsync:
 
-### Local
-For using `rsync` locally, use the following function:
-```
-rsync(from = "SyncTest/Testfile1.R", to = "SyncDestination/")
-```
-It takes two arguments, namely `from` which specifies the  source destination and `to`, which defines the final destination. This functions behaves more like an improved copy command. 
 
+### RsyncL
+
+#### Setting up a connection
+The first step of every `rsync` process, is to establishing a connection object.
+Argument `type` specifies the type of connection - RsyncL, RsyncDHHTP. RsyncD.
+Depending on the type, different information is needed.
+
+`type = "RsyncL"`specifies synchronization between two local directories.
+`from`defines the name of the file to be synced, including its directory path.
+`to` specifies the destination directory. It returns a list object.
+
+```
+conObject <- rsync::connection( type = "RsyncL",
+                                from = "C:/exampleFolder/"
+                                to = "C:/destinationFolder")
+```
+
+#### List Entries
+`listEntries` takes the connection object as input and gives out the object contained in the destination folder (`conObject$to`)
+
+```
+rsync::listEntries(conObject)
+```
+
+#### Sending a File
+Sending a file is easy. File origin and destination are already defined in the connection object `conObject`.
+This poses the input for the `sendFile()`function.
+
+```
+rsync::sendFile(conObject)
+```
+
+#### Sending a Folder
+`sendFolder()` syncs a complete folder between two local directories. `conObject` contains the information about its type.
+`dirName`takes as input the path to the folder that shall be sent. `pattern` defines which files from the folder shall be synced.
+
+```
+rsync::sendFolder(conObject, dirName, pattern = "*.Rdata")
+```
+#### Sending an Object
+
+
+`sendObject()` syncs an Object with a destination folder.
+`conObject` contains the information about its type and the destination location (`conObject$to`)
+`z` shall be the object to be sent. It is taken as second input argument in `sendObject()`
+
+```
+z <- 3
+rsync::sendObject(serverTestingRsyncL, obj = z)
+```
+
+#### Deleting an Entry
+`deleteEntry()` deltes an entry of the destination folder. 
+`conObject` contains information on type of connection and destination folder (`conObject$to`).
+`entryName`deinfes the objects to be deleted. 
+
+```
+rsync::deleteEntry(conObject, entryName = "z.Rdata")
+```
+#### Deleting all Entries
+`deleteAllEntries()` deltes all entries of the destination folder. 
+`conObject` contains information on type of connection and destination folder (`conObject$to`).
+
+```
+rsync::deleteAllEntries(conObject)
+```
+
+
+##Old
 ### Global
 
 #### Preparation

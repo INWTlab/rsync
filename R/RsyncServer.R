@@ -530,7 +530,7 @@ getEntry <- function(db, ...) {
 
 #' @export
 getEntry.default <- function(db, entryName, file = NULL, ...) {
-  # browser()
+
   ## retrun: in case of csv: data.frame; in case of rdata or json: list
   address <- paste0(db$host, db$name, "/", entryName)
   if (!is.null(file)) return(download.file(address, file))
@@ -609,8 +609,10 @@ loadrdata.RsyncDHTTP <- function(db, address) {
 
 #' @export
 loadrdata.default <- function(db, address) {
+  # browser()
   on.exit(try(close(con), silent = TRUE))
-
+  # con <- socketConnection(host = paste0(dirname(address), "/"), port = basename(address), blocking = FALSE)
+  #Wie kann man connection zu Deamon öffnen?
   con <- file(address)
   open(con)
   as.list(con, all.names = TRUE)
