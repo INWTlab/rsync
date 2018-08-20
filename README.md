@@ -27,16 +27,16 @@ For further information about the original source of rsync, please see this link
 ## Features:
 The rsync functionality can be used in three settings:
 
-synchronizing files between...
-   1) local directories (RsyncL)
+It is great for synchronizing files between...
+   1) local directories (`RsyncL`)
    
-  2) an HTTP interface of an rsync daemon and a local directory (RsyncDHTTP)
+  2) an HTTP interface of an rsync daemon and a local directory (`RsyncDHTTP`)
   
-  3) an rsync daemon and a local directory (RsyncD)
+  3) an rsync daemon and a local directory (`RsyncD`)
    
 
 ## Installation:
-The rsync package can be downloaded and installed by running the following command from within R:
+The rsync package can be downloaded and installed by running the following command from the R console:
 ```
 source("https://github.com/INWTlab/rsync")  #NOCH ZU ÄNDERN (oder tar.gz Datei laden?)
 ```
@@ -45,16 +45,16 @@ source("https://github.com/INWTlab/rsync")  #NOCH ZU ÄNDERN (oder tar.gz Datei 
 ## How to use Rsync:
 
 
-### RsyncL
+### Connection RsyncL
 
-#### Setting up a connection
-The first step of every `rsync` process, is to establishing a connection object.
-Argument `type` specifies the type of connection - RsyncL, RsyncDHHTP. RsyncD.
+#### Setting up the connection
+The first step of every `rsync` process, is to establish a connection object.
+Argument `type` specifies the type of connection - RsyncL, RsyncDHHTP or RsyncD.
 Depending on the type, different information is needed.
 
 `type = "RsyncL"`specifies synchronization between two local directories.
 `from`defines the name of the file to be synced, including its directory path.
-`to` specifies the destination directory. It returns a list object.
+`to` specifies the destination directory. The function returns a list object.
 
 ```
 conObject <- rsync::connection( type = "RsyncL",
@@ -89,7 +89,7 @@ rsync::sendFolder(conObject, dirName, pattern = "*.Rdata")
 
 `sendObject()` syncs an Object with a destination folder.
 `conObject` contains the information about its type and the destination location (`conObject$to`)
-`z` shall be the object to be sent. It is taken as second input argument in `sendObject()`
+An exemplary object `z` shall be the object to be sent. It is taken as second input argument in `sendObject()`
 
 ```
 z <- 3
@@ -97,9 +97,9 @@ rsync::sendObject(serverTestingRsyncL, obj = z)
 ```
 
 #### Deleting an Entry
-`deleteEntry()` deltes an entry of the destination folder. 
+`deleteEntry()` deletes an entry of the destination folder. 
 `conObject` contains information on type of connection and destination folder (`conObject$to`).
-`entryName`deinfes the objects to be deleted. 
+`entryName` defines the objects to be deleted. 
 
 ```
 rsync::deleteEntry(conObject, entryName = "z.Rdata")
@@ -111,6 +111,13 @@ rsync::deleteEntry(conObject, entryName = "z.Rdata")
 ```
 rsync::deleteAllEntries(conObject)
 ```
+
+### Connection RsyncDHTTP
+
+
+
+
+### Connection RsyncD
 
 
 ##Old
