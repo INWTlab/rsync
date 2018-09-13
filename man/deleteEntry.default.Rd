@@ -7,7 +7,7 @@
 \method{deleteEntry}{default}(db, entryName, verbose = FALSE)
 }
 \arguments{
-\item{db}{RsyncServer object , returning: 'name', 'lastModified' and 'size'}
+\item{db}{RsyncServer object}
 
 \item{entryName}{Name of the entry to be deleted}
 

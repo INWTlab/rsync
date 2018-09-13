@@ -7,7 +7,7 @@
 \method{listEntries}{RsyncDHTTP}(db)
 }
 \arguments{
-\item{db}{RsyncServer object , returning: 'name', 'lastModified' and 'size'}
+\item{db}{RsyncServer object}
 }
 \description{
 API to use rsync as persistent file and object storage.

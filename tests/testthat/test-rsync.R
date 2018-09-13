@@ -1,20 +1,21 @@
-library(yaml)
+
 library(testthat)
 library(tidyr)
 context("RsyncServer")
 
+source("~/.inwt/rsync/config.R")
 
-serverTestingRsyncDHTTP <- rsync::connection( type = "RsyncDHTTP",
-                                              host =   read_yaml("~/.inwt/rsync/config.yaml")[[1]],
-                                              name =   read_yaml("~/.inwt/rsync/config.yaml")[[2]],
-                                              password =  read_yaml("~/.inwt/rsync/config.yaml")[[3]],
-                                              url =   read_yaml("~/.inwt/rsync/config.yaml")[[4]])
 
-serverTestingRsyncD <- rsync::connection( type = "RsyncD",
-                                          host =   read_yaml("~/.inwt/rsync/config.yaml")[[1]],
-                                          name =   read_yaml("~/.inwt/rsync/config.yaml")[[2]],
-                                          password =  read_yaml("~/.inwt/rsync/config.yaml")[[3]],
-                                          url =  "" ) #read_yaml("~/.inwt/rsync/config.yaml")[[4]]
+serverTestingRsyncDHTTP <- rsync::rsyncDHTTP(host = hostURL,
+                                             name = nameServer,
+                                             password = passwordServer,
+                                             url = urlServer)
+
+
+
+serverTestingRsyncD <- rsync::rsyncD(host = hostURL,
+                                     name = nameServer,
+                                     password =passwordServer)
 
 expectTrue <- function(a) testthat::expect_true(a)
 
@@ -102,26 +103,29 @@ save(list = "y", file = paste0(dirName, "/", "y.Rdata"))
 dir.create(file.path(dirName, "neu/"), showWarnings = FALSE)
 neu <- file.path(dirName, "neu/")
 
-serverTestingRsyncL <- rsync::connection( type = "RsyncL",
-                                          from = paste0(dirName, "/", "x.Rdata"),
-                                          to = neu)
+serverTestingRsyncL <- rsync::rsyncL( from = paste0(dirName, "/"),
+                                      to = neu)
 
 #deleteAllEntries:
 expectTrue(nrow(listEntries(rsync::deleteAllEntries(serverTestingRsyncL))) == 0)
 #sendFile
-expectTrue(nrow(listEntries(rsync::sendFile(serverTestingRsyncL))) == 1)
+expectTrue(nrow(listEntries(rsync::sendFile(serverTestingRsyncL, file = "x.Rdata" ))) == 1)
 
 #sendFolder
-serverTestingRsyncL$from <- paste0(dirName, "/", "y.Rdata")
-expectTrue(nrow(listEntries(rsync::sendFile(serverTestingRsyncL))) == 2)
+#serverTestingRsyncL$from <- paste0(dirName, "/", "y.Rdata")
+expectTrue(nrow(listEntries(rsync::sendFile(serverTestingRsyncL, file = "y.Rdata"))) == 2)
 expectTrue(nrow(listEntries(rsync::deleteAllEntries(serverTestingRsyncL))) == 0)
-expectTrue(nrow(listEntries(rsync::sendFolder(serverTestingRsyncL, dirName, pattern = "*.Rdata"))) == 2)
+expectTrue(nrow(listEntries(rsync::sendFolder(serverTestingRsyncL, dirName, pattern = "*.Rdata"))) == 2) #where does the pattern appear in the function
+
 #get
 expectTrue(rsync::getEntry(serverTestingRsyncL, "y.Rdata")$y == 2)
 
+####validation here
+
+
 #sendObject
 z <- 3
-expectTrue(nrow(listEntries(sendObject(serverTestingRsyncL, z))) == 3) #warum wird y.Rdata statt z.Rdata gesendet?
+expectTrue(nrow(listEntries(sendObject(serverTestingRsyncL, z))) == 3)
 
 expectTrue(getEntry(serverTestingRsyncL, "z.Rdata")$z == 3)
 expectTrue(nrow(listEntries(deleteEntry(serverTestingRsyncL, "z.Rdata"))) == 2)
@@ -135,7 +139,7 @@ dat <- data.frame(
   stringsAsFactors = FALSE
 )
 data.table::fwrite(dat, file = paste0(dirName, "/", "dat.csv"))
-expectTrue(nrow(listEntries(sendFile(serverTestingRsyncL, paste0(dirName, "/", "dat.csv")))) == 1)
+expectTrue(nrow(listEntries(sendFile(serverTestingRsyncL,  "dat.csv"))) == 1)
 expectTrue(base::identical(dat, getEntry(serverTestingRsyncL, "dat.csv")))
 expectTrue(nrow(listEntries(deleteAllEntries(serverTestingRsyncL))) == 0)
 
@@ -145,7 +149,7 @@ lst <- list(
   date = "2017-01-01"
 )
 jsonlite::write_json(lst, path = paste0(dirName, "/", "lst.json"))
-expectTrue(nrow(listEntries(sendFile(serverTestingRsyncL, paste0(dirName, "/", "lst.json")))) == 1)
+expectTrue(nrow(listEntries(sendFile(serverTestingRsyncL, "lst.json"))) == 1)
 expectTrue(base::identical(lst, getEntry(serverTestingRsyncL, "lst.json")))
 expectTrue(nrow(listEntries(deleteAllEntries(serverTestingRsyncL))) == 0)
 
@@ -170,11 +174,10 @@ dirName <- tempdir()
 file.remove(dir(dirName, "Rdata|csv|json", full.names = TRUE))
 
 #create serverRsyncDHelper to make sure a file to send exists
-serverRsyncDHelper <- connection( type = "RsyncDHTTP",
-                                  host = serverTestingRsyncD$host,
-                                  name = serverTestingRsyncD$name,
-                                  password = serverTestingRsyncD$password,
-                                  url =   serverTestingRsyncDHTTP$url)
+serverRsyncDHelper <- rsync::rsyncDHTTP( host = serverTestingRsyncD$host,
+                                         name = serverTestingRsyncD$name,
+                                         password = serverTestingRsyncD$password,
+                                         url =   serverTestingRsyncDHTTP$url)
 
 expectTrue(nrow(listEntries(deleteAllEntries(serverRsyncDHelper))) == 0)
 
@@ -189,7 +192,7 @@ save(list = "y", file = paste0(dirName, "/", "y.Rdata"))
 expectTrue(nrow(listEntries(rsync::sendFile(serverRsyncDHelper, paste0(dirName, "/", "y.Rdata")))) == 1) #sends .Rdata object from directory to deamon via a helper
 expectTrue(nrow(listEntries(rsync::sendFolder(serverRsyncDHelper, dirName, pattern = "*.Rdata"))) == 2) #sends .Rdata object from directory to deamon via a helper
 #delete files in directory
-unlink(paste0(dirName, "/", c("*.Rdata", "*.json", "*.csv"))) #worked
+unlink(paste0(dirName, "/", c("*.Rdata", "*.json", "*.csv")))
 expectTrue(nrow(listDir(dirName)) == 0)
 
 #deleteEntry of deamon
@@ -248,9 +251,8 @@ expectTrue(nrow(listDir(dirName)) == 0)
 expectTrue(nrow(listEntries(sendObject(serverTestingRsyncD, z, to = dirName))) == 3) #working
 expectTrue(nrow(listDir(dirName)) == 1)
 
-# #get funktioniert noch nicht.
-# #get
-# # getEntry(serverTestingRsyncD, "x.Rdata")$x
+# Wie kann man eine Connection zum Deamon aufbauen?
+# getEntry(serverTestingRsyncD, "x.Rdata")$x
 # expectTrue(getEntry(serverTestingRsyncD, "z.Rdata")$z == 3)
 
 # check for csv
@@ -292,6 +294,7 @@ unlink(paste0(dirName, "/", c("*.Rdata", "*.json", "*.csv"))) #worked
 expectTrue(nrow(listDir(dirName)) == 0)
 expectTrue(nrow(listEntries(rsync::sendFile(serverTestingRsyncD, paste0(dirName, "/", "lst.json"), dirName))) == 2)
 expectTrue(nrow(listDir(dirName)) == 1)
+
 
 
 
