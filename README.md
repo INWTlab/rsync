@@ -45,40 +45,38 @@ source("https://github.com/INWTlab/rsync")  #NOCH ZU ÄNDERN (oder tar.gz Datei 
 ## How to use Rsync:
 
 
-### Connection RsyncL
+### RsyncL Connection
 
-#### Setting up the connection
-The first step of every `rsync` process, is to establish a connection object.
-Argument `type` specifies the type of connection - RsyncL, RsyncDHHTP or RsyncD.
-Depending on the type, different information is needed.
+#### Setting up the Connection
+The first step of every `rsync` process, is to establish a rsync object.
+Depending on the type of object, different information is needed.
+For establishing a local connection following arguements are needed:
 
-`type = "RsyncL"`specifies synchronization between two local directories.
-`from`defines the name of the file to be synced, including its directory path.
+`from`defines the name of directory path of the file to be synced, not the file itself.
 `to` specifies the destination directory. The function returns a list object.
 
 ```
-conObject <- rsync::connection( type = "RsyncL",
-                                from = "C:/exampleFolder/"
-                                to = "C:/destinationFolder")
+conObject <- rsync::rsyncL(from = "C:/exampleFolder/"
+                           to = "C:/destinationFolder")
 ```
 
 #### List Entries
-`listEntries` takes the connection object as input and gives out the object contained in the destination folder (`conObject$to`)
+`listEntries` takes the rsyncL object as input and gives out the objects contained in the destination folder (`conObject$to`)
 
 ```
 rsync::listEntries(conObject)
 ```
 
 #### Sending a File
-Sending a file is easy. File origin and destination are already defined in the connection object `conObject`.
-This poses the input for the `sendFile()`function.
+Sending a file is easy. The file's directory is already defined in the rsyncL object `conObject`.
+`sendFile()` takes two arguments as input: `conObject`and `file`. It then sends the specified file to `conObject$to`.
 
 ```
-rsync::sendFile(conObject)
+rsync::sendFile(conObject, file = "exampleFile.R")
 ```
 
 #### Sending a Folder
-`sendFolder()` syncs a complete folder between two local directories. `conObject` contains the information about its type.
+`sendFolder()` syncs a complete folder between two local directories. `conObject` contains the information about the local connection type `rsyncL`.
 `dirName`takes as input the path to the folder that shall be sent. `pattern` defines which files from the folder shall be synced.
 
 ```
@@ -86,19 +84,18 @@ rsync::sendFolder(conObject, dirName, pattern = "*.Rdata")
 ```
 #### Sending an Object
 
-
-`sendObject()` syncs an Object with a destination folder.
-`conObject` contains the information about its type and the destination location (`conObject$to`)
+`sendObject()` syncs an object with a destination folder.
+`conObject`is of type rsyncL and contains the information on the destination location (`conObject$to`)
 An exemplary object `z` shall be the object to be sent. It is taken as second input argument in `sendObject()`
 
 ```
 z <- 3
-rsync::sendObject(serverTestingRsyncL, obj = z)
+rsync::sendObject(conObject, obj = z)
 ```
 
 #### Deleting an Entry
 `deleteEntry()` deletes an entry of the destination folder. 
-`conObject` contains information on type of connection and destination folder (`conObject$to`).
+`conObject` contains information on the  destination folder (`conObject$to`).
 `entryName` defines the objects to be deleted. 
 
 ```
@@ -112,12 +109,155 @@ rsync::deleteEntry(conObject, entryName = "z.Rdata")
 rsync::deleteAllEntries(conObject)
 ```
 
-### Connection RsyncDHTTP
+### RsyncDHTTP Connection 
+
+#### Setting up the Connection
+The first step of every `rsync` process, is to create a rsyncDHTTP object.
+Depending on the type of object, different information is needed.
+For a connection with a rsync HTTP server follwoing arguements are needed:
+
+```
+conObject <- rsync::rsyncDHTTP( host = "rsync://user@example.de",
+                                name = "server123",
+                                password = "r4nd0mPwd123",
+                                url =  "https://serverAddress.de")
+```
+
+#### List Entries
+`listEntries` takes the rsyncDHTTP object as input and gives out the objects available on the server (`conObject$host`)
+
+```
+rsync::listEntries(conObject)
+```
+
+#### Sending a File
+With `sendFile()` it is possible to send a file from a local directory to a rsync HTTP server. 
+`sendFile()` takes two arguments as input: `conObject`and `file`. `file` contains the name of the file and its path. It then sends the specified file to `conObject$host`.
+
+```
+rsync::sendFile(conObject, file = "C:/pathToFile/exampleFile.R")
+```
+
+#### Sending a Folder
+
+`sendFolder()` allows to send a folder from a local directory to a rsync HTTP server. 
+`dirName`takes as input the path to the folder that shall be sent. `pattern` defines which files from the folder shall be synced.
+`conObject` contains the information on where the folder is sent. 
+
+
+```
+rsync::sendFolder(conObject, dirName, pattern = "*.Rdata")
+```
+#### Sending an Object
+
+`sendObject()` syncs an object with a rsync HTTP server.
+`conObject`is of type rsyncDHTTP and contains the information on the destination server (`conObject$host`)
+An exemplary object `z` shall be the object to be sent. It is taken as second input argument in `sendObject()`
+
+```
+z <- 3
+rsync::sendObject(conObject, obj = z)
+```
+
+#### Deleting an Entry
+`deleteEntry()` deletes an entry on the rsync HTTP server.
+`conObject` is of type rsyncDHTTP and contains information of the server.
+`entryName` defines the objects to be deleted. 
+
+```
+rsync::deleteEntry(conObject, entryName = "z.Rdata")
+```
+#### Deleting all Entries
+`deleteAllEntries()` deltes all entries on the rsync HTTP server. 
+`conObject` is of type rsyncDHTTP and contains information of the server.
+
+```
+rsync::deleteAllEntries(conObject)
+```
 
 
 
 
-### Connection RsyncD
+
+### RsyncD Connection 
+
+#### Setting up the Connection
+The first step of every `rsync` process, is to create a rsyncDHTTP object.
+Depending on the type of object, different information is needed.
+For a connection with a rsync HTTP server follwoing arguements are needed:
+
+```
+conObject <- rsync::rsyncDHTTP( host = "rsync://user@example.de",
+                                name = "server123",
+                                password = "r4nd0mPwd123",
+                                url =  "https://serverAddress.de")
+```
+
+#### List Entries
+`listEntries` takes the rsyncDHTTP object as input and gives out the objects available on the server (`conObject$host`)
+
+```
+rsync::listEntries(conObject)
+```
+
+#### Sending a File
+With `sendFile()` it is possible to send a file from a local directory to a rsync HTTP server. 
+`sendFile()` takes two arguments as input: `conObject`and `file`. `file` contains the name of the file and its path. It then sends the specified file to `conObject$host`.
+
+```
+rsync::sendFile(conObject, file = "C:/pathToFile/exampleFile.R")
+```
+
+#### Sending a Folder
+
+`sendFolder()` allows to send a folder from a local directory to a rsync HTTP server. 
+`dirName`takes as input the path to the folder that shall be sent. `pattern` defines which files from the folder shall be synced.
+`conObject` contains the information on where the folder is sent. 
+
+
+```
+rsync::sendFolder(conObject, dirName, pattern = "*.Rdata")
+```
+#### Sending an Object
+
+`sendObject()` syncs an object with a rsync HTTP server.
+`conObject`is of type rsyncDHTTP and contains the information on the destination server (`conObject$host`)
+An exemplary object `z` shall be the object to be sent. It is taken as second input argument in `sendObject()`
+
+```
+z <- 3
+rsync::sendObject(conObject, obj = z)
+```
+
+#### Deleting an Entry
+`deleteEntry()` deletes an entry on the rsync HTTP server.
+`conObject` is of type rsyncDHTTP and contains information of the server.
+`entryName` defines the objects to be deleted. 
+
+```
+rsync::deleteEntry(conObject, entryName = "z.Rdata")
+```
+#### Deleting all Entries
+`deleteAllEntries()` deltes all entries on the rsync HTTP server. 
+`conObject` is of type rsyncDHTTP and contains information of the server.
+
+```
+rsync::deleteAllEntries(conObject)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ##Old
