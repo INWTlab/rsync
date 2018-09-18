@@ -732,10 +732,10 @@ sendFolder <- function(db, ...) {
 #'   \code{sendFile}.
 #' }
 #' @export
-sendFolder.default <- function(db, to, ..., validate = TRUE, verbose = FALSE) { #left out folder, therfore added argument "to"
-
-  files <- listEntries(db)$name #folder not needed so far
-  files <- paste0(to, "/", files)
+sendFolder.default <- function(db, to, folder = "",  ..., validate = TRUE, verbose = FALSE) { #left out folder, therfore added argument "to"
+  if (folder != "") files <- dir(folder, full.names = TRUE, ...)
+  else {files <- listEntries(db)$name #folder not needed so far
+        files <- paste0(to, "/", files) }
   to <- to
   for (file in files) sendFile(db, file, to, validate) #verbose
   db

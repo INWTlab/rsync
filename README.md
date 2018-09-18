@@ -108,6 +108,30 @@ rsync::deleteEntry(conObject, entryName = "z.Rdata")
 ```
 rsync::deleteAllEntries(conObject)
 ```
+#### Getting an Entry
+
+`get()` prints out the content of `entryName` of a rsyncL directory `conObject$from`).
+If `entryName` is a character the entry is saved there first. Then it is tried to load that file into R and return it from this function.
+This is implemented for csv, json and Rdata files. `...` are passed to `download.file` which is only used in case `file` is not `NULL`.
+   
+```
+rsync::get(conObject, entryName)
+```
+
+#### Validating the Sync
+
+`rsync::rsyncSuccessful()` tests if the sync process was successful. It returns TRUE in this case, FALSE in every other case.
+
+```
+local  <- function(file) paste0(conObject$from, "/", file)
+remote <- function(file) paste0(conObject$to, "/", file)
+
+rsync::rsyncSuccessful(local("exampleFile.Rdata"), remote("exampleFile.Rdata"))
+```
+
+
+
+
 
 ### RsyncDHTTP Connection 
 
@@ -175,8 +199,28 @@ rsync::deleteEntry(conObject, entryName)
 rsync::deleteAllEntries(conObject)
 ```
 
+#### Getting an Entry
+
+`get()` prints out the content of `entryName` of a rsync HTTP server.
+If `entryName` is a character the entry is saved there first. Then it is tried to load that file into R and return it from this function.
+This is implemented for csv, json and Rdata files. `...` are passed to `download.file` which is only used in case `file` is not `NULL`.
+   
+```
+rsync::get(conObject, entryName)
+```
 
 
+#### Validating the Sync
+
+`rsync::rsyncSuccessful()` tests if the sync process was successful. It returns TRUE in this case, FALSE in every other case.
+`dir` in `local` specifies the local directory. 
+
+```
+local <- function(file) paste0(dir , "/", file)
+remote <- function(file) paste0(conObject$url, file)
+
+rsync::rsyncSuccessful(local("exampleFile.Rdata"), remote("exampleFile.Rdata"))
+```
 
 
 ### RsyncD Connection 
@@ -243,57 +287,27 @@ rsync::deleteEntry(conObject, entryName)
 rsync::deleteAllEntries(conObject)
 ```
 
+#### Getting an Entry
 
-
-
-`rsync::rsyncSuccessful()` tests if the sync process was successfull. It returns TRUE in this case, FALSE in every other case.
-```
-rsync::rsyncSuccessful(localFile, remoteFile)
-```
-
-`rsync::identical()` tests if two files are synced successfully. It returns TRUE in this case, FALSE in every other case.
-```
-rsync::identical(localFile, remoteFile)
-```
-
-`rsync::get()` If `file` is a character the entry is saved there first. Then it is
-   tried to load that file into R and return it from this function. This is
-   implemented for csv, json and Rdata files. `...` are passed to
-   `download.file` which is only used in case `file` is not
-   `NULL`.
+`get()` prints out the content of `entryName` of a rsync deamon.
+If `entryName` is a character the entry is saved there first. Then it is tried to load that file into R and return it from this function.
+This is implemented for csv, json and Rdata files. `...` are passed to `download.file` which is only used in case `file` is not `NULL`.
    
 ```
-rsync::get(db, entryName, file = NULL, ...)
+rsync::get(conObject, entryName)
 ```
 
+#### Validating the Sync
 
-`rsync::loadrdata()` loads a R data object
-```
-rsync::loadrdata(address)
-```
+`rsync::rsyncSuccessful()` tests if the sync process was successful. It returns TRUE in this case, FALSE in every other case.
 
-
-`rsync::loadcsv()` loads a csv file
 ```
-rsync::loadcsv(address)
-```
+local  <- function(file) paste0(conObject$host, "/", file)
+remote <- function(file) paste0(dir, "/", file)
 
-
-`rsync::loadjson()` loads a json file
-```
-rsync::loadjson(address)
+rsync::rsyncSuccessful(local("exampleFile.Rdata"), remote("exampleFile.Rdata"))
 ```
 
-
-`rsync::print.RsyncServer()` prints the name of the RsyncServer object
-```
-rsync::print.RsyncServer(x)
-```
-
-`rsync::print.as.character.RsyncServer()` converts a RsynsServer object to a character
-```
-rsync::print.as.character.RsyncServer(x)
-```
 
 
 

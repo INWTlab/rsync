@@ -236,7 +236,7 @@ unlink(paste0(dirName, "/", c("*.Rdata", "*.json", "*.csv"))) #worked
 expectTrue(nrow(listDir(dirName)) == 0)
 
 #sendFolder Deamon to directory
-expectTrue(nrow(listEntries(rsync::sendFolder(serverTestingRsyncD, dirName))) == 2)
+expectTrue(nrow(listEntries(rsync::sendFolder(serverTestingRsyncD, dirName ))) == 2)
 expectTrue(nrow(listDir(dirName)) == 2)
 
 
@@ -263,13 +263,13 @@ z <- 34
 expectTrue(nrow(listEntries(rsync::sendObject(serverRsyncDHelper, z))) == 3)
 
 
-#male sure it is empty:
-unlink(paste0(dirName, "/", c("*.Rdata", "*.json", "*.csv"))) #worked
+#make sure it is empty:
+unlink(paste0(dirName, "/", c("*.Rdata", "*.json", "*.csv")))
 expectTrue(nrow(listDir(dirName)) == 0)
 
 
-expectTrue(nrow(listEntries(sendObject(serverTestingRsyncD, z, to = dirName))) == 3) #working
-expectTrue(nrow(listDir(dirName)) == 1)
+expectTrue(nrow(listEntries(sendObject(serverTestingRsyncD, z, to = dirName))) == 3)  #only checks if three files are on the deamon
+expectTrue(nrow(listDir(dirName)) == 1) #checks if sendFolder was successful.
 
 # Wie kann man eine Connection zum Deamon aufbauen?
 # getEntry(serverTestingRsyncD, "x.Rdata")$x
