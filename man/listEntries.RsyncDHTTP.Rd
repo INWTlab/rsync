@@ -7,13 +7,13 @@
 \method{listEntries}{RsyncDHTTP}(db)
 }
 \arguments{
-\item{db}{RsyncServer object}
+\item{db}{Rsync object}
 }
 \description{
 API to use rsync as persistent file and object storage.
 }
 \details{
 \describe{
-Returns a data.frame with the elements in the rsync storage.
+Returns a data.frame with the elements on the rsync server.
 }
 }

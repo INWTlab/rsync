@@ -9,7 +9,7 @@
 #'
 #' @details
 #' \describe{
-#'  Connection with a Rsync HTTP server. All arguments are characters.
+#'  Establishes a connection with a Rsync HTTP server. All arguments are characters.
 #' }
 #' @export
 rsyncDHTTP <-function(host, name, password, url) {
@@ -31,7 +31,7 @@ rsyncDHTTP <-function(host, name, password, url) {
 #'
 #' @details
 #' \describe{
-#'  Connection with a Rsync deamon. All arguments are characters.
+#'  Establishes a connection with a Rsync deamon. All arguments are characters.
 #' }
 #' @export
 rsyncD <-function(host, name, password) {
@@ -49,14 +49,14 @@ rsyncD <-function(host, name, password) {
 #'
 #' @details
 #' \describe{
-#'  Local connection. All arguments are characters.
+#'  Establishes a local connection. All arguments are characters.
 #' }
 #' @param from (character) only for type RsyncL;
 #' @param to (character) only for type RsyncL
 #' @export
 rsyncL <-function(from, to) {
   aoos::retList(c("RsyncL", "RsyncD"))
-  # aoos::retList(c("RsyncL", "RsyncD"))
+
 }
 
 
@@ -65,11 +65,11 @@ rsyncL <-function(from, to) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db a RsyncServer object that stores necessary information for respective connection types
+#' @param db a Rsync object that stores necessary information for respective connection types
 #'
 #' @details
 #' \describe{
-#'  Lists entries of object.
+#'  Lists entries of db objects.
 #' }
 #'
 #' @export
@@ -81,16 +81,16 @@ listEntries <- function(db, ...) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db RsyncServer object
+#' @param db Rsync object
 #'
 #' @details
 #' \describe{
-#' Returns a data.frame with the elements in the rsync storage.
+#' Returns a data.frame with the elements on the rsync server.
 #' }
 #'
 #' @export
 listEntries.RsyncDHTTP <- function(db) {
-  ## db (RsyncServer)
+  ## db (Rsync)
   ## return data.frame(name, lastModified, size)
   dat <- xml2::read_html(db$url)
   dat <- rvest::html_table(dat)
@@ -109,17 +109,15 @@ listEntries.RsyncDHTTP <- function(db) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db RsyncServer object
+#' @param db Rsync object
 #'
 #' @details
 #' \describe{
-#' Returns a data.frame with the elements in the object.
+#' Returns a data.frame with the elements in the local directory of the rsync object.
 #' }
 #' @export
 listEntries.RsyncL <- function(db) {
 
-  # print("files of in to:")
-  # list.files(db$to)
   dat <- as.data.frame(list.files(db$to))
   names(dat) <- "Objects"
   dat
@@ -130,35 +128,28 @@ listEntries.RsyncL <- function(db) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db RsyncServer object
+#' @param db Rsync object
 #'
 #' @details
 #' \describe{
-#' Returns a data.frame with the elements in the object.
+#' Returns a data.frame with the elements in the rsync object.
 #' }
 #' @export
 listEntries.default <- function(db) {
 
-
   pre <- sprintf("RSYNC_PASSWORD=\"%s\"", db$password)
   to <-  paste0(db$host, db$name)
 
-  # print("files of rsync deamon:")
   command <- paste(
     pre,
     "rsync",
     to
   )
   dat <- system(command, intern = TRUE, wait = TRUE, ignore.stdout = FALSE, ignore.stderr = FALSE)
-
-
   dat <- as.data.frame(dat)
-
   dat <- dat[2:4,1] #first line is dropped
   dat <- as.data.frame(dat)
   dat <- dat %>% separate(dat, into = c("shortcut", "size","date", "time", "name"), sep = "\\s+")
-  #####
-
   dat <- na.omit(dat)
   dat
   }
@@ -167,23 +158,22 @@ listEntries.default <- function(db) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db RsyncServer object
+#' @param db Rsync object
 #'
 #' @details
 #' \describe{
-#' deletes an entry from a RsyncServer object
+#' deletes an entry from a Rsync object
 #' }
 #' @export
 deleteEntry <- function(db, ...) {
   UseMethod("deleteEntry", db)
 }
 
-
 #' Rsync API
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db RsyncServer object
+#' @param db Rsync object
 #' @param entryName Name of the entry to be deleted
 #' @param verbose (logical) default = FALSE
 #'
@@ -203,7 +193,6 @@ deleteEntry.default <- function(db, entryName, verbose = FALSE) {
   args <- paste(args, includes, excludes)
   emptyDir <- paste0(tempdir(), "/empty/")
   dir.create(emptyDir)
-
 
   objects <- listEntries(db)$name
 
@@ -238,18 +227,16 @@ deleteEntry.default <- function(db, entryName, verbose = FALSE) {
   )
 
    system(command, intern = FALSE, wait = TRUE, ignore.stdout = FALSE, ignore.stderr = FALSE)
-
    dat  <- as.data.frame(listEntries(db))
    dat <- na.omit(dat)
    dat
-
 }
 
 #' Rsync API
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db RsyncServer object
+#' @param db Rsync object
 #' @param entryName Name of the entry to be deleted
 #' @param verbose (logical) default = FALSE
 #'
@@ -264,18 +251,17 @@ deleteEntry.RsyncL <- function(db, entryName, verbose = FALSE) {
   db
 }
 
-
 #' Rsync API
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db RsyncServer object
+#' @param db Rsync object
 #' @param entryName Name of the entry to be deleted
 #' @param verbose (logical) default = FALSE
 #'
 #' @details
 #' \describe{
-#'   entryName is deleted from the RsyncServer object
+#'   entryName is deleted from the Rsync object
 #' }
 #' @export
 deleteEntry.RsyncDHTTP <- function(db, entryName, verbose = FALSE) {
@@ -296,11 +282,11 @@ deleteEntry.RsyncDHTTP <- function(db, entryName, verbose = FALSE) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db RsyncServer object
+#' @param db Rsync object
 #'
 #' @details
 #' \describe{
-#'  deletes all entries from the RsyncServer object
+#'  deletes all entries from the Rsync object
 #' }
 #' @export
 deleteAllEntries <- function(db, ...) {
@@ -311,12 +297,12 @@ deleteAllEntries <- function(db, ...) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db RsyncServer object
+#' @param db Rsync object
 #' @param verbose (logical) default = FALSE
 #'
 #' @details
 #' \describe{
-#'  deletes all entries from the RsyncServer object
+#'  deletes all entries from the Rsync object
 #' }
 #' @export
 deleteAllEntries.default <- function(db, verbose = FALSE) { #lists entries of destination folder
@@ -331,7 +317,7 @@ deleteAllEntries.default <- function(db, verbose = FALSE) { #lists entries of de
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db RsyncServer object
+#' @param db Rsync object
 #' @param verbose (logical) default = FALSE
 #'
 #' @details
@@ -349,12 +335,12 @@ deleteAllEntries.RsyncL <- function(db, verbose = FALSE) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db RsyncServer object
+#' @param db Rsync object
 #' @param verbose (logical) default = FALSE
 #'
 #' @details
 #' \describe{
-#'  deletes all entries from the RsyncServer object
+#'  deletes all entries from the Rsync object
 #' }
 #' @export
 deleteAllEntries.RsyncDHTTP <- function(db, verbose = FALSE) {
@@ -372,7 +358,7 @@ deleteAllEntries.RsyncDHTTP <- function(db, verbose = FALSE) {
 #'
 #' @details
 #' \describe{
-#'   Sends a file to or from a RsyncServer object.
+#'   Sends a file to or from a Rsync object.
 #' }
 #' @export
 sendFile <- function(db, ...) {
@@ -383,7 +369,7 @@ sendFile <- function(db, ...) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db RsyncServer object , returning: 'name', 'lastModified' and 'size'
+#' @param db Rsync object , returning: 'name', 'lastModified' and 'size'
 #' @param file file to be sent (i.e .txt file, .R file, etc.)
 #' @param validate (logical) default: TRUE,
 #' @param verbose (logical) default: FALSE
@@ -412,7 +398,7 @@ sendFile.default <- function(db, file, to = "", validate = TRUE, verbose = FALSE
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db RsyncServer object
+#' @param db Rsync object
 #' @param validate (logical) default: TRUE,
 #' @param verbose (logical) default: FALSE
 #'
@@ -440,7 +426,7 @@ sendFile.RsyncL <- function(db, file, validate = TRUE, verbose = FALSE) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db RsyncServer object
+#' @param db Rsync object
 #' @param file file to be sent (i.e .txt file, .R file, etc.)
 #' @param validate (logical) default: TRUE,
 #' @param verbose (logical) default: FALSE
@@ -468,7 +454,7 @@ sendFile.RsyncDHTTP <- function(db, file, validate = TRUE, verbose = FALSE) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db RsyncServer object
+#' @param db Rsync object
 #' @param file file to be synced (i.e .txt file, .R file, etc.)
 #' @param args (character) more arguments
 #'
@@ -487,7 +473,7 @@ rsyncFile <- function(db, ...) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db RsyncServer object
+#' @param db Rsync object
 #' @param file file to be synced (i.e .txt file, .R file, etc.)
 #' @param args (character) more arguments
 #'
@@ -506,7 +492,7 @@ rsyncFile.RsyncDHTTP <- function(db, file, args) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db RsyncServer object
+#' @param db Rsync object
 #' @param file file to be synced (i.e .txt file, .R file, etc.)
 #' @param args (character) more arguments
 #'
@@ -526,7 +512,7 @@ rsyncFile.RsyncL <- function(db, file, args) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db RsyncServer object
+#' @param db Rsync object
 #' @param file file to be synced (i.e .txt file, .R file, etc.)
 #' @param args (character) more arguments
 #'
@@ -565,6 +551,7 @@ rsyncSuccessful <- function(localFile, remoteFile) {
   mapply(identicalEntries, localFile = localFile, remoteFile = remoteFile)
 }
 
+
 #' Rsync API
 #'
 #' API to use rsync as persistent file and object storage.
@@ -580,17 +567,45 @@ rsyncSuccessful <- function(localFile, remoteFile) {
 #' @export
 identicalEntries <- function(localFile, remoteFile) {
   on.exit({try(silent = TRUE, {close(loc); close(rem)})})
+ # if (grepl("rsync", localFile)) loc <- open.connection(localFile, open = "rb") #connection mit Deamon öffen funktioniert nicht
+  loc <- file(localFile, open = "rb")
+
+  if (grepl("http", remoteFile)) rem <- url(remoteFile, open = "rb")
+  else rem <- file(remoteFile, open = "rb")
+
+  if (!base::identical(openssl::sha256(loc), openssl::sha256(rem)))
+    warning(sprintf("%s: Local and remote file are not the same!", localFile))
+}
+
+
+
+#' Rsync API
+#'
+#' API to use rsync as persistent file and object storage.
+#'
+#' @param localFile source file
+#' @param remoteFile target file
+#'
+#' @details
+#' \describe{
+#' Tests if two files are exactly identical. It returns TRUE in this case, FALSE in every other case.
+#' }
+#'
+#' @export
+identicalEntries.RsyncL <- function(db, localFile, remoteFile) {
+  on.exit({try(silent = TRUE, {close(loc); close(rem)})})
   loc <- file(localFile, open = "rb")
   rem <- url(remoteFile, open = "rb")
   if (!base::identical(openssl::sha256(loc), openssl::sha256(rem)))
     warning(sprintf("%s: Local and remote file are not the same!", localFile))
 }
 
+
 #' Rsync API
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db RsyncServer object
+#' @param db Rsync object
 #' @param obj R object to be sent to db
 #' @param objName name of 'obj'
 #' @param ... more arguments
@@ -610,7 +625,7 @@ sendObject <- function(db, ...) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db RsyncServer object , returning: 'name', 'lastModified' and 'size'
+#' @param db Rsync object , returning: 'name', 'lastModified' and 'size'
 #' @param obj R object to be sent to db
 #' @param objName name of 'obj'
 #' @param ... more arguments
@@ -633,7 +648,7 @@ sendObject.default <- function(db, obj, to = "", objName = as.character(substitu
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db RsyncServer object , returning: 'name', 'lastModified' and 'size'
+#' @param db Rsync object , returning: 'name', 'lastModified' and 'size'
 #' @param obj R object to be sent to db
 #' @param objName name of 'obj'
 #' @param ... more arguments
@@ -655,7 +670,7 @@ sendObject.RsyncDHTTP <- function(db, obj, objName = as.character(substitute(obj
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db RsyncServer object , returning: 'name', 'lastModified' and 'size'
+#' @param db Rsync object , returning: 'name', 'lastModified' and 'size'
 #' @param obj R object to be sent to db
 #' @param objName name of 'obj'
 #' @param ... more arguments
@@ -680,7 +695,7 @@ sendObject.RsyncL <- function(db, obj, objName = as.character(substitute(obj)), 
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db RsyncServer object , returning: 'name', 'lastModified' and 'size'
+#' @param db Rsync object , returning: 'name', 'lastModified' and 'size'
 #' @param folder folder, of which the content shall be sent
 #' @param ... more arguments
 #' @param validate (logical) default = TRUE
@@ -703,7 +718,7 @@ sendFolder <- function(db, ...) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db RsyncServer object , returning: 'name', 'lastModified' and 'size'
+#' @param db Rsync object , returning: 'name', 'lastModified' and 'size'
 #' @param folder folder, of which the content shall be sent
 #' @param ... more arguments
 #' @param validate (logical) default = TRUE
@@ -730,7 +745,7 @@ sendFolder.default <- function(db, to, ..., validate = TRUE, verbose = FALSE) { 
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db RsyncServer object , returning: 'name', 'lastModified' and 'size'
+#' @param db Rsync object , returning: 'name', 'lastModified' and 'size'
 #' @param folder folder, of which the content shall be sent
 #' @param ... more arguments
 #' @param validate (logical) default = TRUE
@@ -755,7 +770,7 @@ sendFolder.RsyncDHTTP <- function(db, folder, ..., validate = TRUE, verbose = FA
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db RsyncServer object , returning: 'name', 'lastModified' and 'size'
+#' @param db Rsync object , returning: 'name', 'lastModified' and 'size'
 #' @param folder folder, of which the content shall be sent
 #' @param pattern an optional regular expression. Only file names which match the regular expression will be returned.
 #' @param ... more arguments
@@ -781,7 +796,7 @@ sendFolder.RsyncL <- function(db, folder,  ..., validate = TRUE, verbose = FALSE
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db RsyncServer object
+#' @param db Rsync object
 #' @param entryName Name of the entry in db
 #' @param file (character)  default= NULL
 #' @param ... more arguments
@@ -804,7 +819,7 @@ getEntry <- function(db, ...) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db RsyncServer object
+#' @param db Rsync object
 #' @param entryName Name of the entry in db
 #' @param file (character)  default= NULL
 #' @param ... more arguments
@@ -837,7 +852,7 @@ getEntry.default <- function(db, entryName, file = NULL, ...) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db RsyncServer object
+#' @param db Rsync object
 #' @param entryName Name of the entry in db
 #' @param file (character)  default= NULL
 #' @param ... more arguments
@@ -869,7 +884,7 @@ getEntry.RsyncDHTTP <- function(db, entryName, file = NULL, ...) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db RsyncServer object
+#' @param db Rsync object
 #' @param entryName Name of the entry in db
 #' @param file (character)  default= NULL
 #' @param ... more arguments
@@ -938,7 +953,7 @@ loadrdata.RsyncL <- function(db, address) {
 #'
 #' @details
 #' \describe{
-#'   loads a R data object from a RsyncServer object
+#'   loads a R data object from a Rsync object
 #' }
 #' @export
 loadrdata.RsyncDHTTP <- function(db, address) {
@@ -957,7 +972,7 @@ loadrdata.RsyncDHTTP <- function(db, address) {
 #'
 #' @details
 #' \describe{
-#'   loads a R data object from a RsyncServer object
+#'   loads a R data object from a Rsync object
 #' }
 #' @export
 loadrdata.default <- function(db, address) {
@@ -1046,12 +1061,12 @@ loadjson.default <- function(db, file, ...) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param x RsyncServer object
+#' @param x Rsync object
 #' @param ... more arguments
 #'
 #' @details
 #' \describe{
-#' prints the RsyncServer object
+#' prints the Rsync object
 #' }
 #'
 #' @export
@@ -1068,12 +1083,12 @@ print.RsyncServer <- function(x, ...) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param x RsyncServer object
+#' @param x Rsync object
 #' @param ... more arguments
 #'
 #' @details
 #' \describe{
-#' prints the RsyncServer object
+#' prints the Rsync object
 #' }
 #' @export
 print.RsyncDHTTP <- function(x, ...) {
@@ -1089,12 +1104,12 @@ print.RsyncDHTTP <- function(x, ...) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param x RsyncServer object
+#' @param x Rsync object
 #' @param ... more arguments
 #'
 #' @details
 #' \describe{
-#' prints the RsyncServer object
+#' prints the Rsync object
 #' }
 #' @export
 print.RsyncD <- function(x, ...) {
@@ -1110,7 +1125,7 @@ print.RsyncD <- function(x, ...) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param x RsyncServer object
+#' @param x Rsync object
 #' @param ... more arguments
 #'
 #' @details
@@ -1132,7 +1147,7 @@ print.RsyncL <- function(x, ...) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param x RsyncServer object
+#' @param x Rsync object
 #' @param ... more arguments
 #'
 #' @details
@@ -1152,7 +1167,7 @@ as.character.RsyncServer <- function(x, ...) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param x RsyncServer object
+#' @param x Rsync object
 #' @param ... more arguments
 #'
 #' @details
@@ -1171,7 +1186,7 @@ as.character.RsyncDHTTP <- function(x, ...) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param x RsyncServer object
+#' @param x Rsync object
 #' @param ... more arguments
 #'
 #' @details
@@ -1190,7 +1205,7 @@ as.character.RsyncD <- function(x, ...) {
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param x RsyncServer object
+#' @param x Rsync object
 #' @param ... more arguments
 #'
 #' @details

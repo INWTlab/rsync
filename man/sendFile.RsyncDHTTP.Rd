@@ -8,7 +8,7 @@
   verbose = FALSE)
 }
 \arguments{
-\item{db}{RsyncServer object}
+\item{db}{Rsync object}
 
 \item{file}{file to be sent (i.e .txt file, .R file, etc.)}
 

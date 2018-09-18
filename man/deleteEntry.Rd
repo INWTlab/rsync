@@ -7,13 +7,13 @@
 deleteEntry(db, ...)
 }
 \arguments{
-\item{db}{RsyncServer object}
+\item{db}{Rsync object}
 }
 \description{
 API to use rsync as persistent file and object storage.
 }
 \details{
 \describe{
-deletes an entry from a RsyncServer object
+deletes an entry from a Rsync object
 }
 }

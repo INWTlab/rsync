@@ -7,13 +7,13 @@
 listEntries(db, ...)
 }
 \arguments{
-\item{db}{a RsyncServer object that stores necessary information for respective connection types}
+\item{db}{a Rsync object that stores necessary information for respective connection types}
 }
 \description{
 API to use rsync as persistent file and object storage.
 }
 \details{
 \describe{
- Lists entries of object.
+ Lists entries of db objects.
 }
 }

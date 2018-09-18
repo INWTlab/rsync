@@ -7,7 +7,7 @@
 \method{getEntry}{RsyncL}(db, entryName, file = NULL, ...)
 }
 \arguments{
-\item{db}{RsyncServer object}
+\item{db}{Rsync object}
 
 \item{entryName}{Name of the entry in db}
 

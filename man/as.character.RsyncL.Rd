@@ -7,7 +7,7 @@
 \method{as.character}{RsyncL}(x, ...)
 }
 \arguments{
-\item{x}{RsyncServer object}
+\item{x}{Rsync object}
 
 \item{...}{more arguments}
 }

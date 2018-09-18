@@ -7,7 +7,7 @@
 \method{sendFile}{RsyncL}(db, file, validate = TRUE, verbose = FALSE)
 }
 \arguments{
-\item{db}{RsyncServer object}
+\item{db}{Rsync object}
 
 \item{validate}{(logical) default: TRUE,}
 

@@ -16,6 +16,6 @@ API to use rsync as persistent file and object storage.
 }
 \details{
 \describe{
- Local connection. All arguments are characters.
+ Establishes a local connection. All arguments are characters.
 }
 }

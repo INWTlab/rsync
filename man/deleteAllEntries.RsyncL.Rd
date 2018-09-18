@@ -7,7 +7,7 @@
 \method{deleteAllEntries}{RsyncL}(db, verbose = FALSE)
 }
 \arguments{
-\item{db}{RsyncServer object}
+\item{db}{Rsync object}
 
 \item{verbose}{(logical) default = FALSE}
 }

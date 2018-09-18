@@ -120,7 +120,17 @@ expectTrue(nrow(listEntries(rsync::sendFolder(serverTestingRsyncL, dirName, patt
 #get
 expectTrue(rsync::getEntry(serverTestingRsyncL, "y.Rdata")$y == 2)
 
-####validation here
+
+
+# validate
+local <- function(file) paste0(serverTestingRsyncL$from, "/", file)
+remote <- function(file) paste0(serverTestingRsyncL$to, "/", file)
+
+testthat::expect_warning(
+  rsyncSuccessful(local("x.Rdata"), remote("y.Rdata")),
+  regexp = "Local and remote file are not the same!"
+)
+testthat::expect_null(unlist(rsyncSuccessful(local("y.Rdata"), remote("y.Rdata"))))
 
 
 #sendObject
@@ -230,11 +240,21 @@ expectTrue(nrow(listEntries(rsync::sendFolder(serverTestingRsyncD, dirName))) ==
 expectTrue(nrow(listDir(dirName)) == 2)
 
 
+#Connection mit Deamon zu öffnen funktioniert nicht
+#Das hat auswirkungen auf identicalEntries() und somit rsyncSuccessful(); und auf get()
 
-
-
-
-# expectTrue(rsync::getEntry(serverTestingRsyncD, "x.Rdata")$x == 1)
+    # # validate
+    # local <- function(file) paste0(serverTestingRsyncD$host, file)
+    # remote <- function(file) paste0(dirName, "/", file)
+    #
+    # testthat::expect_warning(
+    #   rsyncSuccessful(local("x.Rdata"), remote("y.Rdata")),
+    #   regexp = "Local and remote file are not the same!"
+    # )
+    # testthat::expect_null(unlist(rsyncSuccessful(local("y.Rdata"), remote("y.Rdata"))))
+    #
+    #
+    # # expectTrue(rsync::getEntry(serverTestingRsyncD, "x.Rdata")$x == 1)
 
 #sendObject
 z <- 34
@@ -257,7 +277,7 @@ expectTrue(nrow(listDir(dirName)) == 1)
 
 # check for csv
 #preparation send file with helper again to deamon
-expectTrue(nrow(listEntries(deleteAllEntries(serverTestingRsyncD))) == 0)
+suppressWarnings(expectTrue(nrow(listEntries(deleteAllEntries(serverTestingRsyncD))) == 0))
 unlink(paste0(dirName, "/", c("*.Rdata", "*.json", "*.csv"))) #worked
 expectTrue(nrow(listDir(dirName)) == 0)
 

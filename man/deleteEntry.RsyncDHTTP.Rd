@@ -7,7 +7,7 @@
 \method{deleteEntry}{RsyncDHTTP}(db, entryName, verbose = FALSE)
 }
 \arguments{
-\item{db}{RsyncServer object}
+\item{db}{Rsync object}
 
 \item{entryName}{Name of the entry to be deleted}
 
@@ -18,6 +18,6 @@ API to use rsync as persistent file and object storage.
 }
 \details{
 \describe{
-  entryName is deleted from the RsyncServer object
+  entryName is deleted from the Rsync object
 }
 }

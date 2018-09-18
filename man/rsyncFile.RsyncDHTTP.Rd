@@ -7,7 +7,7 @@
 \method{rsyncFile}{RsyncDHTTP}(db, file, args)
 }
 \arguments{
-\item{db}{RsyncServer object}
+\item{db}{Rsync object}
 
 \item{file}{file to be synced (i.e .txt file, .R file, etc.)}
 

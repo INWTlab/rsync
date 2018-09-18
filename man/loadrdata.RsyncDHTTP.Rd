@@ -14,6 +14,6 @@ API to use rsync as persistent file and object storage.
 }
 \details{
 \describe{
-  loads a R data object from a RsyncServer object
+  loads a R data object from a Rsync object
 }
 }

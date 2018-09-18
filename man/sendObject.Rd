@@ -7,7 +7,7 @@
 sendObject(db, ...)
 }
 \arguments{
-\item{db}{RsyncServer object}
+\item{db}{Rsync object}
 
 \item{...}{more arguments}
 

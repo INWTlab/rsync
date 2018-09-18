@@ -7,7 +7,7 @@
 sendFolder(db, ...)
 }
 \arguments{
-\item{db}{RsyncServer object , returning: 'name', 'lastModified' and 'size'}
+\item{db}{Rsync object , returning: 'name', 'lastModified' and 'size'}
 
 \item{...}{more arguments}
 

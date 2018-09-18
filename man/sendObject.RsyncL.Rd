@@ -8,7 +8,7 @@
   objName = as.character(substitute(obj)), ...)
 }
 \arguments{
-\item{db}{RsyncServer object , returning: 'name', 'lastModified' and 'size'}
+\item{db}{Rsync object , returning: 'name', 'lastModified' and 'size'}
 
 \item{obj}{R object to be sent to db}
 

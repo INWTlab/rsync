@@ -7,7 +7,7 @@
 \method{deleteAllEntries}{default}(db, verbose = FALSE)
 }
 \arguments{
-\item{db}{RsyncServer object}
+\item{db}{Rsync object}
 
 \item{verbose}{(logical) default = FALSE}
 }
@@ -16,6 +16,6 @@ API to use rsync as persistent file and object storage.
 }
 \details{
 \describe{
- deletes all entries from the RsyncServer object
+ deletes all entries from the Rsync object
 }
 }

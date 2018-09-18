@@ -20,6 +20,6 @@ API to use rsync as persistent file and object storage.
 }
 \details{
 \describe{
- Connection with a Rsync HTTP server. All arguments are characters.
+ Establishes a connection with a Rsync HTTP server. All arguments are characters.
 }
 }

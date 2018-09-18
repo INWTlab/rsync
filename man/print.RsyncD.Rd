@@ -7,7 +7,7 @@
 \method{print}{RsyncD}(x, ...)
 }
 \arguments{
-\item{x}{RsyncServer object}
+\item{x}{Rsync object}
 
 \item{...}{more arguments}
 }
@@ -16,6 +16,6 @@ API to use rsync as persistent file and object storage.
 }
 \details{
 \describe{
-prints the RsyncServer object
+prints the Rsync object
 }
 }
