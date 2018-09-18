@@ -4,7 +4,7 @@
 \alias{sendFolder.default}
 \title{Rsync API}
 \usage{
-\method{sendFolder}{default}(db, folder = "", to, ..., validate = TRUE,
+\method{sendFolder}{default}(db, to, folder = "", ..., validate = TRUE,
   verbose = FALSE)
 }
 \arguments{

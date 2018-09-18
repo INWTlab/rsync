@@ -448,6 +448,91 @@ sendFile.RsyncDHTTP <- function(db, file, validate = TRUE, verbose = FALSE) {
   db
 }
 
+#' Rsync API
+#'
+#' API to use rsync as persistent file and object storage.
+#'
+#'
+#' @details
+#' \describe{
+#'   Extracts a file from a Rsync object.
+#' }
+#' @export
+extractFile <- function(db, ...) {
+  UseMethod("extractFile", db)
+}
+
+
+#' Rsync API
+#'
+#' API to use rsync as persistent file and object storage.
+#'
+#' @param db Rsync object
+#' @param file file to be sent (i.e .txt file, .R file, etc.)
+#' @param validate (logical) default: TRUE,
+#' @param verbose (logical) default: FALSE
+#'
+#' @details
+#' \describe{
+#'   Extracts a file from a db and sends it to a locoal directory.
+#' }
+#' @export
+extractFile.RsyncDHTTP <- function(db, file, to, validate = TRUE, verbose = FALSE) {
+  #browser()
+
+  pre <- sprintf("RSYNC_PASSWORD=\"%s\"", db$password)
+  #args <- if (verbose) "-ltvvx" else "-ltx"
+  #args <- ""
+  from <-  paste0(db$host, db$name)
+  file <- paste0(from, "/", basename(file))
+  to <- normalizePath(to, mustWork = TRUE)
+
+  rsync::rsync(file, to, pre = pre)
+  list.files(to)
+}
+
+#' Rsync API
+#'
+#' API to use rsync as persistent file and object storage.
+#'
+#'
+#' @details
+#' \describe{
+#'   Extracts a file from a Rsync object.
+#' }
+#' @export
+extractFolder <- function(db, ...) {
+  UseMethod("extractFolder", db)
+}
+
+#' Rsync API
+#'
+#' API to use rsync as persistent file and object storage.
+#'
+#' @param db Rsync object
+#' @param file file to be sent (i.e .txt file, .R file, etc.)
+#' @param validate (logical) default: TRUE,
+#' @param verbose (logical) default: FALSE
+#'
+#' @details
+#' \describe{
+#'   Extracts a file from a db and sends it to a locoal directory.
+#' }
+#' @export
+extractFolder.RsyncDHTTP <- function(db, to, folder = "", ... , validate = TRUE, verbose = FALSE) {
+   if (folder != "") files <- dir(folder, full.names = TRUE, ...)
+   else files <- listEntries(db)$name
+
+  pre <- sprintf("RSYNC_PASSWORD=\"%s\"", db$password)
+  from <-  paste0(db$host, db$name)
+  to <- normalizePath(to, mustWork = TRUE)
+
+  for (file in files) {file <- paste0(from, "/", basename(file))
+                       rsync::rsync(file, to, pre = pre)}
+
+  listDir(to)
+}
+
 
 
 #' Rsync API
@@ -1219,4 +1304,26 @@ as.character.RsyncL <- function(x, ...) {
   names(ret) <- names(x)
   ret
 }
+
+
+#' Rsync API
+#'
+#' API to use rsync as persistent file and object storage.
+#'
+#' @param x Rsync object
+#' @param ... more arguments
+#'
+#' @details
+#' \describe{
+#' converts a RsynsServer object to a character
+#' }
+#' @export
+listDir <- function(dirName) {
+  dat <- list.files(dirName)
+  dat <- as.data.frame(dat[grepl("Rdata|csv|json", dat)])
+  names(dat) <- "Objects"
+  dat
+
+}
+
 

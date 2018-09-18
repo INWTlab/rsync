@@ -65,6 +65,22 @@ expectTrue(nrow(listEntries(sendObject(serverTestingRsyncDHTTP, z))) == 1)
 expectTrue(getEntry(serverTestingRsyncDHTTP, "z.Rdata")$z == 3)
 expectTrue(nrow(listEntries(deleteEntry(serverTestingRsyncDHTTP, "z.Rdata"))) == 0)
 
+#extract file from server
+#preparation:
+expectTrue(nrow(listEntries(sendFile(serverTestingRsyncDHTTP, paste0(dirName, "/", c("x", "y"), ".Rdata")))) == 2)
+unlink(paste0(dirName, "/x.Rdata"))
+#extractFile()
+rsync::extractFile(serverTestingRsyncDHTTP, "x.Rdata", to = dirName)
+expectTrue(nrow(listDir(dirName)) == 3)
+
+#extract folder from server
+#preparation:
+unlink(paste0(dirName, "/*.Rdata"))
+#extractFolder()
+rsync::extractFolder(serverTestingRsyncDHTTP, to = dirName, pattern = "*.Rdata")
+expectTrue(nrow(listDir(dirName)) == 2)
+unlink(paste0(dirName, "/*.Rdata"))
+
 # check for csv
 dat <- data.frame(
   x = 1L,
@@ -73,6 +89,7 @@ dat <- data.frame(
   stringsAsFactors = FALSE
 )
 data.table::fwrite(dat, file = paste0(dirName, "/", "dat.csv"))
+expectTrue(nrow(listEntries(deleteAllEntries(serverTestingRsyncDHTTP))) == 0)
 expectTrue(nrow(listEntries(sendFile(serverTestingRsyncDHTTP, paste0(dirName, "/", "dat.csv")))) == 1)
 expectTrue(base::identical(dat, getEntry(serverTestingRsyncDHTTP, "dat.csv")))
 expectTrue(nrow(listEntries(deleteAllEntries(serverTestingRsyncDHTTP))) == 0)
@@ -168,17 +185,6 @@ expectTrue(nrow(listEntries(deleteAllEntries(serverTestingRsyncL))) == 0)
 
 
 #Tests RsyncD
-
-#function to list objects in directory
-listDir <- function(dirName) {
-  dat <- list.files(dirName)
-  dat <- as.data.frame(dat[grepl("Rdata|csv|json", dat)])
-  names(dat) <- "Objects"
-  dat
-
-}
-
-
 dirName <- tempdir()
 # In case we run these Tests multiple times in a row:
 file.remove(dir(dirName, "Rdata|csv|json", full.names = TRUE))

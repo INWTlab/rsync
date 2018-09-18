@@ -154,7 +154,7 @@ conObject <- rsync::rsyncDHTTP( host = "rsync://user@example.de",
 rsync::listEntries(conObject)
 ```
 
-#### Sending a File
+#### Sending a File to a rsync HTTP server
 With `sendFile()` it is possible to send a file from a local directory to a rsync HTTP server. 
 `sendFile()` takes two arguments as input: `conObject`and `file`. `file` contains the name of the file and its path. It then sends the specified file to `conObject$host`.
 
@@ -162,7 +162,7 @@ With `sendFile()` it is possible to send a file from a local directory to a rsyn
 rsync::sendFile(conObject, file = "C:/pathToFile/exampleFile.R")
 ```
 
-#### Sending a Folder
+#### Sending a Folder to a rsync HTTP server
 
 `sendFolder()` allows to send a folder from a local directory to a rsync HTTP server. 
 `dirName`takes as input the path to the folder that shall be sent. `pattern` defines which files from the folder shall be synced.
@@ -172,7 +172,7 @@ rsync::sendFile(conObject, file = "C:/pathToFile/exampleFile.R")
 ```
 rsync::sendFolder(conObject, dirName, pattern = "*.Rdata")
 ```
-#### Sending an Object
+#### Sending an Object to a rsync HTTP server
 
 `sendObject()` syncs an object with a rsync HTTP server.
 `conObject`is of type rsyncDHTTP and contains the information on the destination server (`conObject$host`)
@@ -181,6 +181,21 @@ An exemplary object `z` shall be the object to be sent. It is taken as second in
 ```
 z <- 3
 rsync::sendObject(conObject, obj = z)
+```
+
+#### Extracting a file from a rsync HTTP server
+`extractFile` extracts a file `file` from the rsync HTTP server `conObject` and sends it to `to`.
+
+```
+rsync::extractFile(conObject, file, to)
+```
+
+#### Extracting a folder from a rsync HTTP server
+`extractFolder` extracts a folder from the rsync HTTP server `conObject` and sends it to `to`.
+Either a pattern is specified (`pattern`), which selects files or the optional argument `folder` is defined. 
+
+```
+rsync::extractFolder(conObject, to, folder = "")
 ```
 
 #### Deleting an Entry
@@ -233,7 +248,7 @@ For a connection with a rsync deamon follwoing arguements are needed:
 ```
 conObject <- rsync::rsyncD(host = "rsync://user@example.de",
                            name = "server123",
-                           password = "r4nd0mPwd123")                              )
+                           password = "r4nd0mPwd123")
 ```
 
 #### Listing Entries 
