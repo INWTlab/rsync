@@ -60,7 +60,7 @@ conObject <- rsync::rsyncL(from = "C:/exampleFolder/"
                            to = "C:/destinationFolder")
 ```
 
-#### List Entries
+#### Listing Entries
 `listEntries` takes the rsyncL object as input and gives out the objects contained in the destination folder (`conObject$to`)
 
 ```
@@ -123,7 +123,7 @@ conObject <- rsync::rsyncDHTTP( host = "rsync://user@example.de",
                                 url =  "https://serverAddress.de")
 ```
 
-#### List Entries
+#### Listing Entries
 `listEntries` takes the rsyncDHTTP object as input and gives out the objects available on the server (`conObject$host`)
 
 ```
@@ -165,7 +165,7 @@ rsync::sendObject(conObject, obj = z)
 `entryName` defines the objects to be deleted. 
 
 ```
-rsync::deleteEntry(conObject, entryName = "z.Rdata")
+rsync::deleteEntry(conObject, entryName)
 ```
 #### Deleting all Entries
 `deleteAllEntries()` deltes all entries on the rsync HTTP server. 
@@ -182,64 +182,62 @@ rsync::deleteAllEntries(conObject)
 ### RsyncD Connection 
 
 #### Setting up the Connection
-The first step of every `rsync` process, is to create a rsyncDHTTP object.
+The first step of every `rsync` process, is to create a rsyncD object.
 Depending on the type of object, different information is needed.
-For a connection with a rsync HTTP server follwoing arguements are needed:
+For a connection with a rsync deamon follwoing arguements are needed:
 
 ```
-conObject <- rsync::rsyncDHTTP( host = "rsync://user@example.de",
-                                name = "server123",
-                                password = "r4nd0mPwd123",
-                                url =  "https://serverAddress.de")
+conObject <- rsync::rsyncD(host = "rsync://user@example.de",
+                           name = "server123",
+                           password = "r4nd0mPwd123")                              )
 ```
 
-#### List Entries
-`listEntries` takes the rsyncDHTTP object as input and gives out the objects available on the server (`conObject$host`)
+#### Listing Entries 
+`listEntries` takes the rsyncD object as input and gives out the objects of the rsync deamon (`conObject$host`)
 
 ```
 rsync::listEntries(conObject)
 ```
 
-#### Sending a File
-With `sendFile()` it is possible to send a file from a local directory to a rsync HTTP server. 
-`sendFile()` takes two arguments as input: `conObject`and `file`. `file` contains the name of the file and its path. It then sends the specified file to `conObject$host`.
+#### Sending a File from a deamon to a local directory
+With `sendFile()` it is possible to send a file from a rsync deamon to a local directory. 
+`sendFile()` takes three arguments as input: `conObject` the rsync deamon object, `file`  the name of the file and `to` the local destination directory.
 
 ```
-rsync::sendFile(conObject, file = "C:/pathToFile/exampleFile.R")
+rsync::sendFile(conObject, file = "exampleFile.R", to = "C:/destinationDir/")
 ```
 
-#### Sending a Folder
+#### Sending a Folder from a deamon to a local directory
 
-`sendFolder()` allows to send a folder from a local directory to a rsync HTTP server. 
-`dirName`takes as input the path to the folder that shall be sent. `pattern` defines which files from the folder shall be synced.
-`conObject` contains the information on where the folder is sent. 
-
+`sendFolder()` allows to send a folder from a rsync Deamon to a local directory.
+`conObject` contains the information on the rsync deamon.
+`dirName`takes as input of the destination path. `folder` is optional and can be used to specify a folder that shall be sent. 
 
 ```
-rsync::sendFolder(conObject, dirName, pattern = "*.Rdata")
+rsync::sendFolder(conObject, dirName, folder = "")
 ```
-#### Sending an Object
+#### Sending an Object from a deamon to a local directory
 
-`sendObject()` syncs an object with a rsync HTTP server.
-`conObject`is of type rsyncDHTTP and contains the information on the destination server (`conObject$host`)
+`sendObject()` syncs an object from a rsync deamon with a local directory.
+`conObject`is of type rsyncD and contains the information on the rsyn deamon.
 An exemplary object `z` shall be the object to be sent. It is taken as second input argument in `sendObject()`
-
+`to` defines the local destination directory.
 ```
 z <- 3
-rsync::sendObject(conObject, obj = z)
+rsync::sendObject(conObject, obj = z, to)
 ```
 
 #### Deleting an Entry
-`deleteEntry()` deletes an entry on the rsync HTTP server.
-`conObject` is of type rsyncDHTTP and contains information of the server.
+`deleteEntry()` deletes an entry on the rsync deamon.
+`conObject` is of type rsyncD and contains information of the deamon.
 `entryName` defines the objects to be deleted. 
 
 ```
-rsync::deleteEntry(conObject, entryName = "z.Rdata")
+rsync::deleteEntry(conObject, entryName)
 ```
 #### Deleting all Entries
-`deleteAllEntries()` deltes all entries on the rsync HTTP server. 
-`conObject` is of type rsyncDHTTP and contains information of the server.
+`deleteAllEntries()` deltes all entries on the rsync deamon. 
+`conObject` is of type rsyncD and contains information of the deamon.
 
 ```
 rsync::deleteAllEntries(conObject)
@@ -247,89 +245,6 @@ rsync::deleteAllEntries(conObject)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-##Old
-### Global
-
-#### Preparation
-
-For using `rsync` remotely a preparational step is neccessary. Credentials regarding the remote server must be stored in a config file in a user's home directory.
-Within the home directory a hidden folder must be created, following the name `.rsync`. Within this folder a file must be stored that is named `rsync.yaml`.
-
-The `rsync.yaml` file needs to have the following structure, where the right side of the `:` in each row must be replaced by the corresponding information of the user's server.
-
-
-```
-hostURL: "rsync://example-url-of-host.de"
-nameServer: "exampleServerName"
-passwordServer:  "examplePassword1234"
-urlServer: "https://url-to-Server.de"
-```
-
-#### Usage
-
-The remote version of `rsync` makes use of multiple function:
-
-`rsync::connection()` establishes a connection to the remote server. All arguments `host`, `name`, `password`, `url` are characters. This function must access the credentials information stored in the previously created config file `rsync.yaml`.
-```
-rsync::connection(host, name, password, url)
-```
-Example:
-```
-rsync::connection(
-    host     = read_yaml("~/.rsync/rsync.yaml")[[1]],
-    name     = read_yaml("~/.rsync/rsync.yaml")[[2]],
-    password = read_yaml("~/.rsync/rsync.yaml")[[3]],
-    url      = read_yaml("~/.rsync/rsync.yaml")[[4]]) 
-```
-Outout:
-```
-Rsync server: 
-  host: rsync://example-url-of-host.de/
-  name: exampleServerName
-  password: ****
-  url: https://url-to-Server.de/
-```
-
-
-`rsync::ls()` calls the objects in the rsync storage from the data base and returns them as a data frame.
-```
-rsync::ls(db)
-```
-
-`rsync::delete()` deletes an entry in the data base.
-```
-rsync::delete(db, entryName, verbose = FALSE)
-```
-
-`rsync::deleteAllEntries()` deletes all entries in the data base
-```
-rsync::deleteAllEntries(db, verbose = FALSE)
-``` 
-
-`rsync::sendFile()` sends a locally stored file to a data base. If validate is TRUE the hash-sum of the remote file is compared to the local version. A warning is issued should the differ.
-
-```
-rsync::sendFile(db, file, validate = TRUE, verbose = FALSE)
-```
-
-
-`rsync::rsyncFile()` syncs a (local) file to the server that is specified in the config file. 
-```
-rsync::rsyncFile(db, file, args)
-```
 
 `rsync::rsyncSuccessful()` tests if the sync process was successfull. It returns TRUE in this case, FALSE in every other case.
 ```
@@ -339,18 +254,6 @@ rsync::rsyncSuccessful(localFile, remoteFile)
 `rsync::identical()` tests if two files are synced successfully. It returns TRUE in this case, FALSE in every other case.
 ```
 rsync::identical(localFile, remoteFile)
-```
-
-`rsync::sendObject()` Send an R object to db. This is a wrapper around `sendFile`
-```
-rsync::sendObject(db, obj, objName = as.character(substitute(obj)), ...)
-```
-
-
-
-`rsync::sendFolder()` Sends the content of a folder to a data base using `sendFile`
-```
-rsync::sendFolder(db, folder, ..., validate = TRUE, verbose = FALSE)
 ```
 
 `rsync::get()` If `file` is a character the entry is saved there first. Then it is
