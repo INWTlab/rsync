@@ -1,48 +1,50 @@
----
-output:
-  html_document: default
-  pdf_document: default
----
   
-# [![Travis-CI Build Status](https://travis-ci.org//INWTlab/rsync.svg?branch=master)](https://travis-ci.org/INWTlab/rsync)
+[![Travis-CI Build Status](https://travis-ci.org//INWTlab/rsync.svg?branch=master)](https://travis-ci.org/INWTlab/rsync)
 
 
-## rsync-Package of INWT:
+## Rsync as R-Package
 
-In this project we provide functionalites of rsync for INWT projects.
-rsync is a open source file-copying tool that is freely available under the GNU General Public License.
-We built an R package around it in order to use its features in R contexts as well as make use of automatic testing. 
+`rsync` is a open source file-copying tool that is freely available under the
+GNU General Public License. This is an R package providing an API to rsync from
+R.
+
 
 ## Why using rsync:
 
-Rsync is a tool, which is used with Unix systems and allows efficient transferring and synchronizing of files across computer systems. It is widely used for makeing backups, copying files or mirroring. 
+Rsync is a tool, which is used with Unix systems and allows efficient
+transferring and synchronizing of files across computer systems. It is widely
+used for makeing backups, copying files or mirroring.
+
 Working with Rsync offers nice benefits, as it is:
   - fast
   - works remotly and locally 
   - minimizes data transfer, as it only transfers the changes within the files 
   - supports copying links, devices, owners, groups, and permissions
 
-For further information about the original source of rsync, please see this link: https://rsync.samba.org/
+For further information about rsync, please visit https://rsync.samba.org/.
 
-## Features:
-The rsync functionality can be used in three settings:
-
-It is great for synchronizing files between...
-   1) local directories (`RsyncL`)
-   
-  2) an HTTP interface of an rsync daemon and a local directory (`RsyncDHTTP`)
   
-  3) an rsync daemon and a local directory (`RsyncD`)
-   
-
 ## Installation:
+
 The rsync package can be downloaded and installed by running the following command from the R console:
+
 ```
-source("https://github.com/INWTlab/rsync")  #NOCH ZU ÄNDERN (oder tar.gz Datei laden?)
+devtools::install_github("INWTlab/rsync")
 ```
 
+## Settings / Classes
 
-## How to use Rsync:
+We distinguish between three settings for which we use rsync:
+
+- sync between local directories (`RsyncL`)
+- sync with an rsync daemon and a local directory (`RsyncD`)
+- sync with an rsync daemon (write only) and a local directory and reading using
+  HTTP (`RsyncDHTTP`)
+  
+These settings are represented by S3 classes in R. The list of methods follows below.
+
+
+## Methods
 
 
 ### RsyncL Connection
