@@ -5,20 +5,22 @@
 \title{Interface to rsync cli-tool}
 \usage{
 rsync(from, to, includes = NULL, excludes = NULL, args = "-rltvx",
-  pre = NULL)
+  pre = NULL, intern = FALSE)
 }
 \arguments{
 \item{from}{(character) source}
 
 \item{to}{(character) target}
 
-\item{includes, excludes}{(chracter) with length >=1 restictions}
+\item{includes, excludes}{(character) with length >=1}
 
-\item{args}{(character) more arguments}
+\item{args}{(character) arguments passed to rsync. Default is '-rltvx' and
+works for most cases.}
 
-\item{pre}{(character) something which is pasted before the 'rsync' command}
+\item{pre}{(character) something which is pasted before the 'rsync' command.
+E.g. a password}
 
-\item{...}{arguments passed to rsync}
+\item{intern}{(logical) passed to \link{system}}
 }
 \description{
 Calls the CLI-program 'rsync'.
