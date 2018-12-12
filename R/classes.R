@@ -35,16 +35,56 @@ rsyncL <-function(from, to) {
 }
 
 
-getPre <- function(db) {
-  if (!is.null(db$password)) {
-    sprintf("RSYNC_PASSWORD=\"%s\"", db$password)
+getPre <- function(host) {
+  if (!is.null(host$password)) {
+    sprintf("RSYNC_PASSWORD=\"%s\"", host$password)
   } else {
     NULL
   }
 }
 
-getTo <- function(db) {
-  if (!is.null(db$to)) db$to
-  else if (!is.null(db$host)) paste0(db$host, db$name)
-  else stop("Failed to construct destination folder. 'to' or 'host' are missing.")
+getArgs <- function(args) {
+  #edit later
+  args
 }
+
+
+
+
+getFile <- function(local, host, fileName, direction) {
+  browser()
+  if(direction == 'send') paste0(local, '/', fileName)
+  else if(direction == 'get') paste0(host$host, host$name, '/', fileName)
+  else stop("Failed to construct origin's folder.")
+
+  # if(!is.null(from)) from <- from # case of send to http
+  # else if(!is.null(db$from)) from <- db$from
+  # else if (!is.null(db$host)) from <- paste0(db$host, db$name)
+  # else stop("Failed to construct origin's folder")
+  #
+  # file <- paste0(from, "/", basename(fileName))
+  # file
+}
+
+
+
+getTo <- function(local, host, direction) {
+
+  if((direction == 'send') & !is.null(host$host)) paste0(host$host, host$name)
+  else if((direction == 'send') & !is.null(host$to)) paste0(host$to, '/')
+  else if(direction == 'get') local
+  else stop("Failed to construct destination folder.")
+  #
+  # if (!is.null(to)) to
+  # else if (!is.null(db$to)) db$to #for the rsyncL case
+  # else if (!is.null(db$host)) paste0(db$host, db$name)
+  # else stop("Failed to construct destination folder. 'to' or 'host' are missing.")
+}
+
+
+getObj <- function(host) {
+  if(!is.null(host$host))  paste0(host$host, host$name)
+  else if(!is.null(host$to)) host$to
+  else stop("Failed to find Object to list")
+}
+

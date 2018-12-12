@@ -4,12 +4,10 @@
 \alias{rsync}
 \title{Interface to rsync cli-tool}
 \usage{
-rsync(from, to, includes = NULL, excludes = NULL, args = "-rltvx",
+rsync(file, to, includes = NULL, excludes = NULL, args = "-rltvx",
   pre = NULL, intern = FALSE)
 }
 \arguments{
-\item{from}{(character) source}
-
 \item{to}{(character) target}
 
 \item{includes, excludes}{(character) with length >=1}
@@ -21,6 +19,8 @@ works for most cases.}
 E.g. a password}
 
 \item{intern}{(logical) passed to \link{system}}
+
+\item{from}{(character) source}
 }
 \description{
 Calls the CLI-program 'rsync'.

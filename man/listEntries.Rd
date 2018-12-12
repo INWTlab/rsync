@@ -4,16 +4,13 @@
 \alias{listEntries}
 \title{List entries}
 \usage{
-listEntries(db, ...)
+listEntries(host, ...)
 }
 \arguments{
-\item{db}{rsync object connection}
-
 \item{...}{ignored}
-}
-\value{
-Returns a data.frame.
+
+\item{db}{rsync object connection}
 }
 \description{
-List all entries in destination folder.
+List all entries in destination folder. Returns a data frame.
 }

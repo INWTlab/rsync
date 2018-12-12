@@ -13,7 +13,7 @@
 #'
 #' @rdname rsync
 #' @export
-rsync <- function(from, to, includes = NULL, excludes = NULL, args = "-rltvx", pre = NULL, intern = FALSE) {
+rsync <- function(file, to, includes = NULL, excludes = NULL, args = "-rltvx", pre = NULL, intern = FALSE) {
 
   constructArg <- function(x, s) {
     if (is.null(x)) return(x)
@@ -34,7 +34,7 @@ rsync <- function(from, to, includes = NULL, excludes = NULL, args = "-rltvx", p
     args,
     includes,
     excludes,
-    from,
+    file,
     to
   )
 

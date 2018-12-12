@@ -6,15 +6,18 @@
 #' @param ... ignored
 #'
 #' @export
-listEntries <- function(db, ...) {
-  UseMethod("listEntries", db)
+listEntries <- function(host, ...) {
+  UseMethod("listEntries", host)
 }
 
 #' @export
-listEntries.default <- function(db, ...) {
-  pre <- getPre(db)
-  to <- getTo(db)
-  dir <- rsync(NULL, to, args = NULL, pre = pre, intern = TRUE)
+listEntries.default <- function(host, ...) {
+  pre <- getPre(host)
+
+  to <- getObj(host)
+
+
+  dir <- rsync(NULL, to, args = NULL, pre = pre, intern = TRUE) #send NULL to destination folder and view it
   dir <- dat::extract(dir, ~ !grepl("\\.$", .))
   if (length(dir) == 0) return(emptyDir())
   dir <- strsplit(dir, " +")
