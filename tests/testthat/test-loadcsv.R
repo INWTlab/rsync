@@ -1,7 +1,7 @@
 library(testthat)
 library(tidyr)
 
-context("deleteEntry")
+context("loadcsv")
 source("~/.inwt/rsync/config.R")
 
 expectTrue <- function(a) testthat::expect_true(a)
@@ -9,13 +9,18 @@ expectTrue <- function(a) testthat::expect_true(a)
 
 dirName <- tempdir()
 dirName2 <- paste0(dirName, '/extraFolder/')
-dir.create(dirName2)
+dir.create(dirName2
 # In case we run these Tests multiple times in a row:
 file.remove(dir(dirName, "Rdata|csv|json", full.names = TRUE))
-x <- 1
-y <- 2
- save(list = "x", file = paste0(dirName, "/", "x.Rdata"))
-save(list = "y", file = paste0(dirName, "/", "y.Rdata"))
+
+dat <- data.frame(
+  x = 1L,
+  date = "2018-12-24",
+  z = 1.12345,
+  stringsAsFactors = FALSE
+)
+
+data.table::fwrite(dat, file = paste0(dirName, "/", "x.csv"))
 
 
 
@@ -37,12 +42,10 @@ serverTestingRsyncL <- rsync::rsyncL(from = dirName,
 
 
 
-#1:
-rsync::deleteEntry(host = serverTestingRsyncDHTTP, entryName = 'y.Rdata')
 
-#2:
-rsync::deleteEntry(host = serverTestingRsyncD, entryName = 'y.Rdata')
+#1 rsyncDHTTP
+rsync::sendFile(local = dirName, host = serverTestingRsyncDHTTP, fileName = 'x.csv')
+rsync::loadcsv(host = serverTestingRsyncDHTTP, csvName = 'x.csv')
 
-
-#3:
-rsync::deleteEntry(host = serverTestingRsyncL, entryName = 'y.Rdata')
+#2 rsyncD
+rsync::loadcsv(host = serverTestingRsyncD, csvName = 'x.csv')

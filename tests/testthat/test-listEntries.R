@@ -31,7 +31,7 @@ serverTestingRsyncD <- rsync::rsyncD(host = hostURL,
 
 
 serverTestingRsyncL <- rsync::rsyncL(from = dirName,
-                                     to = "/home/dberscheid/Netzfreigaben/Git_TEX/rsync")
+                                     to = "/home/dberscheid/Netzfreigaben/Git_TEX/rsync/")
 
 
 
