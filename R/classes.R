@@ -53,10 +53,11 @@ getArgs <- function(args) {
 
 getFile <- function(local, host, fileName, direction) {
   browser()
-  if(direction == 'send') paste0(local, '/', fileName)
-  else if(direction == 'get') paste0(host$host, host$name, '/', fileName)
+  if(direction == 'send') file <- paste0(local, '/', fileName)
+  else if(direction == 'get') file <- paste0(host$host, host$name, '/', fileName)
   else stop("Failed to construct origin's folder.")
 
+  file
   # if(!is.null(from)) from <- from # case of send to http
   # else if(!is.null(db$from)) from <- db$from
   # else if (!is.null(db$host)) from <- paste0(db$host, db$name)

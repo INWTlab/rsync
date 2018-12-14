@@ -8,6 +8,8 @@ expectTrue <- function(a) testthat::expect_true(a)
 
 
 dirName <- tempdir()
+dirName2 <- paste0(dirName, '/extraFolder/')
+dir.create(dirName2)
 # In case we run these Tests multiple times in a row:
 file.remove(dir(dirName, "Rdata|csv|json", full.names = TRUE))
 x <- 1
@@ -31,14 +33,14 @@ serverTestingRsyncD <- rsync::rsyncD(host = hostURL,
 
 
 serverTestingRsyncL <- rsync::rsyncL(from = dirName,
-                                     to = "/home/dberscheid/Netzfreigaben/Git_TEX/rsync")
+                                     to = dirName2)
 
 
 
 #1 rsyncDHTTP
-rsync::getFile(local = "/home/dberscheid/Netzfreigaben/Git_TEX/rsync", host = serverTestingRsyncDHTTP, fileName = 'x.Rdata')
+rsync::getFile(local = dirName2, host = serverTestingRsyncDHTTP, fileName = 'x.Rdata')
 
 #2 rsyncD
-rsync::getFile(local = "/home/dberscheid/Netzfreigaben/Git_TEX/rsync", host = serverTestingRsyncD, fileName = 'x.Rdata')
+rsync::getFile(local = dirName2, host = serverTestingRsyncD, fileName = 'x.Rdata')
 
 

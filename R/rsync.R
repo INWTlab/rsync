@@ -14,7 +14,7 @@
 #' @rdname rsync
 #' @export
 rsync <- function(file, to, includes = NULL, excludes = NULL, args = "-rltvx", pre = NULL, intern = FALSE) {
-
+  #browser()
   constructArg <- function(x, s) {
     if (is.null(x)) return(x)
     paste(paste0(s, " \"", x, "\""), collapse = " ")

@@ -30,7 +30,7 @@ sendFile <- function(host, ...) {
 #' }
 #'
 #' @export
-sendFile.default <- function(local, host, fileName, validate = TRUE, verbose = FALSE ) {
+sendFile.default <- function(host, local, fileName, verbose = FALSE ) {
 
   if (verbose == TRUE) {
     args <- "-ltvvx"

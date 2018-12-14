@@ -12,7 +12,7 @@ dirName <- tempdir()
 file.remove(dir(dirName, "Rdata|csv|json", full.names = TRUE))
 x <- 1
 y <- 2
-# save(list = "x", file = paste0(dirName, "/", "x.Rdata"))
+#save(list = "x", file = paste0(dirName, "/", "x.Rdata"))
 save(list = "y", file = paste0(dirName, "/", "y.Rdata"))
 
 
@@ -37,10 +37,9 @@ serverTestingRsyncL <- rsync::rsyncL(from = dirName,
 
 
   #1) send and get with rsyncDHTTP
-  rsync::rsyncFile(local = "/home/dberscheid/Netzfreigaben/Git_TEX/rsync", host = serverTestingRsyncDHTTP, fileName = 'x.Rdata', direction = 'get', args = "-ltx") # das wäre der get Fall
-  rsync::rsyncFile(local = "/home/dberscheid/Netzfreigaben/Git_TEX/rsync", host = serverTestingRsyncDHTTP, fileName = 'x.Rdata', direction = 'send', args = "-ltx") # das wäre der get Fall
-
-
+  rsync::rsyncFile(local = dirName, host = serverTestingRsyncDHTTP, fileName = 'x.Rdata', direction = 'get', args = "-ltx") # das wäre der get Fall
+  rsync::rsyncFile(local = dirName, host = serverTestingRsyncDHTTP, fileName = 'x.Rdata', direction = 'send', args = "-ltx") # das wäre der get Fall
+#"/home/dberscheid/Netzfreigaben/Git_TEX/rsync"
   #2:send and get with rsyncD
   rsync::rsyncFile(local = "/home/dberscheid/Netzfreigaben/Git_TEX/rsync", host = serverTestingRsyncD, fileName = 'x.Rdata', direction = 'get', args = "-ltx") # das wäre der get Fall
   #gibt es laut schema nicht

@@ -16,7 +16,7 @@ listEntries.default <- function(host, ...) {
 
   to <- getObj(host)
 
-
+  #browser()
   dir <- rsync(NULL, to, args = NULL, pre = pre, intern = TRUE) #send NULL to destination folder and view it
   dir <- dat::extract(dir, ~ !grepl("\\.$", .))
   if (length(dir) == 0) return(emptyDir())

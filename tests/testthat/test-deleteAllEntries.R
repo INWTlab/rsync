@@ -1,7 +1,7 @@
 library(testthat)
 library(tidyr)
 
-context("deleteEntry")
+context("deleteAllEntries")
 source("~/.inwt/rsync/config.R")
 
 expectTrue <- function(a) testthat::expect_true(a)
@@ -14,7 +14,7 @@ dir.create(dirName2)
 file.remove(dir(dirName, "Rdata|csv|json", full.names = TRUE))
 x <- 1
 y <- 2
- save(list = "x", file = paste0(dirName, "/", "x.Rdata"))
+save(list = "x", file = paste0(dirName, "/", "x.Rdata"))
 save(list = "y", file = paste0(dirName, "/", "y.Rdata"))
 
 
@@ -37,12 +37,12 @@ serverTestingRsyncL <- rsync::rsyncL(from = dirName,
 
 
 
+#deleteAllEntries always deletes files on the host side
 #1:
-rsync::deleteEntry(host = serverTestingRsyncDHTTP, entryName = 'x.Rdata')
+rsync::deleteAllEntries(host = serverTestingRsyncDHTTP)
 
 #2:
-rsync::deleteEntry(host = serverTestingRsyncD, entryName = 'y.Rdata')
-
+rsync::deleteAllEntries(host = serverTestingRsyncD)
 
 #3:
-rsync::deleteEntry(host = serverTestingRsyncL, entryName = 'y.Rdata')
+rsync::deleteAllEntries(host = serverTestingRsyncL)
