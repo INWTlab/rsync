@@ -7,9 +7,13 @@
 rsyncFile(host, ...)
 }
 \arguments{
-\item{db}{Rsync object}
+\item{host}{Rsync object}
 
-\item{file}{file to be synced (i.e .txt file, .R file, etc.)}
+\item{local}{local directory}
+
+\item{fileName}{file to be synced (i.e .txt file, .R file, etc.)}
+
+\item{direction}{the direction that it is synced in ('send'- from local to host or 'get' - from host to local)}
 
 \item{args}{(character) more arguments}
 }
@@ -18,6 +22,6 @@ API to use rsync as persistent file and object storage.
 }
 \details{
 \describe{
-  Syncs a file with db
+  Syncs a file with of a rsync object
 }
 }

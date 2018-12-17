@@ -2,11 +2,12 @@
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db Rsync object
+#' @param host Rsync object
+#' @param ...
 #'
 #' @details
 #' \describe{
-#' deletes an entry from a Rsync object
+#' deletes all entries from a Rsync object
 #' }
 #' @export
 deleteAllEntries <- function(host, ...) {

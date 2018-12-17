@@ -1,13 +1,15 @@
-# rsync::loadcsv(host = serverTestingRsyncDHTTP, csvName = 'x.csv')
-
 #' Rsync API
 #'
 #' API to use rsync as persistent file and object storage.
 #'
 #'
+#' @param host Rsync object, with csv file
+#' @param csvName name of csv file
+#' @param ...
+#'
 #' @details
 #' \describe{
-#'   Sends a file to or from a Rsync object.
+#'   loads a csv file from a Rsync object.
 #' }
 #' @export
 loadcsv <- function(host, ...) {
@@ -23,13 +25,8 @@ loadcsv.default <- function(host, csvName, verbose = FALSE ) {
   } else {
     args <- "-ltx"}
 
-   # table <- dat
-
-
   direction <- 'get'
-
   dirName <- tempdir()
-
   rsyncFile(dirName, host, csvName, direction, args)
 
   #open csv file in dirName

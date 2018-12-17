@@ -1,7 +1,7 @@
 library(testthat)
 library(tidyr)
 
-context("sendFile")
+context("identicalEntries")
 source("~/.inwt/rsync/config.R")
 
 expectTrue <- function(a) testthat::expect_true(a)
@@ -10,12 +10,15 @@ expectTrue <- function(a) testthat::expect_true(a)
 dirName <- tempdir()
 dirName2 <- paste0(dirName, '/extraFolder/')
 dir.create(dirName2)
+
 # In case we run these Tests multiple times in a row:
 file.remove(dir(dirName, "Rdata|csv|json", full.names = TRUE))
 x <- 1
 y <- 2
 save(list = "x", file = paste0(dirName, "/", "x.Rdata"))
-save(list = "y", file = paste0(dirName, "/", "y.Rdata"))
+#save(list = "y", file = paste0(dirName, "/", "y.Rdata"))
+
+
 
 serverTestingRsyncDHTTP <- rsync::rsyncDHTTP(host = hostURL,
                                              name = nameServer,
@@ -35,21 +38,15 @@ serverTestingRsyncL <- rsync::rsyncL(from = dirName,
 
 
 
-#1 rsyncDHTTP
-invisible(rsync::deleteAllEntries(host = serverTestingRsyncDHTTP))
-invisible(rsync::sendFile(local = dirName, host = serverTestingRsyncDHTTP, fileName = 'x.Rdata'))
-expectTrue(nrow(rsync::listEntries(serverTestingRsyncDHTTP)) == 1)
-invisible(rsync::deleteAllEntries(host = serverTestingRsyncDHTTP))
+#1:
+rsync::deleteAllEntries(host = serverTestingRsyncDHTTP)
+rsync::sendFile(local = dirName, host = serverTestingRsyncDHTTP, fileName = 'x.Rdata')
+rsync::identicalEntries(local = dirName, host = serverTestingRsyncDHTTP, entryName = 'x.Rdata')
+# rsync::rsyncSuccessful()
 
-#2 rsyncD
-# rsync::sendFile(local = dirName, host = serverTestingRsyncD, fileName = 'x.Rdata')
+#2:
+rsync::identicalEntries(local = dirName, host = serverTestingRsyncD, entryName = 'x.Rdata')
 
-#2 rsyncL
-invisible(rsync::deleteAllEntries(host = serverTestingRsyncL))
-invisible(rsync::sendFile(local = dirName, host = serverTestingRsyncL, fileName = 'y.Rdata'))
-expectTrue(nrow(listEntries(serverTestingRsyncL)) == 1)
-invisible(rsync::deleteAllEntries(host = serverTestingRsyncL))
-
-
-
-
+#3:
+rsync::sendFile(local = dirName, host = serverTestingRsyncL, fileName = 'x.Rdata')
+rsync::identicalEntries(local = dirName, host = serverTestingRsyncL, entryName = 'x.Rdata')

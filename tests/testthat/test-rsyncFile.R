@@ -8,11 +8,13 @@ expectTrue <- function(a) testthat::expect_true(a)
 
 
 dirName <- tempdir()
+dirName2 <- paste0(dirName, '/extraFolder/')
+dir.create(dirName2)
 # In case we run these Tests multiple times in a row:
 file.remove(dir(dirName, "Rdata|csv|json", full.names = TRUE))
 x <- 1
 y <- 2
-#save(list = "x", file = paste0(dirName, "/", "x.Rdata"))
+save(list = "x", file = paste0(dirName, "/", "x.Rdata"))
 save(list = "y", file = paste0(dirName, "/", "y.Rdata"))
 
 
@@ -31,22 +33,39 @@ serverTestingRsyncD <- rsync::rsyncD(host = hostURL,
 
 
 serverTestingRsyncL <- rsync::rsyncL(from = dirName,
-                                     to = "/home/dberscheid/Netzfreigaben/Git_TEX/rsync")
+                                     to = dirName2)
 
 
 
 
-  #1) send and get with rsyncDHTTP
-  rsync::rsyncFile(local = dirName, host = serverTestingRsyncDHTTP, fileName = 'x.Rdata', direction = 'get', args = "-ltx") # das wäre der get Fall
-  rsync::rsyncFile(local = dirName, host = serverTestingRsyncDHTTP, fileName = 'x.Rdata', direction = 'send', args = "-ltx") # das wäre der get Fall
-#"/home/dberscheid/Netzfreigaben/Git_TEX/rsync"
-  #2:send and get with rsyncD
-  rsync::rsyncFile(local = "/home/dberscheid/Netzfreigaben/Git_TEX/rsync", host = serverTestingRsyncD, fileName = 'x.Rdata', direction = 'get', args = "-ltx") # das wäre der get Fall
-  #gibt es laut schema nicht
-  # rsync::rsyncFile(local = "/home/dberscheid/Netzfreigaben/Git_TEX/rsync", host = serverTestingRsyncD, fileName = 'x.Rdata', direction = 'send', args = "-ltx") # das wäre der get Fall
+#1) send and get with rsyncDHTTP
+  #get
+invisible(rsync::deleteAllEntries(host = serverTestingRsyncDHTTP))
+invisible(rsync::sendFile(local = dirName, host = serverTestingRsyncDHTTP, fileName = 'x.Rdata'))
+file.remove(dir(dirName, "Rdata|csv|json", full.names = TRUE))
+rsync::rsyncFile(local = dirName, host = serverTestingRsyncDHTTP, fileName = 'x.Rdata', direction = 'get', args = "-ltx")
+expectTrue(nrow(listDir(dirName)) == 1)
 
-#3: send and get with rsyncL
-  # rsync::rsyncFile(local = "/home/dberscheid/Netzfreigaben/Git_TEX/rsync", host = serverTestingRsyncL, fileName = 'x.Rdata', direction = 'get', args = "-ltx") # das wäre der get Fall
-  rsync::rsyncFile(local = "/home/dberscheid/Netzfreigaben/Git_TEX", host = serverTestingRsyncL, fileName = 'y.Rdata', direction = 'send', args = "-ltx") # das wäre der get Fall
+  #send
+invisible(rsync::deleteAllEntries(host = serverTestingRsyncDHTTP))
+rsync::rsyncFile(local = dirName, host = serverTestingRsyncDHTTP, fileName = 'x.Rdata', direction = 'send', args = "-ltx")
+expectTrue(nrow(rsync::listEntries(serverTestingRsyncDHTTP)) == 1)
 
+
+
+#2:get with rsyncD
+invisible(rsync::deleteAllEntries(host = serverTestingRsyncD))
+invisible(rsync::sendFile(local = dirName, host = serverTestingRsyncD, fileName = 'x.Rdata'))
+file.remove(dir(dirName, "Rdata|csv|json", full.names = TRUE))
+rsync::rsyncFile(local = dirName, host = serverTestingRsyncD, fileName = 'x.Rdata', direction = 'get', args = "-ltx")
+expectTrue(nrow(listDir(dirName)) == 1)
+
+# send with rsyncD not needed
+
+
+#3: send with rsyncL
+invisible(rsync::deleteAllEntries(host = serverTestingRsyncL))
+rsync::rsyncFile(local = dirName, host = serverTestingRsyncL, fileName = 'x.Rdata', direction = 'send', args = "-ltx")
+expectTrue(nrow(listEntries(host = serverTestingRsyncL)) == 0)
+# get with rsyncL not needed
 

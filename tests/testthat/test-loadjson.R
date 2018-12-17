@@ -38,11 +38,20 @@ serverTestingRsyncL <- rsync::rsyncL(from = dirName,
                                      to = dirName2)
 
 
-
-
 #1 rsyncDHTTP
-rsync::sendFile(local = dirName, host = serverTestingRsyncDHTTP, fileName = 'lst.json')
-rsync::loadjson(host = serverTestingRsyncDHTTP, jsonName = 'lst.json')
+invisible(rsync::deleteAllEntries(host = serverTestingRsyncDHTTP))
+invisible(rsync::sendFile(local = dirName, host = serverTestingRsyncDHTTP, fileName = 'lst.json'))
+expectTrue(nrow(rsync::listEntries(serverTestingRsyncDHTTP)) == 1)
+expectTrue(!is.null(rsync::loadjson(host = serverTestingRsyncDHTTP, jsonName = 'lst.json')))
+invisible(rsync::deleteAllEntries(host = serverTestingRsyncDHTTP))
+
+
 
 #2 rsyncD
-rsync::loadjson(host = serverTestingRsyncD, jsonName = 'lst.json')
+invisible(rsync::deleteAllEntries(host = serverTestingRsyncD))
+invisible(rsync::sendFile(local = dirName, host = serverTestingRsyncD, fileName = 'lst.json'))
+expectTrue(nrow(rsync::listEntries(serverTestingRsyncD)) == 1)
+expectTrue(!is.null(rsync::loadjson(host = serverTestingRsyncD, jsonName = 'lst.json')))
+invisible(rsync::deleteAllEntries(host = serverTestingRsyncD))
+
+

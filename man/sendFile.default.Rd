@@ -7,22 +7,19 @@
 \method{sendFile}{default}(host, local, fileName, verbose = FALSE)
 }
 \arguments{
+\item{host}{Rsync object , returning: 'name', 'lastModified' and 'size'}
+
+\item{local}{local directory to send file from}
+
+\item{fileName}{file to be sent (i.e .txt file, .R file, etc.)}
+
 \item{verbose}{(logical) default: FALSE}
-
-\item{db}{Rsync object , returning: 'name', 'lastModified' and 'size'}
-
-\item{file}{file to be sent (i.e .txt file, .R file, etc.)}
-
-\item{validate}{(logical) default: TRUE,}
 }
 \description{
 API to use rsync as persistent file and object storage.
 }
 \details{
 \describe{
-  Sends a file (file in local file system) to db. If validate is TRUE the
-  hash-sum of the remote file is compared to the local version. A warning is
-  issued should the differ. The return status of the command line rsync is
-  returned by this function.
+  Sends a file (file in local file system) to a host.
 }
 }

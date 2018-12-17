@@ -2,7 +2,7 @@
 #'
 #' List all entries in destination folder. Returns a data frame.
 #'
-#' @param db rsync object connection
+#' @param host rsync object connection
 #' @param ... ignored
 #'
 #' @export
@@ -13,11 +13,9 @@ listEntries <- function(host, ...) {
 #' @export
 listEntries.default <- function(host, ...) {
   pre <- getPre(host)
-
   to <- getObj(host)
 
-  #browser()
-  dir <- rsync(NULL, to, args = NULL, pre = pre, intern = TRUE) #send NULL to destination folder and view it
+  dir <- rsync(NULL, to, args = NULL, pre = pre, intern = TRUE)
   dir <- dat::extract(dir, ~ !grepl("\\.$", .))
   if (length(dir) == 0) return(emptyDir())
   dir <- strsplit(dir, " +")

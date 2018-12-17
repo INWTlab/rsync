@@ -1,12 +1,15 @@
-
 #' Rsync API
 #'
 #' API to use rsync as persistent file and object storage.
 #'
+#' @param host Rsync object, with json file
+#' @param jsonName name of json file
+#' @param ...
+#'
 #'
 #' @details
 #' \describe{
-#'   Sends a file to or from a Rsync object.
+#'   Loads a file from a Rsync object.
 #' }
 #' @export
 loadjson <- function(host, ...) {
@@ -22,8 +25,7 @@ loadjson.default <- function(host, jsonName, verbose = FALSE ) {
   } else {
     args <- "-ltx"}
 
-  direction <- 'get'
-
+  direction <- "get"
   dirName <- tempdir()
 
   rsyncFile(dirName, host, jsonName, direction, args)

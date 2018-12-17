@@ -6,11 +6,18 @@
 \usage{
 loadjson(host, ...)
 }
+\arguments{
+\item{host}{Rsync object, with json file}
+
+\item{...}{}
+
+\item{jsonName}{name of json file}
+}
 \description{
 API to use rsync as persistent file and object storage.
 }
 \details{
 \describe{
-  Sends a file to or from a Rsync object.
+  Loads a file from a Rsync object.
 }
 }

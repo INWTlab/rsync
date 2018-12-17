@@ -11,6 +11,6 @@ API to use rsync as persistent file and object storage.
 }
 \details{
 \describe{
-  Sends a file to or from a Rsync object.
+  Sends a file to a rsync host object.
 }
 }

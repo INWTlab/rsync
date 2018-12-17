@@ -7,9 +7,9 @@
 listEntries(host, ...)
 }
 \arguments{
-\item{...}{ignored}
+\item{host}{rsync object connection}
 
-\item{db}{rsync object connection}
+\item{...}{ignored}
 }
 \description{
 List all entries in destination folder. Returns a data frame.

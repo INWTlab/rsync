@@ -24,25 +24,38 @@ serverTestingRsyncDHTTP <- rsync::rsyncDHTTP(host = hostURL,
                                              password = passwordServer,
                                              url = urlServer)
 
-
-
 serverTestingRsyncD <- rsync::rsyncD(host = hostURL,
                                      name = nameServer,
                                      password =passwordServer)
-
-
 
 serverTestingRsyncL <- rsync::rsyncL(from = dirName,
                                      to = dirName2)
 
 
 
-#1:
-rsync::deleteEntry(host = serverTestingRsyncDHTTP, entryName = 'y.Rdata')
+#1: rsyncDHTTP
+invisible(rsync::deleteAllEntries(host = serverTestingRsyncDHTTP))
+expectTrue(nrow(listEntries(serverTestingRsyncDHTTP)) == 0)
+invisible(rsync::sendFile(local = dirName, host = serverTestingRsyncDHTTP, fileName = 'x.Rdata'))
+expectTrue(nrow(rsync::listEntries(serverTestingRsyncDHTTP)) == 1)
+invisible(rsync::deleteEntry(host = serverTestingRsyncDHTTP, entryName = 'x.Rdata'))
+expectTrue(nrow(rsync::listEntries(serverTestingRsyncDHTTP)) == 0)
 
-#2:
-rsync::deleteEntry(host = serverTestingRsyncD, entryName = 'y.Rdata')
+
+#2: rsyncD
+invisible(rsync::deleteAllEntries(host = serverTestingRsyncD))
+expectTrue(nrow(listEntries(serverTestingRsyncD)) == 0)
+invisible(rsync::sendFile(local = dirName, host = serverTestingRsyncD, fileName = 'y.Rdata'))
+expectTrue(nrow(rsync::listEntries(serverTestingRsyncD)) == 1)
+invisible(rsync::deleteEntry(host = serverTestingRsyncD, entryName = 'y.Rdata'))
+expectTrue(nrow(rsync::listEntries(serverTestingRsyncD)) == 0)
 
 
-#3:
-rsync::deleteEntry(host = serverTestingRsyncL, entryName = 'y.Rdata')
+
+#3: rsyncL
+invisible(rsync::deleteAllEntries(host = serverTestingRsyncL))
+expectTrue(nrow(listEntries(serverTestingRsyncL)) == 0)
+invisible(rsync::sendFile(local = dirName, host = serverTestingRsyncL, fileName = 'y.Rdata'))
+expectTrue(nrow(rsync::listEntries(serverTestingRsyncL)) == 1)
+invisible(rsync::deleteEntry(host = serverTestingRsyncL, entryName = 'y.Rdata'))
+expectTrue(nrow(rsync::listEntries(serverTestingRsyncL)) == 0)

@@ -2,8 +2,8 @@
 #'
 #' Calls the CLI-program 'rsync'.
 #'
-#' @param from (character) source
-#' @param to   (character) target
+#' @param file (character) source
+#' @param to (character) target
 #' @param includes,excludes (character) with length >=1
 #' @param args (character) arguments passed to rsync. Default is '-rltvx' and
 #'   works for most cases.
@@ -14,7 +14,7 @@
 #' @rdname rsync
 #' @export
 rsync <- function(file, to, includes = NULL, excludes = NULL, args = "-rltvx", pre = NULL, intern = FALSE) {
-  #browser()
+
   constructArg <- function(x, s) {
     if (is.null(x)) return(x)
     paste(paste0(s, " \"", x, "\""), collapse = " ")

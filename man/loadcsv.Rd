@@ -6,11 +6,18 @@
 \usage{
 loadcsv(host, ...)
 }
+\arguments{
+\item{host}{Rsync object, with csv file}
+
+\item{...}{}
+
+\item{csvName}{name of csv file}
+}
 \description{
 API to use rsync as persistent file and object storage.
 }
 \details{
 \describe{
-  Sends a file to or from a Rsync object.
+  loads a csv file from a Rsync object.
 }
 }
