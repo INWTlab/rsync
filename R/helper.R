@@ -20,17 +20,7 @@ print.RsyncServer <- function(x, ...) {
   print(listEntries(x), ...)
 }
 
-#' Rsync API
-#'
-#' API to use rsync as persistent file and object storage.
-#'
-#' @param x Rsync object
-#' @param ... more arguments
-#'
-#' @details
-#' \describe{
-#' prints the Rsync object
-#' }
+
 #' @export
 print.RsyncDHTTP <- function(x, ...) {
   xchar <- as.character(x)
@@ -41,17 +31,7 @@ print.RsyncDHTTP <- function(x, ...) {
   print(listEntries(x), ...)
 }
 
-#' Rsync API
-#'
-#' API to use rsync as persistent file and object storage.
-#'
-#' @param x Rsync object
-#' @param ... more arguments
-#'
-#' @details
-#' \describe{
-#' prints the Rsync object
-#' }
+
 #' @export
 print.RsyncD <- function(x, ...) {
   xchar <- as.character(x)
@@ -62,17 +42,7 @@ print.RsyncD <- function(x, ...) {
   print(listEntries(x), ...)
 }
 
-#' Rsync API
-#'
-#' API to use rsync as persistent file and object storage.
-#'
-#' @param x Rsync object
-#' @param ... more arguments
-#'
-#' @details
-#' \describe{
-#' prints the local directory
-#' }
+
 #' @export
 print.RsyncL <- function(x, ...) {
   xchar <- as.character(x)
@@ -84,18 +54,7 @@ print.RsyncL <- function(x, ...) {
 }
 
 
-#' Rsync API
-#'
-#' API to use rsync as persistent file and object storage.
-#'
-#' @param x Rsync object
-#' @param ... more arguments
-#'
-#' @details
-#' \describe{
-#' converts a RsynsServer object to a character
-#' }
-#'
+
 #' @export
 as.character.RsyncServer <- function(x, ...) {
   x$password <- "****"
@@ -104,17 +63,7 @@ as.character.RsyncServer <- function(x, ...) {
   ret
 }
 
-#' Rsync API
-#'
-#' API to use rsync as persistent file and object storage.
-#'
-#' @param x Rsync object
-#' @param ... more arguments
-#'
-#' @details
-#' \describe{
-#' converts a RsynsServer object to a character
-#' }
+
 #' @export
 as.character.RsyncDHTTP <- function(x, ...) {
   x$password <- "****"
@@ -123,17 +72,7 @@ as.character.RsyncDHTTP <- function(x, ...) {
   ret
 }
 
-#' Rsync API
-#'
-#' API to use rsync as persistent file and object storage.
-#'
-#' @param x Rsync object
-#' @param ... more arguments
-#'
-#' @details
-#' \describe{
-#' converts a RsynsServer object to a character
-#' }
+
 #' @export
 as.character.RsyncD <- function(x, ...) {
   x$password <- "****"
@@ -142,17 +81,7 @@ as.character.RsyncD <- function(x, ...) {
   ret
 }
 
-#' Rsync API
-#'
-#' API to use rsync as persistent file and object storage.
-#'
-#' @param x Rsync object
-#' @param ... more arguments
-#'
-#' @details
-#' \describe{
-#' converts a RsynsServer object to a character
-#' }
+
 #' @export
 as.character.RsyncL <- function(x, ...) {
 
@@ -162,22 +91,12 @@ as.character.RsyncL <- function(x, ...) {
 }
 
 
-#' Rsync API
-#'
-#' API to use rsync as persistent file and object storage.
-#'
-#' @param x Rsync object
-#' @param ... more arguments
-#'
-#' @details
-#' \describe{
-#' converts a RsynsServer object to a character
-#' }
+
 #' @export
 listDir <- function(dirName) {
   dat <- list.files(dirName)
   dat <- as.data.frame(dat[grepl("Rdata|csv|json", dat)])
   names(dat) <- "Objects"
   dat
-  
+
 }
