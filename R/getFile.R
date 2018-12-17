@@ -8,13 +8,13 @@
 #'   Sends a file to or from a Rsync object.
 #' }
 #' @export
-getFile <- function(host, ...) {
-  UseMethod("getFile", host)
+getFile <- function(db, ...) {
+  UseMethod("getFile", db)
 }
 
 
 #' @export
-getFile.default <- function(local, host, fileName, validate = TRUE, verbose = FALSE ) {
+getFile.default <- function(db, entryName, path = getwd(), validate = TRUE, verbose = FALSE ) {
 
   if (verbose == TRUE) {
     args <- "-ltvvx"
@@ -34,3 +34,7 @@ getFile.default <- function(local, host, fileName, validate = TRUE, verbose = FA
 }
 
 
+### TODO:
+getFile.rsyncDHTTP <- function(...) {
+  download.file(...)
+}

@@ -27,16 +27,16 @@ sendFile <- function(host, ...) {
 #' }
 #'
 #' @export
-sendFile.default <- function(host, local, fileName, verbose = FALSE ) {
+sendFile.default <- function(db, fileName, vilidity = TRUE, verbose = FALSE ) {
 
   if (verbose == TRUE) {
     args <- "-ltvvx"
   } else {
     args <- "-ltx"}
 
-  direction <- 'send'
-    rsyncFile(local, host, fileName, direction, args)
+  to <- getTo(db)
+  pre <- getPre(db)
+  args <- getArgs(db)
+  rsync(fileName, to, args = args, pre = pre)
 
 }
-
-
