@@ -4,18 +4,19 @@
 \alias{sendFolder.default}
 \title{Rsync API}
 \usage{
-\method{sendFolder}{default}(host, local, folderName, verbose = FALSE)
+\method{sendFolder}{default}(db, folderName, validate = TRUE,
+  verbose = FALSE)
 }
 \arguments{
-\item{verbose}{(logical) default = TRUE}
-
 \item{db}{Rsync object , returning: 'name', 'lastModified' and 'size'}
+
+\item{validate}{(logical) default = TRUE}
+
+\item{verbose}{(logical) default = TRUE}
 
 \item{folder}{folder, of which the content shall be sent}
 
 \item{...}{more arguments}
-
-\item{validate}{(logical) default = TRUE}
 }
 \description{
 API to use rsync as persistent file and object storage.

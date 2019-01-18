@@ -8,8 +8,8 @@
 #'   Sends a file to a rsync host object.
 #' }
 #' @export
-sendFile <- function(host, ...) {
-  UseMethod("sendFile", host)
+sendFile <- function(db, ...) {
+  UseMethod("sendFile", db)
 }
 
 #' Rsync API
@@ -27,16 +27,19 @@ sendFile <- function(host, ...) {
 #' }
 #'
 #' @export
-sendFile.default <- function(db, fileName, vilidity = TRUE, verbose = FALSE ) {
+sendFile.default <- function(db, fileName, validate = TRUE, verbose = FALSE ) {
 
   if (verbose == TRUE) {
     args <- "-ltvvx"
   } else {
     args <- "-ltx"}
 
+  file <- getFile(db, fileName)
   to <- getTo(db)
   pre <- getPre(db)
-  args <- getArgs(db)
-  rsync(fileName, to, args = args, pre = pre)
 
+  rsync(file, to, args = args, pre = pre)
+
+  type <-getType(db)
+  if ((validate) & (type != 'RsyncD')) identicalEntries(db, fileName)
 }

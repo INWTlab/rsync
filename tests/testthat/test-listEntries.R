@@ -6,7 +6,8 @@ source("~/.inwt/rsync/config.R")
 
 expectTrue <- function(a) testthat::expect_true(a)
 
-dirName <- tempdir()
+# dirName <- tempdir()
+dirName <- getwd()
 dirName2 <- paste0(dirName, '/extraFolder/')
 dir.create(dirName2)
 # In case we run these Tests multiple times in a row:
@@ -31,26 +32,24 @@ serverTestingRsyncL <- rsync::rsyncL(from = dirName,
                                      to = dirName2)
 
 
-#1:
-invisible(rsync::deleteAllEntries(host = serverTestingRsyncDHTTP))
-invisible(rsync::sendFile(local = dirName, host = serverTestingRsyncDHTTP, fileName = 'x.Rdata'))
-invisible(rsync::sendFile(local = dirName, host = serverTestingRsyncDHTTP, fileName = 'y.Rdata'))
+# rsyncDHTTP
+invisible(rsync::deleteAllEntries(db = serverTestingRsyncDHTTP))
+invisible(rsync::sendFile(db = serverTestingRsyncDHTTP, fileName = 'x.Rdata'))
+invisible(rsync::sendFile(db = serverTestingRsyncDHTTP, fileName = 'y.Rdata'))
 expectTrue(nrow(rsync::listEntries(serverTestingRsyncDHTTP)) == 2)
-invisible(rsync::deleteAllEntries(host = serverTestingRsyncDHTTP))
+invisible(rsync::deleteAllEntries(db = serverTestingRsyncDHTTP))
 
 
-#2:
-
-invisible(rsync::deleteAllEntries(host = serverTestingRsyncD))
-invisible(rsync::sendFile(local = dirName, host = serverTestingRsyncD, fileName = 'x.Rdata'))
-invisible(rsync::sendFile(local = dirName, host = serverTestingRsyncD, fileName = 'y.Rdata'))
+# rsyncD
+invisible(rsync::deleteAllEntries(db = serverTestingRsyncD))
+invisible(rsync::sendFile(db = serverTestingRsyncD, fileName = 'x.Rdata'))
+invisible(rsync::sendFile(db = serverTestingRsyncD, fileName = 'y.Rdata'))
 expectTrue(nrow(rsync::listEntries(serverTestingRsyncD)) == 2)
-invisible(rsync::deleteAllEntries(host = serverTestingRsyncD))
+invisible(rsync::deleteAllEntries(db = serverTestingRsyncD))
 
-
-#3:
-invisible(rsync::deleteAllEntries(host = serverTestingRsyncL))
-invisible(rsync::sendFile(local = dirName, host = serverTestingRsyncL, fileName = 'x.Rdata'))
-invisible(rsync::sendFile(local = dirName, host = serverTestingRsyncL, fileName = 'y.Rdata'))
+# rsyncL
+invisible(rsync::deleteAllEntries(db = serverTestingRsyncL))
+invisible(rsync::sendFile(db = serverTestingRsyncL, fileName = 'x.Rdata'))
+invisible(rsync::sendFile(db = serverTestingRsyncL, fileName = 'y.Rdata'))
 expectTrue(nrow(rsync::listEntries(serverTestingRsyncL)) == 2)
-invisible(rsync::deleteAllEntries(host = serverTestingRsyncL))
+invisible(rsync::deleteAllEntries(db = serverTestingRsyncL))

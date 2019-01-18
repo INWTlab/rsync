@@ -9,15 +9,16 @@
 #'
 #' @details
 #' \describe{
-#'   loads a csv file from a Rsync object.
+#'   loads a rdata file from a Rsync object.
 #' }
 #' @export
-loadcsv <- function(db, ...) {
-  UseMethod("loadcsv", db)
+loadrdata <- function(db, ...) {
+  UseMethod("loadrdata", db)
 }
 
+
 #' @export
-loadcsv.default <- function(db, csvName, verbose = FALSE ) {
+loadrdata.default <- function(db, rdataName, verbose = FALSE ) {
 
   if (verbose == TRUE) {
     args <- "-ltvvx"
@@ -25,20 +26,22 @@ loadcsv.default <- function(db, csvName, verbose = FALSE ) {
     args <- "-ltx"}
 
   type <- getType(db)
-
   if (type == 'RsyncL') {
     from <-db$to
   } else {
     from <- paste0(db$host, db$name)
   }
 
-  file <- paste0(from, '/' ,basename(csvName))
+  file <- paste0(from, '/' ,basename(rdataName))
   to <- getwd()
   pre <- getPre(db)
 
   rsync(file, to, args = args, pre = pre)
 
-  #open csv file in dirName
-  csvName <- data.table::fread(paste0(dirName, '/', csvName), showProgress = FALSE, data.table = FALSE)
-  csvName
-  }
+  #load rdata after downloading from local directory
+  con <- file(paste0(to, '/', rdataName), 'rb')
+  load(con, e <- new.env(parent = emptyenv()))
+  close(con)
+  as.list(e, all.names = TRUE)
+
+}

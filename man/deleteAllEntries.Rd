@@ -4,12 +4,12 @@
 \alias{deleteAllEntries}
 \title{Rsync API}
 \usage{
-deleteAllEntries(host, ...)
+deleteAllEntries(db, ...)
 }
 \arguments{
-\item{host}{Rsync object}
-
 \item{...}{}
+
+\item{host}{Rsync object}
 }
 \description{
 API to use rsync as persistent file and object storage.

@@ -4,7 +4,7 @@
 \alias{identicalEntries}
 \title{Rsync API}
 \usage{
-identicalEntries(host, ...)
+identicalEntries(db, ...)
 }
 \arguments{
 \item{localFile}{source file}

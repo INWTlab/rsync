@@ -4,16 +4,17 @@
 \alias{sendFile.default}
 \title{Rsync API}
 \usage{
-\method{sendFile}{default}(host, local, fileName, verbose = FALSE)
+\method{sendFile}{default}(db, fileName, validate = TRUE,
+  verbose = FALSE)
 }
 \arguments{
-\item{host}{Rsync object , returning: 'name', 'lastModified' and 'size'}
-
-\item{local}{local directory to send file from}
-
 \item{fileName}{file to be sent (i.e .txt file, .R file, etc.)}
 
 \item{verbose}{(logical) default: FALSE}
+
+\item{local}{local directory to send file from}
+
+\item{host}{Rsync object , returning: 'name', 'lastModified' and 'size'}
 }
 \description{
 API to use rsync as persistent file and object storage.

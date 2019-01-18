@@ -7,7 +7,8 @@ source("~/.inwt/rsync/config.R")
 expectTrue <- function(a) testthat::expect_true(a)
 
 
-dirName <- tempdir()
+# dirName <- tempdir()
+dirName <- getwd()
 dirName2 <- paste0(dirName, '/extraFolder/')
 dir.create(dirName2)
 
@@ -37,16 +38,20 @@ serverTestingRsyncL <- rsync::rsyncL(from = dirName,
                                      to = dirName2)
 
 
+# rsyncD
+rsync::deleteAllEntries(db = serverTestingRsyncDHTTP)
+rsync::sendFile(db = serverTestingRsyncDHTTP, fileName = 'x.Rdata')
+expectTrue(nrow(rsync::listEntries(serverTestingRsyncDHTTP)) == 1)
+rsync::identicalEntries(db = serverTestingRsyncDHTTP, entryName = 'x.Rdata')
+rsync::deleteAllEntries(db = serverTestingRsyncD)
+expectTrue(nrow(rsync::listEntries(serverTestingRsyncD)) == 0)
 
-#1:
-rsync::deleteAllEntries(host = serverTestingRsyncDHTTP)
-rsync::sendFile(local = dirName, host = serverTestingRsyncDHTTP, fileName = 'x.Rdata')
-rsync::identicalEntries(local = dirName, host = serverTestingRsyncDHTTP, entryName = 'x.Rdata')
-# rsync::rsyncSuccessful()
 
-#2:
-rsync::identicalEntries(local = dirName, host = serverTestingRsyncD, entryName = 'x.Rdata')
-
-#3:
-rsync::sendFile(local = dirName, host = serverTestingRsyncL, fileName = 'x.Rdata')
-rsync::identicalEntries(local = dirName, host = serverTestingRsyncL, entryName = 'x.Rdata')
+#rsyncL
+rsync::deleteAllEntries(db = serverTestingRsyncL)
+rsync::sendFile(db = serverTestingRsyncL, fileName = 'x.Rdata')
+expectTrue(nrow(rsync::listEntries(serverTestingRsyncL)) == 1)
+rsync::identicalEntries(db = serverTestingRsyncL, entryName = 'x.Rdata')
+rsync::deleteAllEntries(db = serverTestingRsyncL)
+expectTrue(nrow(rsync::listEntries(serverTestingRsyncL)) == 0)
+file.remove('x.Rdata')

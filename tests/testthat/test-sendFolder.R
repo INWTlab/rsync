@@ -7,7 +7,8 @@ source("~/.inwt/rsync/config.R")
 expectTrue <- function(a) testthat::expect_true(a)
 
 
-dirName <- tempdir()
+# dirName <- tempdir()
+dirName <- getwd()
 
 
 dirName2 <- paste0(dirName, '/testFolder/')
@@ -48,10 +49,23 @@ serverTestingRsyncL <- rsync::rsyncL(from = dirName,
 
 
 
-#1 rsyncDHTTP
-rsync::sendFolder(local = dirName, host = serverTestingRsyncDHTTP, folderName = 'exampleFolder')
 
 #2 rsyncD
+invisible(rsync::deleteAllEntries(db = serverTestingRsyncD))
+rsync::sendFolder(db = serverTestingRsyncD, folderName = 'exampleFolder')
+expectTrue(nrow(rsync::listEntries(serverTestingRsyncD)) == 2)
+invisible(rsync::deleteAllEntries(db = serverTestingRsyncD))
+
+
+
+#1 rsyncDHTTP
+rsync::sendFolder(db = serverTestingRsyncDHTTP, folderName = 'exampleFolder')
+expectTrue(nrow(rsync::listEntries(serverTestingRsyncDHTTP)) == 2)
+invisible(rsync::deleteAllEntries(db = serverTestingRsyncDHTTP))
+
 
 #2 rsyncL
-rsync::sendFolder(local = dirName, host = serverTestingRsyncL, folderName = 'exampleFolder')
+rsync::sendFolder(db = serverTestingRsyncL, folderName = 'exampleFolder')
+expectTrue(nrow(listDir(serverTestingRsyncL$to)) == 2)
+
+

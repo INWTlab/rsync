@@ -7,7 +7,8 @@ source("~/.inwt/rsync/config.R")
 expectTrue <- function(a) testthat::expect_true(a)
 
 
-dirName <- tempdir()
+# dirName <- tempdir()
+dirName <- getwd()
 dirName2 <- paste0(dirName, '/extraFolder/')
 dir.create(dirName2)
 # In case we run these Tests multiple times in a row:
@@ -36,21 +37,36 @@ serverTestingRsyncL <- rsync::rsyncL(from = dirName,
                                      to = dirName2)
 
 
-#1 rsyncDHTTP
-invisible(rsync::deleteAllEntries(host = serverTestingRsyncDHTTP))
-invisible(rsync::sendFile(local = dirName, host = serverTestingRsyncDHTTP, fileName = 'x.csv'))
-expectTrue(nrow(rsync::listEntries(serverTestingRsyncDHTTP)) == 1)
-expectTrue(nrow(rsync::loadcsv(host = serverTestingRsyncDHTTP, csvName = 'x.csv')) == 1)
-invisible(rsync::deleteAllEntries(host = serverTestingRsyncDHTTP))
-
-
-
-#2 rsyncD
-invisible(rsync::deleteAllEntries(host = serverTestingRsyncD))
-invisible(rsync::sendFile(local = dirName, host = serverTestingRsyncD, fileName = 'x.csv'))
+# rsyncD
+invisible(rsync::deleteAllEntries(db = serverTestingRsyncD))
+invisible(rsync::sendFile(db = serverTestingRsyncD, fileName = 'x.csv'))
 expectTrue(nrow(rsync::listEntries(serverTestingRsyncD)) == 1)
-expectTrue(nrow(rsync::loadcsv(host = serverTestingRsyncD, csvName = 'x.csv')) == 1)
-invisible(rsync::deleteAllEntries(host = serverTestingRsyncD))
+csvData <- rsync::loadcsv(db = serverTestingRsyncD, csvName = 'x.csv')
+expectTrue(!is.null(objects(csvData)))
+expectTrue(file.exists('x.csv'))
+invisible(rsync::deleteAllEntries(db = serverTestingRsyncD))
 
 
 
+# rsyncDHTTP
+invisible(rsync::deleteAllEntries(db = serverTestingRsyncDHTTP))
+invisible(rsync::sendFile(db = serverTestingRsyncDHTTP, fileName = 'x.csv'))
+expectTrue(nrow(rsync::listEntries(serverTestingRsyncDHTTP)) == 1)
+file.remove('x.csv')
+csvData <- rsync::loadcsv(db = serverTestingRsyncDHTTP, csvName = 'x.csv')
+expectTrue(!is.null(objects(csvData)))
+expectTrue(file.exists('x.csv'))
+invisible(rsync::deleteAllEntries(db = serverTestingRsyncDHTTP))
+
+#rsyncL
+invisible(rsync::deleteAllEntries(db = serverTestingRsyncL))
+invisible(rsync::sendFile(db = serverTestingRsyncL, fileName = 'x.csv'))
+expectTrue(nrow(rsync::listEntries(serverTestingRsyncL)) == 1)
+file.remove('x.csv')
+rm(csvData)
+csvData <- rsync::loadcsv(db = serverTestingRsyncL, csvName = 'x.csv')
+expectTrue(!is.null(objects(csvData)))
+expectTrue(file.exists('x.csv'))
+file.remove('x.csv')
+rm(csvData)
+invisible(rsync::deleteAllEntries(db = serverTestingRsyncL))

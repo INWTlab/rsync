@@ -2,9 +2,15 @@
 % Please edit documentation in R/classes.R
 \name{rsyncDHTTP}
 \alias{rsyncDHTTP}
+\alias{rsyncD}
+\alias{rsyncL}
 \title{Rsync API}
 \usage{
 rsyncDHTTP(host, name, password, url)
+
+rsyncD(host, name, password)
+
+rsyncL(from, to)
 }
 \arguments{
 \item{host}{(character) the url, where the host file is stored}

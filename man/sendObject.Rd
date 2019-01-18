@@ -4,7 +4,7 @@
 \alias{sendObject}
 \title{Rsync API}
 \usage{
-sendObject(host, ...)
+sendObject(db, ...)
 }
 \description{
 API to use rsync as persistent file and object storage.

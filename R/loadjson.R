@@ -12,23 +12,32 @@
 #'   Loads a file from a Rsync object.
 #' }
 #' @export
-loadjson <- function(host, ...) {
-  UseMethod("loadjson", host)
+loadjson <- function(db, ...) {
+  UseMethod("loadjson", db)
 }
 
 
 #' @export
-loadjson.default <- function(host, jsonName, verbose = FALSE ) {
+loadjson.default <- function(db, jsonName, verbose = FALSE ) {
 
   if (verbose == TRUE) {
     args <- "-ltvvx"
   } else {
     args <- "-ltx"}
 
-  direction <- "get"
-  dirName <- tempdir()
+  type <- getType(db)
 
-  rsyncFile(dirName, host, jsonName, direction, args)
+  if (type == 'RsyncL') {
+    from <-db$to
+  } else {
+    from <- paste0(db$host, db$name)
+  }
+
+  file <- paste0(from, '/' ,basename(jsonName))
+  to <- getwd()
+  pre <- getPre(db)
+
+  rsync(file, to, args = args, pre = pre)
 
   jsonName <- jsonlite::read_json(paste0(dirName, '/', jsonName), simplifyVector = TRUE)
   jsonName

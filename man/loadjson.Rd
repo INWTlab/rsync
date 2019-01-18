@@ -4,12 +4,12 @@
 \alias{loadjson}
 \title{Rsync API}
 \usage{
-loadjson(host, ...)
+loadjson(db, ...)
 }
 \arguments{
-\item{host}{Rsync object, with json file}
-
 \item{...}{}
+
+\item{host}{Rsync object, with json file}
 
 \item{jsonName}{name of json file}
 }

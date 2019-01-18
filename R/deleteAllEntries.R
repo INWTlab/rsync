@@ -10,24 +10,22 @@
 #' deletes all entries from a Rsync object
 #' }
 #' @export
-deleteAllEntries <- function(host, ...) {
-  UseMethod("deleteAllEntries", host)
+deleteAllEntries <- function(db, ...) {
+  UseMethod("deleteAllEntries", db)
 }
 
 #' @export
-deleteAllEntries.default <- function(host, verbose = FALSE) {
+deleteAllEntries.default <- function(db, verbose = FALSE) {
 
   on.exit(try(file.remove(emptyDir), silent = TRUE))
 
   if(verbose == TRUE) args <-  "-rvv --delete"
   else args <- "-r --delete"
 
-  dat <- rsync::listEntries(host)
+  dat <- rsync::listEntries(db)
   entries <- c(levels(dat$name))
 
-  invisible(lapply(entries, deleteEntry, host = host, verbose = verbose))
-  rsync::listEntries(host)
+  invisible(lapply(entries, deleteEntry, db = db, verbose = verbose))
+  rsync::listEntries(db)
 
 }
-
-

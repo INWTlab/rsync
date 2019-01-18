@@ -39,6 +39,5 @@ rsync <- function(file, to, includes = NULL, excludes = NULL, args = "-rltvx", p
   )
 
   system(command, intern = intern, wait = TRUE, ignore.stdout = FALSE, ignore.stderr = FALSE)
-
 }
 

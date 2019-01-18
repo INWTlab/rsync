@@ -4,7 +4,7 @@
 \alias{deleteEntry}
 \title{Rsync API}
 \usage{
-deleteEntry(host, ...)
+deleteEntry(db, ...)
 }
 \arguments{
 \item{db}{Rsync object}

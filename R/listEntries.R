@@ -6,14 +6,14 @@
 #' @param ... ignored
 #'
 #' @export
-listEntries <- function(host, ...) {
-  UseMethod("listEntries", host)
+listEntries <- function(db, ...) {
+  UseMethod("listEntries", db)
 }
 
 #' @export
-listEntries.default <- function(host, ...) {
-  pre <- getPre(host)
-  to <- getObj(host)
+listEntries.default <- function(db, ...) {
+  pre <- getPre(db)
+  to <- getObj(db)
 
   dir <- rsync(NULL, to, args = NULL, pre = pre, intern = TRUE)
   dir <- dat::extract(dir, ~ !grepl("\\.$", .))

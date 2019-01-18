@@ -7,7 +7,8 @@ source("~/.inwt/rsync/config.R")
 expectTrue <- function(a) testthat::expect_true(a)
 
 
-dirName <- tempdir()
+# dirName <- tempdir()
+dirName <- getwd()
 dirName2 <- paste0(dirName, '/extraFolder/')
 dir.create(dirName2)
 
@@ -38,11 +39,24 @@ serverTestingRsyncL <- rsync::rsyncL(from = dirName,
 
 z <- 34
 
-#1 rsyncDHTTP
-rsync::sendObject(host = serverTestingRsyncDHTTP, object = z)
+# rsyncD
+rsync::deleteAllEntries(db = serverTestingRsyncD)
+rsync::sendObject(db = serverTestingRsyncD, object = z)
+expectTrue(nrow(rsync::listEntries(serverTestingRsyncD)) == 1)
+rsync::deleteAllEntries(db = serverTestingRsyncD)
+expectTrue(nrow(rsync::listEntries(serverTestingRsyncD)) == 0)
 
-#2 rsyncD
-# rsync::sendFile(local = dirName, host = serverTestingRsyncD, fileName = 'x.Rdata')
+
+#1 rsyncDHTTP
+rsync::sendObject(db = serverTestingRsyncDHTTP, object = z)
+expectTrue(nrow(rsync::listEntries(serverTestingRsyncDHTTP)) == 1)
+rsync::deleteAllEntries(db = serverTestingRsyncDHTTP)
+expectTrue(nrow(rsync::listEntries(serverTestingRsyncDHTTP)) == 0)
+
+
 
 #2 rsyncL
-rsync::sendObject(host = serverTestingRsyncL, object = z)
+invisible(rsync::deleteAllEntries(db = serverTestingRsyncL))
+rsync::sendObject(db = serverTestingRsyncL, object = z)
+expectTrue(nrow(listEntries(serverTestingRsyncL)) == 1)
+invisible(rsync::deleteAllEntries(db = serverTestingRsyncL))

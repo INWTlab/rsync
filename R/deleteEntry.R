@@ -9,14 +9,13 @@
 #' deletes an entry from a Rsync object
 #' }
 #' @export
-deleteEntry <- function(host, ...) {
-  UseMethod("deleteEntry", host)
+deleteEntry <- function(db, ...) {
+  UseMethod("deleteEntry", db)
 }
 
 #' @export
-deleteEntry.default <- function(host, entryName, verbose = FALSE) {
-  # browser()
-  if (length(entryName) == 0) return(host)
+deleteEntry.default <- function(db, entryName, verbose = FALSE) {
+  if (length(entryName) == 0) return(db)
   on.exit(try(file.remove(emptyDir), silent = TRUE))
   entryName <- basename(entryName)
   if(verbose == TRUE) args <-  "-rvv --delete"
@@ -28,12 +27,11 @@ deleteEntry.default <- function(host, entryName, verbose = FALSE) {
   emptyDir <- paste0(tempdir(), "/empty/")
   dir.create(emptyDir)
 
-  #jump directely to rsync
-  pre = getPre(host)
-  to = getTo(host = host, direction = 'send')
+  pre = getPre(db)
+  to = getTo(db)
   file = emptyDir
-  rsync::rsync(file, to, args = args, pre = pre)
-  host
+  rsync(file, to, args = args, pre = pre)
+  db
 }
 
 

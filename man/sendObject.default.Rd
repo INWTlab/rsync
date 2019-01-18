@@ -4,17 +4,18 @@
 \alias{sendObject.default}
 \title{Rsync API}
 \usage{
-\method{sendObject}{default}(host, object,
-  objectName = as.character(substitute(object)), verbose = FALSE)
+\method{sendObject}{default}(db, object,
+  objectName = as.character(substitute(object)), validate = TRUE,
+  verbose = FALSE)
 }
 \arguments{
-\item{verbose}{(logical) default: FALSE}
-
 \item{db}{Rsync object , returning: 'name', 'lastModified' and 'size'}
 
-\item{file}{file to be sent (i.e .txt file, .R file, etc.)}
-
 \item{validate}{(logical) default: TRUE,}
+
+\item{verbose}{(logical) default: FALSE}
+
+\item{file}{file to be sent (i.e .txt file, .R file, etc.)}
 }
 \description{
 API to use rsync as persistent file and object storage.

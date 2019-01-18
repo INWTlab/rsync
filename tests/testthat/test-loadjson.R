@@ -7,7 +7,8 @@ source("~/.inwt/rsync/config.R")
 expectTrue <- function(a) testthat::expect_true(a)
 
 
-dirName <- tempdir()
+# dirName <- tempdir()
+dirName <- getwd()
 dirName2 <- paste0(dirName, '/extraFolder/')
 dir.create(dirName2)
 # In case we run these Tests multiple times in a row:
@@ -38,20 +39,34 @@ serverTestingRsyncL <- rsync::rsyncL(from = dirName,
                                      to = dirName2)
 
 
-#1 rsyncDHTTP
-invisible(rsync::deleteAllEntries(host = serverTestingRsyncDHTTP))
-invisible(rsync::sendFile(local = dirName, host = serverTestingRsyncDHTTP, fileName = 'lst.json'))
-expectTrue(nrow(rsync::listEntries(serverTestingRsyncDHTTP)) == 1)
-expectTrue(!is.null(rsync::loadjson(host = serverTestingRsyncDHTTP, jsonName = 'lst.json')))
-invisible(rsync::deleteAllEntries(host = serverTestingRsyncDHTTP))
 
 
-
-#2 rsyncD
-invisible(rsync::deleteAllEntries(host = serverTestingRsyncD))
-invisible(rsync::sendFile(local = dirName, host = serverTestingRsyncD, fileName = 'lst.json'))
+# rsyncD
+invisible(rsync::deleteAllEntries(db = serverTestingRsyncD))
+invisible(rsync::sendFile(db = serverTestingRsyncD, fileName = 'lst.json'))
 expectTrue(nrow(rsync::listEntries(serverTestingRsyncD)) == 1)
-expectTrue(!is.null(rsync::loadjson(host = serverTestingRsyncD, jsonName = 'lst.json')))
-invisible(rsync::deleteAllEntries(host = serverTestingRsyncD))
+rsync::loadjson(db = serverTestingRsyncD, jsonName = 'lst.json')
+expectTrue(file.exists('lst.json'))
+invisible(rsync::deleteAllEntries(db = serverTestingRsyncD))
 
 
+# rsyncDHTTP
+invisible(rsync::deleteAllEntries(db = serverTestingRsyncDHTTP))
+invisible(rsync::sendFile(db = serverTestingRsyncDHTTP, fileName = 'lst.json'))
+expectTrue(nrow(rsync::listEntries(serverTestingRsyncDHTTP)) == 1)
+file.remove('lst.json')
+rsync::loadjson(db = serverTestingRsyncDHTTP, jsonName = 'lst.json')
+expectTrue(file.exists('lst.json'))
+
+invisible(rsync::deleteAllEntries(db = serverTestingRsyncDHTTP))
+
+
+# rsyncL
+invisible(rsync::deleteAllEntries(db = serverTestingRsyncL))
+invisible(rsync::sendFile(db = serverTestingRsyncL, fileName = 'lst.json'))
+expectTrue(nrow(rsync::listEntries(serverTestingRsyncL)) == 1)
+file.remove('lst.json')
+rsync::loadjson(db = serverTestingRsyncL, jsonName = 'lst.json')
+expectTrue(file.exists('lst.json'))
+file.remove('lst.json')
+invisible(rsync::deleteAllEntries(db = serverTestingRsyncL))

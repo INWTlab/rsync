@@ -8,8 +8,8 @@
 #'   Sends a file to or from a Rsync object.
 #' }
 #' @export
-sendObject <- function(host, ...) {
-  UseMethod("sendObject", host)
+sendObject <- function(db, ...) {
+  UseMethod("sendObject", db)
 }
 
 #' Rsync API
@@ -30,21 +30,24 @@ sendObject <- function(host, ...) {
 #' }
 #'
 #' @export
-sendObject.default <- function(host, object, objectName = as.character(substitute(object)), verbose = FALSE ) {
+sendObject.default <- function(db, object, objectName = as.character(substitute(object)), validate = TRUE, verbose = FALSE ) {
 
   if (verbose == TRUE) {
     args <- "-ltvvx"
   } else {
     args <- "-ltx"}
 
-  direction <- 'send'
-
   assign(objectName, object)
 
-  dirName <- tempdir()
+  # dirName <- tempdir()
+  dirName <- getwd()
 
   save(list = objectName, file =  file <- paste0(dirName, "/", objectName, ".Rdata"), compress = TRUE)
+  to <- getTo(db)
+  pre <- getPre(db)
 
-  rsyncFile(dirName, host, paste0(objectName, '.Rdata'), direction, args)
+  rsync(file, to, args = args, pre = pre)
+
+  type <-getType(db)
+  if ((validate) & (type != 'RsyncD')) identicalEntries(db, paste0(objectName, '.Rdata'))
 }
-

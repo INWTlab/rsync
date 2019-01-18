@@ -4,12 +4,12 @@
 \alias{sendFolder}
 \title{Rsync API}
 \usage{
-sendFolder(host, ...)
+sendFolder(db, ...)
 }
 \arguments{
-\item{...}{more arguments}
-
 \item{db}{Rsync object , returning: 'name', 'lastModified' and 'size'}
+
+\item{...}{more arguments}
 
 \item{folder}{folder, of which the content shall be sent}
 

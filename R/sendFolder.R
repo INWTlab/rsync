@@ -17,8 +17,8 @@
 #' }
 #'
 #' @export
-sendFolder <- function(host, ...) {
-  UseMethod("sendFolder", host)
+sendFolder <- function(db, ...) {
+  UseMethod("sendFolder", db)
 }
 
 #' Rsync API
@@ -39,24 +39,14 @@ sendFolder <- function(host, ...) {
 #'   \code{sendFile}.
 #' }
 #' @export
-sendFolder.default <- function(host, local, folderName, verbose = FALSE ) {
+sendFolder.default <- function(db, folderName, validate = TRUE, verbose = FALSE ) {
 
     if (verbose == TRUE) {
       args <- "-ltvvx"
     } else {
       args <- "-ltx"}
 
-    direction <- 'send'
-
-    #send all files in a folder but not the folder itself
-    dat <- listDir(paste0(local, '/', folderName))
-
+    dat <- listDir(paste0(getwd(), '/', folderName))
     entries <- c(levels(dat$Objects))
-
-    invisible(lapply(entries, sendFile, local = local, host = host, verbose = verbose))
-    rsync::listEntries(host)
+    invisible(lapply(entries, sendFile, db = db, verbose = verbose))
 }
-
-
-
-
