@@ -7,23 +7,22 @@
 sendFolder(db, ...)
 }
 \arguments{
-\item{db}{Rsync object , returning: 'name', 'lastModified' and 'size'}
+\item{db}{rsync object that contains information on the type of connection, the target directory (remote or local) and eventually a password.}
 
-\item{...}{more arguments}
+\item{...}{additional arguments}
 
 \item{folder}{folder, of which the content shall be sent}
 
-\item{validate}{(logical) default = TRUE}
+\item{validate}{TRUE. validates if entryName is identical in both locations.}
 
-\item{verbose}{(logical) default = TRUE}
+\item{verbose}{FALSE. If set to TRUE, it prints details of the process.}
 }
 \description{
 API to use rsync as persistent file and object storage.
 }
 \details{
 \describe{
-  Sends the content of a folder to db using \code{sendFile}. \code{...} are
-  passed to \link{dir}. \code{validate} and \code{verbose} are as in
+  Sends the content of a folder to db using \code{sendFile}. \code{validate} and \code{verbose} are as in
   \code{sendFile}.
 }
 }

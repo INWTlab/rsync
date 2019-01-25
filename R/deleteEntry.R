@@ -2,11 +2,14 @@
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db Rsync object
+#' @param db rsync object that contains information on the type of connection, the target directory (remote or local) and eventually a password.
+#' @param entryName entry that shall be deleted.
+#' @param verbose FALSE. If set to TRUE, it prints details of the process.
+#' @param ... additional arguments
 #'
 #' @details
 #' \describe{
-#' deletes an entry from a Rsync object
+#' Deletes an entry from a Rsync object.
 #' }
 #' @export
 deleteEntry <- function(db, ...) {
@@ -28,7 +31,7 @@ deleteEntry.default <- function(db, entryName, verbose = FALSE) {
   dir.create(emptyDir)
 
   pre = getPre(db)
-  to = getTo(db)
+  to = db$to
   file = emptyDir
   rsync(file, to, args = args, pre = pre)
   db

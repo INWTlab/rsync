@@ -2,10 +2,10 @@
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param host Rsync object, with json file
+#' @param db rsync object that contains information on the type of connection, the target directory (remote or local) and eventually a password.
 #' @param jsonName name of json file
-#' @param ...
-#'
+#' @param verbose FALSE. If set to TRUE, it prints details of the process.
+#' @param ... additional arguments
 #'
 #' @details
 #' \describe{
@@ -25,21 +25,13 @@ loadjson.default <- function(db, jsonName, verbose = FALSE ) {
   } else {
     args <- "-ltx"}
 
-  type <- getType(db)
-
-  if (type == 'RsyncL') {
-    from <-db$to
-  } else {
-    from <- paste0(db$host, db$name)
-  }
-
-  file <- paste0(from, '/' ,basename(jsonName))
-  to <- getwd()
+  file <-getHostFile(db, jsonName)
+  to <- tempdir()
   pre <- getPre(db)
 
   rsync(file, to, args = args, pre = pre)
 
-  jsonName <- jsonlite::read_json(paste0(dirName, '/', jsonName), simplifyVector = TRUE)
+  jsonName <- jsonlite::read_json(paste0(to, '/', jsonName), simplifyVector = TRUE)
   jsonName
 }
 

@@ -2,14 +2,14 @@
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#'
-#' @param host Rsync object, with csv file
+#' @param db rsync object that contains information on the type of connection, the target directory (remote or local) and eventually a password.
 #' @param csvName name of csv file
-#' @param ...
+#' @param verbose FALSE. If set to TRUE, it prints details of the process.
+#' @param ... additional arguments
 #'
 #' @details
 #' \describe{
-#'   loads a csv file from a Rsync object.
+#'   Loads a csv file from a Rsync object.
 #' }
 #' @export
 loadcsv <- function(db, ...) {
@@ -24,21 +24,12 @@ loadcsv.default <- function(db, csvName, verbose = FALSE ) {
   } else {
     args <- "-ltx"}
 
-  type <- getType(db)
-
-  if (type == 'RsyncL') {
-    from <-db$to
-  } else {
-    from <- paste0(db$host, db$name)
-  }
-
-  file <- paste0(from, '/' ,basename(csvName))
-  to <- getwd()
+  file <-getHostFile(db, csvName)
+  to <- tempdir()
   pre <- getPre(db)
 
   rsync(file, to, args = args, pre = pre)
 
-  #open csv file in dirName
-  csvName <- data.table::fread(paste0(dirName, '/', csvName), showProgress = FALSE, data.table = FALSE)
+  csvName <- data.table::fread(paste0(to, '/', csvName), showProgress = FALSE, data.table = FALSE)
   csvName
   }

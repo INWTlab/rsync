@@ -2,33 +2,24 @@
 #'
 #' API to use rsync as persistent file and object storage.
 #'
+#' @param db rsync object that contains information on the type of connection, the target directory (remote or local) and eventually a password.
+#' @param object object in the environment, which shall be sent to a target directory
+#' @param validate TRUE. validates if entryName is identical in both locations.
+#' @param verbose FALSE. If set to TRUE, it prints details of the process.
+#' @param ... additional arguments
+#'
 #'
 #' @details
 #' \describe{
-#'   Sends a file to or from a Rsync object.
+#'   Sends an object (from the environment) to a rsync target. If validate is TRUE the
+#'   hash-sum of the remote file is compared to the local version. A warning is
+#'   issued should they differ.
 #' }
 #' @export
 sendObject <- function(db, ...) {
   UseMethod("sendObject", db)
 }
 
-#' Rsync API
-#'
-#' API to use rsync as persistent file and object storage.
-#'
-#' @param db Rsync object , returning: 'name', 'lastModified' and 'size'
-#' @param file file to be sent (i.e .txt file, .R file, etc.)
-#' @param validate (logical) default: TRUE,
-#' @param verbose (logical) default: FALSE
-#'
-#' @details
-#' \describe{
-#'   Sends a file (file in local file system) to db. If validate is TRUE the
-#'   hash-sum of the remote file is compared to the local version. A warning is
-#'   issued should the differ. The return status of the command line rsync is
-#'   returned by this function.
-#' }
-#'
 #' @export
 sendObject.default <- function(db, object, objectName = as.character(substitute(object)), validate = TRUE, verbose = FALSE ) {
 
@@ -38,16 +29,12 @@ sendObject.default <- function(db, object, objectName = as.character(substitute(
     args <- "-ltx"}
 
   assign(objectName, object)
-
-  # dirName <- tempdir()
-  dirName <- getwd()
-
+  dirName <- tempdir()
   save(list = objectName, file =  file <- paste0(dirName, "/", objectName, ".Rdata"), compress = TRUE)
-  to <- getTo(db)
+  to <- db$to
   pre <- getPre(db)
 
   rsync(file, to, args = args, pre = pre)
 
-  type <-getType(db)
-  if ((validate) & (type != 'RsyncD')) identicalEntries(db, paste0(objectName, '.Rdata'))
+  if ((validate) & (class(db)[1] != 'RsyncD')) identicalEntries(db, paste0(objectName, '.Rdata'))
 }

@@ -7,11 +7,13 @@
 loadjson(db, ...)
 }
 \arguments{
-\item{...}{}
+\item{db}{rsync object that contains information on the type of connection, the target directory (remote or local) and eventually a password.}
 
-\item{host}{Rsync object, with json file}
+\item{...}{additional arguments}
 
 \item{jsonName}{name of json file}
+
+\item{verbose}{FALSE. If set to TRUE, it prints details of the process.}
 }
 \description{
 API to use rsync as persistent file and object storage.

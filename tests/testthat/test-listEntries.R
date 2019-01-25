@@ -1,55 +1,48 @@
-library(testthat)
-library(tidyr)
-
 context("listEntries")
 source("~/.inwt/rsync/config.R")
 
-expectTrue <- function(a) testthat::expect_true(a)
+test_that("Entries can of rsync objects can be listet", {
 
-# dirName <- tempdir()
-dirName <- getwd()
-dirName2 <- paste0(dirName, '/extraFolder/')
-dir.create(dirName2)
-# In case we run these Tests multiple times in a row:
-file.remove(dir(dirName, "Rdata|csv|json", full.names = TRUE))
-x <- 1
-y <- 2
-save(list = "x", file = paste0(dirName, "/", "x.Rdata"))
-save(list = "y", file = paste0(dirName, "/", "y.Rdata"))
+  expectTrue <- function(a) testthat::expect_true(a)
 
-
-
-serverTestingRsyncDHTTP <- rsync::rsyncDHTTP(host = hostURL,
-                                             name = nameServer,
-                                             password = passwordServer,
-                                             url = urlServer)
-
-serverTestingRsyncD <- rsync::rsyncD(host = hostURL,
-                                     name = nameServer,
-                                     password =passwordServer)
-
-serverTestingRsyncL <- rsync::rsyncL(from = dirName,
-                                     to = dirName2)
+  dirName <- tempdir()
+  try(file.remove(paste0(dirName,'/extraFolder')), silent = TRUE)
+  dirName2 <- paste0(dirName, '/extraFolder/')
+  dir.create(dirName2)
+  # In case we run these Tests multiple times in a row:
+  file.remove(dir(dirName2, "Rdata|csv|json", full.names = TRUE))
+  file.remove(dir(dirName, "Rdata|csv|json", full.names = TRUE))
+  x <- 1
+  y <- 2
+  save(list = "x", file = paste0(dirName, "/", "x.Rdata"))
+  save(list = "y", file = paste0(dirName, "/", "y.Rdata"))
 
 
-# rsyncDHTTP
-invisible(rsync::deleteAllEntries(db = serverTestingRsyncDHTTP))
-invisible(rsync::sendFile(db = serverTestingRsyncDHTTP, fileName = 'x.Rdata'))
-invisible(rsync::sendFile(db = serverTestingRsyncDHTTP, fileName = 'y.Rdata'))
-expectTrue(nrow(rsync::listEntries(serverTestingRsyncDHTTP)) == 2)
-invisible(rsync::deleteAllEntries(db = serverTestingRsyncDHTTP))
+
+  serverTestingRsyncD <- rsync::newRsync(from = dirName,
+                                         host = hostURL,
+                                         name = nameServer,
+                                         password = passwordServer)
+
+  serverTestingRsyncL <- rsync::newRsync(from = dirName,
+                                         to = dirName2)
 
 
-# rsyncD
-invisible(rsync::deleteAllEntries(db = serverTestingRsyncD))
-invisible(rsync::sendFile(db = serverTestingRsyncD, fileName = 'x.Rdata'))
-invisible(rsync::sendFile(db = serverTestingRsyncD, fileName = 'y.Rdata'))
-expectTrue(nrow(rsync::listEntries(serverTestingRsyncD)) == 2)
-invisible(rsync::deleteAllEntries(db = serverTestingRsyncD))
+  # rsyncD
+  invisible(rsync::deleteAllEntries(db = serverTestingRsyncD))
+  invisible(rsync::sendFile(db = serverTestingRsyncD, fileName = 'x.Rdata'))
+  invisible(rsync::sendFile(db = serverTestingRsyncD, fileName = 'y.Rdata'))
+  expectTrue(nrow(rsync::listEntries(serverTestingRsyncD)) == 2)
+  invisible(rsync::deleteAllEntries(db = serverTestingRsyncD))
 
-# rsyncL
-invisible(rsync::deleteAllEntries(db = serverTestingRsyncL))
-invisible(rsync::sendFile(db = serverTestingRsyncL, fileName = 'x.Rdata'))
-invisible(rsync::sendFile(db = serverTestingRsyncL, fileName = 'y.Rdata'))
-expectTrue(nrow(rsync::listEntries(serverTestingRsyncL)) == 2)
-invisible(rsync::deleteAllEntries(db = serverTestingRsyncL))
+  # rsyncL
+  invisible(rsync::deleteAllEntries(db = serverTestingRsyncL))
+  invisible(rsync::sendFile(db = serverTestingRsyncL, fileName = 'x.Rdata'))
+  invisible(rsync::sendFile(db = serverTestingRsyncL, fileName = 'y.Rdata'))
+  expectTrue(nrow(rsync::listEntries(serverTestingRsyncL)) == 2)
+  invisible(rsync::deleteAllEntries(db = serverTestingRsyncL))
+
+#   #remove traces for further tests
+#   file.remove(dir(dirName2, "Rdata|csv|json", full.names = TRUE))
+#   file.remove(dir(dirName, "Rdata|csv|json", full.names = TRUE))
+ })

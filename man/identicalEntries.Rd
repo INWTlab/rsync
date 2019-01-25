@@ -7,9 +7,11 @@
 identicalEntries(db, ...)
 }
 \arguments{
-\item{localFile}{source file}
+\item{db}{rsnc connection object}
 
-\item{remoteFile}{target file}
+\item{...}{additional arguments}
+
+\item{entryName}{an entry that will be checked}
 }
 \description{
 API to use rsync as persistent file and object storage.

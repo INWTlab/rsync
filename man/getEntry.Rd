@@ -6,11 +6,24 @@
 \usage{
 getEntry(db, ...)
 }
+\arguments{
+\item{db}{rsync object that contains information on the type of connection, the target directory (remote or local) and eventually a password.}
+
+\item{...}{additional arguments}
+
+\item{entryName}{an entry that the get function will get, located on the rsync deamon side / the local target directory.}
+
+\item{validate}{validates if entryName is identical in both locations.}
+
+\item{verbose}{FALSE. If set to TRUE, it prints details of the process.}
+}
 \description{
 API to use rsync as persistent file and object storage.
 }
 \details{
 \describe{
-  Sends a file to or from a Rsync object.
+  Gets a file from a Rsync object. If validate is TRUE the
+  hash-sum of the remote file is compared to the local version. A warning is
+  issued should they differ.
 }
 }

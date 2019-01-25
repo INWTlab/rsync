@@ -2,8 +2,9 @@
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param localFile source file
-#' @param remoteFile target file
+#' @param db rsnc connection object
+#' @param entryName an entry that will be checked
+#' @param ... additional arguments
 #'
 #' @details
 #' \describe{
@@ -21,14 +22,10 @@ identicalEntries <- function(db, ...) {
 identicalEntries.default <- function(db, entryName) {
 
   on.exit({try(silent = TRUE, {close(locFile); close(hostFile)})})
-  locFile <- file(paste0(getwd(), '/', entryName), open = 'rb')
+  locFile <- file(paste0(db$from, '/', entryName), open = 'rb')
 
-  type <- getType(db)
-
-  if(type == 'RsyncDHTTP') {
-    hostFile <- url(paste0(db$url, entryName), open = "rb")
-  } else if(!is.null(type == 'RsyncL')) {
-    hostFile <- file(paste0(db$to, entryName), open = "rb")
+  if (!is.null(class(db)[1]  == 'RsyncL')) {
+    hostFile <- file(paste0(db$to,'/', entryName), open = "rb")
   } else {
     stop('function not valid for type rsync deamon')
   }

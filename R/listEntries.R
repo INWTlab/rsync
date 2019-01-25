@@ -2,8 +2,14 @@
 #'
 #' List all entries in destination folder. Returns a data frame.
 #'
-#' @param host rsync object connection
-#' @param ... ignored
+#' @param db rsync object that contains information on the type of connection, the target directory (remote or local) and eventually a password.
+#' @param ... further arguments
+#'
+#' @details
+#' \describe{
+#'   Lists entries of a Rsync object.
+#' }
+#'
 #'
 #' @export
 listEntries <- function(db, ...) {

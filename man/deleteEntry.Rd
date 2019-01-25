@@ -7,13 +7,19 @@
 deleteEntry(db, ...)
 }
 \arguments{
-\item{db}{Rsync object}
+\item{db}{rsync object that contains information on the type of connection, the target directory (remote or local) and eventually a password.}
+
+\item{...}{additional arguments}
+
+\item{entryName}{entry that shall be deleted.}
+
+\item{verbose}{FALSE. If set to TRUE, it prints details of the process.}
 }
 \description{
 API to use rsync as persistent file and object storage.
 }
 \details{
 \describe{
-deletes an entry from a Rsync object
+Deletes an entry from a Rsync object.
 }
 }

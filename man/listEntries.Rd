@@ -7,10 +7,15 @@
 listEntries(db, ...)
 }
 \arguments{
-\item{...}{ignored}
+\item{db}{rsync object that contains information on the type of connection, the target directory (remote or local) and eventually a password.}
 
-\item{host}{rsync object connection}
+\item{...}{further arguments}
 }
 \description{
 List all entries in destination folder. Returns a data frame.
+}
+\details{
+\describe{
+  Lists entries of a Rsync object.
+}
 }
