@@ -69,11 +69,13 @@ rsync::listEntries(con)
 ```
 
 Sending a file is done with `sendFile`. Input arguments are the *rsyncL* object as well as `fileName`.
+Optional are the arguments `validate=TRUE` which validates, whether both file versions are exactely identical, if set to `TRUE` and `verbose=FALSE`, 
+which gives out additional information about the process, if set to `TRUE`.
 
 ```
 rsync::sendFile(con, fileName = "exampleFile.Rdata")
 ```
-`sendFolder()` syncs the complete content of a folder between two local directories. `folder`specifies the name of the corresponding folder.
+`sendFolder()` syncs the complete content of a folder between two local directories. `folder`specifies the name of the corresponding folder. Optional arguments are as for `sendFile()`.
 
 ```
 rsync::sendFolder(con, folder = 'exampleFolder')
@@ -81,6 +83,7 @@ rsync::sendFolder(con, folder = 'exampleFolder')
 
 `sendObject()` syncs an object with a destination folder. It will create an
 'Rdata' file on-the-fly. `obj` specifies the object from the working environment.
+Optional arguments are as for `sendFile()`.
 
 ```
 z <- 3
@@ -103,17 +106,19 @@ rsync::deleteAllEntries(con)
 
 ### Retrieving
 
-
-`gibt es das wirklich?`
-
-
-`getEntry()` can be used to retrieve entries. `con` refers again to the `rsyncL` object and `entryName` to the entry that shall be retrieved.
+`getEntry()` can be used to retrieve entries from a directory. `con` refers again to the `rsyncL` object and `entryName` to the entry in `con$to` that shall be retrieved. Optional are the arguments `validate=TRUE` which validates, whether both file versions are exactely identical, if set to `TRUE` and `verbose=FALSE`, 
+which gives out additional information about the process, if set to `TRUE`.
 
 ```
 rsync::getEntry(con, entryName)
 ```
 
+`loadData()` takes the `rsyncL` object as well as `dataName`, a charater object containing the name of the object that shall be loaded. 
+The function is capable of loading any of the following file extensions into the working environment: '.Rdata', '.csv', '.json'
 
+```
+rsync::loadData(con, dataName = "x.json")
+```
 
 ## RsyncD Connection
 
@@ -185,7 +190,9 @@ rsync::deleteAllEntries(con)
 rsync::getEntry(con, entryName)
 ```
 
+`loadData()` takes the `rsyncL` object as well as `dataName`, a charater object containing the name of the object that shall be loaded. 
+The function is capable of loading any of the following file extensions into the working environment: '.Rdata', '.csv', '.json'
 
-
-`loaddata()`
-
+```
+rsync::loadData(con, dataName = "x.json")
+```
