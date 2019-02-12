@@ -7,11 +7,13 @@
 sendObject(db, ...)
 }
 \arguments{
-\item{db}{rsync object that contains information on the type of connection, the target directory (remote or local) and eventually a password.}
+\item{db}{rsync object that contains information on the type of connection,
+the target directory (remote or local) and eventually a password.}
 
 \item{...}{additional arguments}
 
-\item{object}{object in the environment, which shall be sent to a target directory}
+\item{object}{object in the environment, which shall be sent to a target
+directory}
 
 \item{validate}{TRUE. validates if entryName is identical in both locations.}
 
@@ -22,8 +24,8 @@ API to use rsync as persistent file and object storage.
 }
 \details{
 \describe{
-  Sends an object (from the environment) to a rsync target. If validate is TRUE the
-  hash-sum of the remote file is compared to the local version. A warning is
-  issued should they differ.
+  Sends an object (from the environment) to a rsync target. If validate is
+      TRUE the hash-sum of the remote file is compared to the local version.
+      A warning is issued should they differ.
 }
 }

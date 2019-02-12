@@ -19,28 +19,28 @@ test_that("Entries can of rsync objects can be listet", {
 
 
 
-  serverTestingRsyncD <- rsync::newRsync(from = dirName,
+  serverTestingRsyncD <- newRsync(from = dirName,
                                          host = hostURL,
                                          name = nameServer,
                                          password = passwordServer)
 
-  serverTestingRsyncL <- rsync::newRsync(from = dirName,
+  serverTestingRsyncL <- newRsync(from = dirName,
                                          to = dirName2)
 
 
   # rsyncD
-  invisible(rsync::deleteAllEntries(db = serverTestingRsyncD))
-  invisible(rsync::sendFile(db = serverTestingRsyncD, fileName = 'x.Rdata'))
-  invisible(rsync::sendFile(db = serverTestingRsyncD, fileName = 'y.Rdata'))
-  expectTrue(nrow(rsync::listEntries(serverTestingRsyncD)) == 2)
-  invisible(rsync::deleteAllEntries(db = serverTestingRsyncD))
+  invisible(deleteAllEntries(db = serverTestingRsyncD))
+  invisible(sendFile(db = serverTestingRsyncD, fileName = 'x.Rdata'))
+  invisible(sendFile(db = serverTestingRsyncD, fileName = 'y.Rdata'))
+  expectTrue(nrow(listEntries(serverTestingRsyncD)) == 2)
+  invisible(deleteAllEntries(db = serverTestingRsyncD))
 
   # rsyncL
-  invisible(rsync::deleteAllEntries(db = serverTestingRsyncL))
-  invisible(rsync::sendFile(db = serverTestingRsyncL, fileName = 'x.Rdata'))
-  invisible(rsync::sendFile(db = serverTestingRsyncL, fileName = 'y.Rdata'))
-  expectTrue(nrow(rsync::listEntries(serverTestingRsyncL)) == 2)
-  invisible(rsync::deleteAllEntries(db = serverTestingRsyncL))
+  invisible(deleteAllEntries(db = serverTestingRsyncL))
+  invisible(sendFile(db = serverTestingRsyncL, fileName = 'x.Rdata'))
+  invisible(sendFile(db = serverTestingRsyncL, fileName = 'y.Rdata'))
+  expectTrue(nrow(listEntries(serverTestingRsyncL)) == 2)
+  invisible(deleteAllEntries(db = serverTestingRsyncL))
 
 #   #remove traces for further tests
 #   file.remove(dir(dirName2, "Rdata|csv|json", full.names = TRUE))

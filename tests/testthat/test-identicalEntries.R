@@ -20,23 +20,23 @@ test_that("Entries are identical", {
   #save(list = "y", file = paste0(dirName, "/", "y.Rdata"))
 
 
-  serverTestingRsyncD <- rsync::newRsync(from = dirName,
+  serverTestingRsyncD <- newRsync(from = dirName,
                                          host = hostURL,
                                          name = nameServer,
                                          password = passwordServer)
 
-  serverTestingRsyncL <- rsync::newRsync(from = dirName,
+  serverTestingRsyncL <- newRsync(from = dirName,
                                          to = dirName2)
 
 
 
   #rsyncL
-  rsync::deleteAllEntries(db = serverTestingRsyncL)
-  rsync::sendFile(db = serverTestingRsyncL, fileName = 'x.Rdata')
-  expectTrue(nrow(rsync::listEntries(serverTestingRsyncL)) == 1)
-  rsync::identicalEntries(db = serverTestingRsyncL, entryName = 'x.Rdata')
-  rsync::deleteAllEntries(db = serverTestingRsyncL)
-  expectTrue(nrow(rsync::listEntries(serverTestingRsyncL)) == 0)
+  deleteAllEntries(db = serverTestingRsyncL)
+  sendFile(db = serverTestingRsyncL, fileName = 'x.Rdata')
+  expectTrue(nrow(listEntries(serverTestingRsyncL)) == 1)
+  identicalEntries(db = serverTestingRsyncL, entryName = 'x.Rdata')
+  deleteAllEntries(db = serverTestingRsyncL)
+  expectTrue(nrow(listEntries(serverTestingRsyncL)) == 0)
   file.remove(paste0(dirName, '/','x.Rdata'))
 
   # #remove traces for further tests

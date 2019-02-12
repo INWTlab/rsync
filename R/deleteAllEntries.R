@@ -2,8 +2,7 @@
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db rsync object that contains information on the type of connection,
-#'     the target directory (remote or local) and eventually a password.
+#' @param db rsync object that contains information on the type of connection, the target directory (remote or local) and eventually a password.
 #' @param verbose FALSE. If set to TRUE, it prints details of the process.
 #' @param ... further arguments
 #'
@@ -21,9 +20,12 @@ deleteAllEntries.default <- function(db, verbose = FALSE) {
 
   on.exit(try(file.remove(emptyDir), silent = TRUE))
 
-  dat <- listEntries(db)
-  entries <- levels(dat$name)
+  if(verbose == TRUE) args <-  "-rvv --delete"
+  else args <- "-r --delete"
 
-  lapply(entries, deleteEntry, db = db, verbose = verbose)
+  dat <- listEntries(db)
+  entries <- c(levels(dat$name))
+
+  invisible(lapply(entries, deleteEntry, db = db, verbose = verbose))
   listEntries(db)
 }

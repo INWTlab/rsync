@@ -10,9 +10,11 @@ newRsync(from = getwd(), host = NULL, name = NULL,
 \arguments{
 \item{from}{(character) the working directory, if not specified otherwise}
 
-\item{host}{(character) the address to the rsync deamon. NULL for a local rsync connection.}
+\item{host}{(character) the address to the rsync deamon. NULL for a local
+rsync connection.}
 
-\item{name}{(character) the name of the deamon's directory. NULL for a local rsync connection.}
+\item{name}{(character) the name of the deamon's directory. NULL for a local
+rsync connection.}
 
 \item{to}{(character) a directory, if it is a local rsync connection.}
 
@@ -23,6 +25,7 @@ API to use rsync as persistent file and object storage.
 }
 \details{
 \describe{
- Establishes a rsync connection with a local directory or a rsync deamon. All arguments are characters.
+ Establishes a rsync connection with a local directory or a rsync deamon. All
+     arguments are characters.
 }
 }

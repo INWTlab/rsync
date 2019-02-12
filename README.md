@@ -12,8 +12,8 @@ R.
 ## Why use rsync:
 
 Rsync is a tool, which is used with Unix systems and allows efficient
-transferring and synchronizing of files across computer systems. It is widely
-used for makeing backups, copying files or mirroring.
+transferring and synchronizing of files across systems. It is widely
+used for makeing backups, copying files or mirroring them.
 
 Working with Rsync offers nice benefits, as it is:
   - fast
@@ -32,18 +32,14 @@ command from the R console:
 ```
 devtools::install_github("INWTlab/rsync")
 ```
-
 Make sure you have the `rsync` command line tool available.
-
 
 ## Settings / Classes
 
-We distinguish between three settings for which we use rsync:
+We distinguish between different settings for which we use rsync:
 
-- sync between local directories (`RsyncL`)
-- sync with an rsync daemon and a local directory (`RsyncD`)
-- sync with an rsync daemon (write only) and a local directory and reading using
-  HTTP (`RsyncDHTTP`)
+- sync between local directories: `RsyncL`
+- sync with a rsync daemon (eventually with a HTTP interface on top) and a local directory: `RsyncD`
   
 These settings are represented by S3 classes in R. The list of methods follows below.
 
@@ -55,15 +51,13 @@ These settings are represented by S3 classes in R. The list of methods follows b
 The first step of every `rsync` process is to initialize a rsync object. For
 establishing a local connection following arguements are needed:
 
-`from`defines the name of directory path of the file to be synced, not the file
+`from` defines the name of directory path of the file to be synced, not the file
 itself. `to` specifies the destination directory.
 
 ```
-con <- rsync::rsyncL(
-  from = "~/exampleFolder",
-  to = "~/destinationFolder"
-)
+con <- rsync::newRsync(from = "~/exampleFolder", to = "~/destinationFolder")
 ```
+
 
 ### Sending
 
@@ -74,21 +68,19 @@ contained in the destination folder (`con$to`).
 rsync::listEntries(con)
 ```
 
-Sending a file with `sendFile`.
+Sending a file is done with `sendFile`. Input arguments are the *rsyncL* object as well as `fileName`.
 
 ```
-rsync::sendFile(con, file = "exampleFile.R")
+rsync::sendFile(con, fileName = "exampleFile.Rdata")
 ```
-
-Sending a folder with `sendFolder()` syncs a complete folder between two local
-directories. `pattern` defines which files from the folder shall be synced.
+`sendFolder()` syncs the complete content of a folder between two local directories. `folder`specifies the name of the corresponding folder.
 
 ```
-rsync::sendFolder(con, dirName, pattern = "*.Rdata")
+rsync::sendFolder(con, folder = 'exampleFolder')
 ```
 
 `sendObject()` syncs an object with a destination folder. It will create an
-'Rdata' file on-the-fly.
+'Rdata' file on-the-fly. `obj` specifies the object from the working environment.
 
 ```
 z <- 3
@@ -97,13 +89,13 @@ rsync::sendObject(con, obj = z)
 
 ### Deleting
 
-`deleteEntry()` deletes an entry in the destination folder. 
+`deleteEntry()` deletes an entry in the destination folder. `entryName` defines the name of the entry. 
 
 ```
 rsync::deleteEntry(con, entryName = "z.Rdata")
 ```
 
-`deleteAllEntries()` deletes all entries in the destination folder. 
+`deleteAllEntries()` deletes all entries in the destination folder of `con`.
 
 ```
 rsync::deleteAllEntries(con)
@@ -111,20 +103,89 @@ rsync::deleteAllEntries(con)
 
 ### Retrieving
 
-`getEntry()` can be used to retrieve entries.
+
+`gibt es das wirklich?`
+
+
+`getEntry()` can be used to retrieve entries. `con` refers again to the `rsyncL` object and `entryName` to the entry that shall be retrieved.
 
 ```
 rsync::getEntry(con, entryName)
 ```
 
 
-## RsyncD/HTTP Connection 
+
+## RsyncD Connection
+
+### Setting up the Connection
+Analogously to the `rsyncL` connection, a `rsyncD` object needs to be created as the first step of the `rsync` process.
+Therefore, call  `newRsync()` as follows: `from` is set to the working directory by default and specifies the local end of a rsync connection. 
+`host` specifies the adress of the rsync deamon. `name` refers to the server name and `password`intuetively to the server's password. 
+
 
 ```
-conObject <- rsync::rsyncDHTTP(
-  host = "rsync://user@example.de",
-  name = "someFolder",
-  password = "password",
-  url = "https://serverAddress.de"
-)
+con <- rsync::newRsync(from = getwd(),
+                       host = 'rsync://user@example.de',
+                       name = 'someFolder',
+                       password  = 'password')
 ```
+
+Besides the initial specification of the `rsyncD` object, the usage of the remaining functions are very similar to the case of `rsyncL`.
+
+
+### Sending
+
+`listEntries` takes the *rsyncD* object as input and returns the objects.
+contained in the destination folder (`con$to`). `con$to`has automatically been contructed from the arguments `con$host` and `con$name`.
+
+```
+rsync::listEntries(con)
+```
+Sending a file is done with `sendFile`. Input arguments are the *rsyncD* object as well as `fileName`.
+
+```
+rsync::sendFile(con, fileName = "exampleFile.Rdata")
+```
+
+`sendFolder()` syncs the complete content from a folder of a local directory (`con$from`) to a rsync deamon (`con$to`). `folder` specifies the name of the corresponding folder.
+
+```
+rsync::sendFolder(con, folder = 'exampleFolder')
+```
+
+`sendObject()` syncs an object from the working environment to a rsync deamon (`con$to`). It will create an
+'Rdata' file on-the-fly. `obj` specifies the object from the working environment.
+
+```
+z <- 3
+rsync::sendObject(con, obj = z)
+```
+
+
+### Deleting
+
+`deleteEntry()` deletes an entry in the destination folder, via a rsync deamon. `entryName` defines the name of the entry. 
+
+```
+rsync::deleteEntry(con, entryName = "z.Rdata")
+```
+
+`deleteAllEntries()` deletes all entries in the destination folder of `con`.
+
+```
+rsync::deleteAllEntries(con)
+```
+
+
+### Retrieving
+
+`getEntry()` can be used to retrieve entries from a rsync deamon. `con` refers again to the `rsyncD` object and `entryName` to the entry that shall be retrieved.
+
+```
+rsync::getEntry(con, entryName)
+```
+
+
+
+`loaddata()`
+

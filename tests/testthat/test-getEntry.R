@@ -18,22 +18,22 @@ test_that("getEntry is working", {
   save(list = "x", file = paste0(dirName, "/", "x.Rdata"))
   save(list = "y", file = paste0(dirName, "/", "y.Rdata"))
 
-  serverTestingRsyncD <- rsync::newRsync(from = dirName,
+  serverTestingRsyncD <- newRsync(from = dirName,
                                          host = hostURL,
                                          name = nameServer,
                                          password = passwordServer)
 
-  serverTestingRsyncL <- rsync::newRsync(from = dirName,
+  serverTestingRsyncL <- newRsync(from = dirName,
                                          to = dirName2)
 
 
 
   # rsyncD
-  expectTrue(nrow(rsync::deleteAllEntries(db = serverTestingRsyncD)) == 0)
-  rsync::sendFile(db = serverTestingRsyncD, fileName = 'x.Rdata')
-  expectTrue(nrow(rsync::listEntries(serverTestingRsyncD)) == 1)
+  expectTrue(nrow(deleteAllEntries(db = serverTestingRsyncD)) == 0)
+  sendFile(db = serverTestingRsyncD, fileName = 'x.Rdata')
+  expectTrue(nrow(listEntries(serverTestingRsyncD)) == 1)
   file.remove(paste0(dirName, '/','x.Rdata'))
-  rsync::getEntry(db = serverTestingRsyncD, entryName = 'x.Rdata')
+  getEntry(db = serverTestingRsyncD, entryName = 'x.Rdata')
   expectTrue(file.exists(paste0(dirName, '/','x.Rdata')))
 
 

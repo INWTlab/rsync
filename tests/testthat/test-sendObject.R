@@ -20,29 +20,29 @@ test_that("sending Objects is working", {
 
 
 
-  serverTestingRsyncD <- rsync::newRsync(from = dirName,
+  serverTestingRsyncD <- newRsync(from = dirName,
                                          host = hostURL,
                                          name = nameServer,
                                          password = passwordServer)
 
-  serverTestingRsyncL <- rsync::newRsync(from = dirName,
+  serverTestingRsyncL <- newRsync(from = dirName,
                                          to = dirName2)
 
   z <- 34
 
   # rsyncD
-  rsync::deleteAllEntries(db = serverTestingRsyncD)
-  rsync::sendObject(db = serverTestingRsyncD, object = z)
-  expectTrue(nrow(rsync::listEntries(serverTestingRsyncD)) == 1)
-  rsync::deleteAllEntries(db = serverTestingRsyncD)
-  expectTrue(nrow(rsync::listEntries(serverTestingRsyncD)) == 0)
+  deleteAllEntries(db = serverTestingRsyncD)
+  sendObject(db = serverTestingRsyncD, object = z)
+  expectTrue(nrow(listEntries(serverTestingRsyncD)) == 1)
+  deleteAllEntries(db = serverTestingRsyncD)
+  expectTrue(nrow(listEntries(serverTestingRsyncD)) == 0)
 
 
   # rsyncL
-  invisible(rsync::deleteAllEntries(db = serverTestingRsyncL))
-  rsync::sendObject(db = serverTestingRsyncL, object = z)
+  invisible(deleteAllEntries(db = serverTestingRsyncL))
+  sendObject(db = serverTestingRsyncL, object = z)
   expectTrue(nrow(listEntries(serverTestingRsyncL)) == 1)
-  invisible(rsync::deleteAllEntries(db = serverTestingRsyncL))
+  invisible(deleteAllEntries(db = serverTestingRsyncL))
 
 
 })

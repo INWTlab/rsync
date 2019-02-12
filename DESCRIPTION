@@ -18,7 +18,8 @@ Imports:
     tibble,
     xml2,
     utils,
-    yaml
+    yaml,
+    tools
 Suggests:
     testthat,
     knitr,

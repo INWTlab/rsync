@@ -18,26 +18,26 @@ test_that("sendFile is working", {
   save(list = "y", file = paste0(dirName, "/", "y.Rdata"))
 
 
-  serverTestingRsyncD <- rsync::newRsync(from = dirName,
+  serverTestingRsyncD <- newRsync(from = dirName,
                                          host = hostURL,
                                          name = nameServer,
                                          password = passwordServer)
 
-  serverTestingRsyncL <- rsync::newRsync(from = dirName,
+  serverTestingRsyncL <- newRsync(from = dirName,
                                          to = dirName2)
 
 
   # rsyncD
-  rsync::deleteAllEntries(db = serverTestingRsyncD)
-  rsync::sendFile(db = serverTestingRsyncD, fileName = 'y.Rdata')
-  expectTrue(nrow(rsync::listEntries(serverTestingRsyncD)) == 1)
-  invisible(rsync::deleteAllEntries(db = serverTestingRsyncD))
+  deleteAllEntries(db = serverTestingRsyncD)
+  sendFile(db = serverTestingRsyncD, fileName = 'y.Rdata')
+  expectTrue(nrow(listEntries(serverTestingRsyncD)) == 1)
+  invisible(deleteAllEntries(db = serverTestingRsyncD))
 
   # rsyncL
-  invisible(rsync::deleteAllEntries(db = serverTestingRsyncL))
-  invisible(rsync::sendFile(db = serverTestingRsyncL, fileName = 'y.Rdata'))
+  invisible(deleteAllEntries(db = serverTestingRsyncL))
+  invisible(sendFile(db = serverTestingRsyncL, fileName = 'y.Rdata'))
   expectTrue(nrow(listEntries(serverTestingRsyncL)) == 1)
-  invisible(rsync::deleteAllEntries(db = serverTestingRsyncL))
+  invisible(deleteAllEntries(db = serverTestingRsyncL))
 
   #remove traces for further tests
   file.remove(dir(dirName2, "Rdata|csv|json", full.names = TRUE))

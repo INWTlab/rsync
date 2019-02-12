@@ -28,23 +28,23 @@ test_that("sending a Folder is working", {
 
 
 
-  serverTestingRsyncD <- rsync::newRsync(from = dirName,
+  serverTestingRsyncD <- newRsync(from = dirName,
                                          host = hostURL,
                                          name = nameServer,
                                          password = passwordServer)
 
-  serverTestingRsyncL <- rsync::newRsync(from = dirName,
+  serverTestingRsyncL <- newRsync(from = dirName,
                                          to = dirName2)
 
 
   # rsyncD
-  invisible(rsync::deleteAllEntries(db = serverTestingRsyncD))
-  rsync::sendFolder(db = serverTestingRsyncD, folderName = 'exampleFolder')
-  expectTrue(nrow(rsync::listEntries(serverTestingRsyncD)) == 2)
-  invisible(rsync::deleteAllEntries(db = serverTestingRsyncD))
+  invisible(deleteAllEntries(db = serverTestingRsyncD))
+  sendFolder(db = serverTestingRsyncD, folderName = 'exampleFolder')
+  expectTrue(nrow(listEntries(serverTestingRsyncD)) == 2)
+  invisible(deleteAllEntries(db = serverTestingRsyncD))
 
   # rsyncL
-  rsync::sendFolder(db = serverTestingRsyncL, folderName = 'exampleFolder')
+  sendFolder(db = serverTestingRsyncL, folderName = 'exampleFolder')
   expectTrue(nrow(listDir(serverTestingRsyncL$to)) == 2)
 
   # #remove traces for further tests

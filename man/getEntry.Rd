@@ -7,11 +7,13 @@
 getEntry(db, ...)
 }
 \arguments{
-\item{db}{rsync object that contains information on the type of connection, the target directory (remote or local) and eventually a password.}
+\item{db}{rsync object that contains information on the type of connection,
+the target directory (remote or local) and eventually a password.}
 
 \item{...}{additional arguments}
 
-\item{entryName}{an entry that the get function will get, located on the rsync deamon side / the local target directory.}
+\item{entryName}{an entry that the get function will get, located on the
+rsync deamon side / the local target directory.}
 
 \item{validate}{validates if entryName is identical in both locations.}
 
