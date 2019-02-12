@@ -23,12 +23,9 @@ sendFolder <- function(db, ...) {
 #' @export
 sendFolder.default <- function(db, folderName, validate = TRUE, verbose = FALSE ) {
 
-    if (verbose == TRUE) {
-      args <- "-ltvvx"
-    } else {
-      args <- "-ltx"}
+  dat <- listDir(paste0(tempdir(), '/', folderName))
+  entries <- levels(dat$Objects)
+  invisible(lapply(entries, sendFile, db = db, verbose = verbose))
+  listEntries(db)
 
-    dat <- listDir(paste0(tempdir(), '/', folderName))
-    entries <- c(levels(dat$Objects))
-    invisible(lapply(entries, sendFile, db = db, verbose = verbose))
 }

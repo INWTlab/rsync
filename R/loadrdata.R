@@ -2,7 +2,8 @@
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db rsync object that contains information on the type of connection, the target directory (remote or local) and eventually a password.
+#' @param db rsync object that contains information on the type of connection,
+#'     the target directory (remote or local) and eventually a password.
 #' @param rdataName name of rdata file
 #' @param verbose FALSE. If set to TRUE, it prints details of the process.
 #' @param ... additional arguments
@@ -17,14 +18,13 @@ loadrdata <- function(db, ...) {
 }
 
 #' @export
-loadrdata.default <- function(db, rdataName, verbose = FALSE ) {
+loadrdata.default <- function(db, rdataName, verbose = FALSE) {
 
-  if (verbose == TRUE) {
-    args <- "-ltvvx"
-  } else {
-    args <- "-ltx"}
+  on.exit(try(close(con), silent = TRUE))
 
-  file <-getHostFile(db, rdataName)
+  args <- if (verbose) "-ltvvx" else "-ltx"
+
+  file <- getHostFile(db, rdataName)
   to <- tempdir()
   pre <- getPre(db)
 
@@ -32,7 +32,6 @@ loadrdata.default <- function(db, rdataName, verbose = FALSE ) {
 
   con <- file(paste0(to, '/', rdataName), 'rb')
   load(con, e <- new.env(parent = emptyenv()))
-  close(con)
   as.list(e, all.names = TRUE)
 
 }

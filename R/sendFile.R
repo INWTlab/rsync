@@ -2,7 +2,8 @@
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db rsync object that contains information on the type of connection, the target directory (remote or local) and eventually a password.
+#' @param db rsync object that contains information on the type of connection,
+#'     the target directory (remote or local) and eventually a password.
 #' @param fileName file, which shall be sent to a target directory
 #' @param validate TRUE. validates if entryName is identical in both locations.
 #' @param verbose FALSE. If set to TRUE, it prints details of the process.
@@ -19,14 +20,10 @@ sendFile <- function(db, ...) {
   UseMethod("sendFile", db)
 }
 
-
 #' @export
 sendFile.default <- function(db, fileName, validate = TRUE, verbose = FALSE ) {
 
-  if (verbose == TRUE) {
-    args <- "-ltvvx"
-  } else {
-    args <- "-ltx"}
+  args <- if (verbose == TRUE) "-ltvvx" else "-ltx"
 
   file <- getLocalFile(db,fileName)
   to <- db$to
@@ -34,5 +31,6 @@ sendFile.default <- function(db, fileName, validate = TRUE, verbose = FALSE ) {
 
   rsync(file, to, args = args, pre = pre)
 
-  if ((validate) & (class(db)[1] != 'RsyncD')) identicalEntries(db, fileName)
+  if ((validate) & (class(db)[1] != 'RsyncD'))
+    identicalEntries(db, fileName)
 }
