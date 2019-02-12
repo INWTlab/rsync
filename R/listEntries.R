@@ -2,7 +2,8 @@
 #'
 #' List all entries in destination folder. Returns a data frame.
 #'
-#' @param db rsync object that contains information on the type of connection, the target directory (remote or local) and eventually a password.
+#' @param db rsync object that contains information on the type of connection,
+#'     the target directory (remote or local) and eventually a password.
 #' @param ... further arguments
 #'
 #' @details
@@ -24,6 +25,7 @@ listEntries.default <- function(db, ...) {
   dir <- rsync(NULL, to, args = NULL, pre = pre, intern = TRUE)
   dir <- dat::extract(dir, ~ !grepl("\\.$", .))
   if (length(dir) == 0) return(emptyDir())
+
   dir <- strsplit(dir, " +")
   dir <- do.call(rbind, dir)
   dir <- as.data.frame(dir)

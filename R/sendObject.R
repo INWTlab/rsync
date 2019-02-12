@@ -2,8 +2,10 @@
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db rsync object that contains information on the type of connection, the target directory (remote or local) and eventually a password.
-#' @param object object in the environment, which shall be sent to a target directory
+#' @param db rsync object that contains information on the type of connection,
+#'     the target directory (remote or local) and eventually a password.
+#' @param object object in the environment, which shall be sent to a target
+#'     directory
 #' @param validate TRUE. validates if entryName is identical in both locations.
 #' @param verbose FALSE. If set to TRUE, it prints details of the process.
 #' @param ... additional arguments
@@ -11,9 +13,9 @@
 #'
 #' @details
 #' \describe{
-#'   Sends an object (from the environment) to a rsync target. If validate is TRUE the
-#'   hash-sum of the remote file is compared to the local version. A warning is
-#'   issued should they differ.
+#'   Sends an object (from the environment) to a rsync target. If validate is
+#'       TRUE the hash-sum of the remote file is compared to the local version.
+#'       A warning is issued should they differ.
 #' }
 #' @export
 sendObject <- function(db, ...) {
@@ -23,18 +25,20 @@ sendObject <- function(db, ...) {
 #' @export
 sendObject.default <- function(db, object, objectName = as.character(substitute(object)), validate = TRUE, verbose = FALSE ) {
 
-  if (verbose == TRUE) {
-    args <- "-ltvvx"
-  } else {
-    args <- "-ltx"}
+  args <- if (verbose) "-ltvvx" else "-ltx"
 
   assign(objectName, object)
   dirName <- tempdir()
-  save(list = objectName, file =  file <- paste0(dirName, "/", objectName, ".Rdata"), compress = TRUE)
+  save(
+    list = objectName,
+    file =  file <- paste0(dirName, "/", objectName, ".Rdata"),
+    compress = TRUE
+  )
   to <- db$to
   pre <- getPre(db)
 
   rsync(file, to, args = args, pre = pre)
 
-  if ((validate) & (class(db)[1] != 'RsyncD')) identicalEntries(db, paste0(objectName, '.Rdata'))
+  if ((validate) & (class(db)[1] != 'RsyncD'))
+    identicalEntries(db, paste0(objectName, '.Rdata'))
 }

@@ -8,7 +8,8 @@
 #'
 #' @details
 #' \describe{
-#' Tests if two files are exactly identical. It returns TRUE in this case, FALSE in every other case.
+#' Tests if two files are exactly identical. It returns TRUE in this case,
+#'     FALSE in every other case.
 #' }
 #'
 #'
@@ -17,11 +18,11 @@ identicalEntries <- function(db, ...) {
   UseMethod("identicalEntries", db)
 }
 
-
 #' @export
 identicalEntries.default <- function(db, entryName) {
 
-  on.exit({try(silent = TRUE, {close(locFile); close(hostFile)})})
+  on.exit(try({close(locFile); close(hostFile)}, silent = TRUE))
+
   locFile <- file(paste0(db$from, '/', entryName), open = 'rb')
 
   if (!is.null(class(db)[1]  == 'RsyncL')) {
