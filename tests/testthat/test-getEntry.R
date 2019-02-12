@@ -27,7 +27,6 @@ test_that("getEntry is working", {
                                          to = dirName2)
 
 
-
   # rsyncD
   expectTrue(nrow(deleteAllEntries(db = serverTestingRsyncD)) == 0)
   sendFile(db = serverTestingRsyncD, fileName = 'x.Rdata')
@@ -36,12 +35,12 @@ test_that("getEntry is working", {
   getEntry(db = serverTestingRsyncD, entryName = 'x.Rdata')
   expectTrue(file.exists(paste0(dirName, '/','x.Rdata')))
 
-
-
-  #rsyncL: nicht benötigt
-
-  # #remove traces for further tests
-  # file.remove(dir(dirName2, "Rdata|csv|json", full.names = TRUE))
-  # file.remove(dir(dirName, "Rdata|csv|json", full.names = TRUE))
+  #rsyncL:
+  expectTrue(nrow(deleteAllEntries(db = serverTestingRsyncL)) == 0)
+  sendFile(db = serverTestingRsyncL, fileName = 'x.Rdata')
+  expectTrue(nrow(listEntries(serverTestingRsyncL)) == 1)
+  file.remove(paste0(dirName, '/','x.Rdata'))
+  getEntry(db = serverTestingRsyncL, entryName = 'x.Rdata')
+  expectTrue(file.exists(paste0(dirName, '/','x.Rdata')))
 
 })

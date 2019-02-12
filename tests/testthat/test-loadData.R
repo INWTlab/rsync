@@ -5,7 +5,6 @@ test_that("rdata can be loaded", {
 
   expectTrue <- function(a) testthat::expect_true(a)
 
-
   dirName <- tempdir()
   try(file.remove(paste0(dirName,'/extraFolder')), silent = TRUE)
   dirName2 <- paste0(dirName, '/extraFolder/')

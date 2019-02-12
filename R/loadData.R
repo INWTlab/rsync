@@ -3,7 +3,7 @@
 #' API to use rsync as persistent file and object storage.
 #'
 #' @param db rsync object that contains information on the type of connection, the target directory (remote or local) and eventually a password.
-#' @param rdataName name of rdata file
+#' @param dataName name of rdata file
 #' @param verbose FALSE. If set to TRUE, it prints details of the process.
 #' @param ... additional arguments
 #'

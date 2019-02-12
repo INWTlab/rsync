@@ -2,11 +2,8 @@
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db rsync object that contains information on the type of connection,
-#'     the target directory (remote or local) and eventually a password.
+#' @inheritParams deleteAllEntries
 #' @param entryName entry that shall be deleted.
-#' @param verbose FALSE. If set to TRUE, it prints details of the process.
-#' @param ... additional arguments
 #'
 #' @details
 #' \describe{

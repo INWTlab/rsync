@@ -2,13 +2,9 @@
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db rsync object that contains information on the type of connection,
-#'     the target directory (remote or local) and eventually a password.
+#' @inheritParams sendFile
 #' @param object object in the environment, which shall be sent to a target
 #'     directory
-#' @param validate TRUE. validates if entryName is identical in both locations.
-#' @param verbose FALSE. If set to TRUE, it prints details of the process.
-#' @param ... additional arguments
 #'
 #'
 #' @details
