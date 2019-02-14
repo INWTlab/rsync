@@ -11,8 +11,6 @@ identicalEntries(db, ...)
 the target directory (remote or local) and eventually a password.}
 
 \item{...}{additional arguments}
-
-\item{entryName}{an entry that will be checked}
 }
 \description{
 API to use rsync as persistent file and object storage.

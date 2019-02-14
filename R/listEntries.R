@@ -2,9 +2,7 @@
 #'
 #' List all entries in destination folder. Returns a data frame.
 #'
-#' @param db rsync object that contains information on the type of connection,
-#'     the target directory (remote or local) and eventually a password.
-#' @param ... further arguments
+#' @inheritParams sendFile
 #'
 #' @details
 #' \describe{
@@ -17,6 +15,7 @@ listEntries <- function(db, ...) {
   UseMethod("listEntries", db)
 }
 
+#' @inheritParams sendFile
 #' @export
 listEntries.default <- function(db, ...) {
   pre <- getPre(db)

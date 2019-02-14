@@ -2,9 +2,7 @@
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db rsync object that contains information on the type of connection, the target directory (remote or local) and eventually a password.
-#' @param verbose FALSE. If set to TRUE, it prints details of the process.
-#' @param ... further arguments
+#' @inheritParams sendFile
 #'
 #' @details
 #' \describe{
@@ -15,8 +13,19 @@ deleteAllEntries <- function(db, ...) {
   UseMethod("deleteAllEntries", db)
 }
 
+#' Rsync API
+#'
+#' API to use rsync as persistent file and object storage.
+#'
+#' @inheritParams sendFile
+#' @param verbose FALSE. If set to TRUE, it prints details of the process.
+#'
+#' @details
+#' \describe{
+#' Deletes all entries from a rsync object.
+#' }
 #' @export
-deleteAllEntries.default <- function(db, verbose = FALSE) {
+deleteAllEntries.default <- function(db, verbose = FALSE, ...) {
 
   on.exit(try(file.remove(emptyDir), silent = TRUE))
 

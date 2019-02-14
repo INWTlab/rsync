@@ -15,7 +15,7 @@ save(list = "y", file = paste0(dirName, "/", "y.Rdata"))
 
 serverTestingRsyncL <- newRsync(from = dirName,
                                 to = dirName2)
-
+nameServer <- NULL
 suppressWarnings(try(source("~/.inwt/rsync/confiig.R"), silent=TRUE))
 if(!is.null(nameServer)){
   test_that("sendFile for rsyncD is working", {

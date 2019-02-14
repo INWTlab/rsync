@@ -12,7 +12,9 @@ rsync(file, to, includes = NULL, excludes = NULL, args = "-rltvx",
 
 \item{to}{(character) target}
 
-\item{includes, excludes}{(character) with length >=1}
+\item{includes}{(character) with length >=1}
+
+\item{excludes}{(character) with length >=1}
 
 \item{args}{(character) arguments passed to rsync. Default is '-rltvx' and
 works for most cases.}

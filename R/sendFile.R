@@ -4,9 +4,6 @@
 #'
 #' @param db rsync object that contains information on the type of connection,
 #'     the target directory (remote or local) and eventually a password.
-#' @param fileName file, which shall be sent to a target directory
-#' @param validate TRUE. validates if entryName is identical in both locations.
-#' @param verbose FALSE. If set to TRUE, it prints details of the process.
 #' @param ... additional arguments
 #'
 #' @details
@@ -20,8 +17,16 @@ sendFile <- function(db, ...) {
   UseMethod("sendFile", db)
 }
 
+#' Rsync API
+#'
+#' API to use rsync as persistent file and object storage.
+#'
+#' @inheritParams sendFile
+#' @param fileName file, which shall be sent to a target directory
+#' @param validate TRUE. validates if entryName is identical in both locations.
+#' @param verbose FALSE. If set to TRUE, it prints details of the process.
 #' @export
-sendFile.default <- function(db, fileName, validate = TRUE, verbose = FALSE ) {
+sendFile.default <- function(db, fileName, validate = TRUE, verbose = FALSE, ...) {
 
   args <- if (verbose == TRUE) "-ltvvx" else "-ltx"
 

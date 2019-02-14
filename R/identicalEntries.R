@@ -2,10 +2,7 @@
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db rsync object that contains information on the type of connection,
-#'     the target directory (remote or local) and eventually a password.
-#' @param entryName an entry that will be checked
-#' @param ... additional arguments
+#' @inheritParams sendFile
 #'
 #' @details
 #' \describe{
@@ -19,8 +16,16 @@ identicalEntries <- function(db, ...) {
   UseMethod("identicalEntries", db)
 }
 
+
+#' Rsync API
+#'
+#' API to use rsync as persistent file and object storage.
+#'
+#' @inheritParams sendFile
+#' @param entryName an entry that will be checked
+#'
 #' @export
-identicalEntries.default <- function(db, entryName) {
+identicalEntries.default <- function(db, entryName, ...) {
 
   on.exit(try({close(locFile); close(hostFile)}, silent = TRUE))
 

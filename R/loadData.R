@@ -2,10 +2,7 @@
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db rsync object that contains information on the type of connection, the target directory (remote or local) and eventually a password.
-#' @param dataName name of data file
-#' @param verbose FALSE. If set to TRUE, it prints details of the process.
-#' @param ... additional arguments
+#' @inheritParams sendFile
 #'
 #' @details
 #' \describe{
@@ -16,8 +13,15 @@ loadData <- function(db, ...) {
   UseMethod("loadData", db)
 }
 
+#' Rsync API
+#'
+#' API to use rsync as persistent file and object storage.
+#'
+#' @inheritParams sendFile
+#' @param dataName name of data file
+#' @param verbose FALSE. If set to TRUE, it prints details of the process.
 #' @export
-loadData.default <- function(db, dataName, verbose = FALSE ) {
+loadData.default <- function(db, dataName, verbose = FALSE, ...) {
 
   if (verbose == TRUE) {
     args <- "-ltvvx"
@@ -41,5 +45,5 @@ loadData.default <- function(db, dataName, verbose = FALSE ) {
   } else if (base::grepl('.json', dataName)) {
     jsonName <- jsonlite::read_json(paste0(to, '/', dataName), simplifyVector = TRUE)
     jsonName
-  } else {stop('File of type ', file_ext(dataName), 'not supported.')}
+  } else {stop('File of type ', tools::file_ext(dataName), 'not supported.')}
 }

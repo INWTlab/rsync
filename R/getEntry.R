@@ -2,13 +2,7 @@
 #'
 #' API to use rsync as persistent file and object storage.
 #'
-#' @param db rsync object that contains information on the type of connection,
-#'     the target directory (remote or local) and eventually a password.
-#' @param entryName an entry that the get function will get, located on the
-#'     rsync deamon side / the local target directory.
-#' @param validate validates if entryName is identical in both locations.
-#' @param verbose FALSE. If set to TRUE, it prints details of the process.
-#' @param ... additional arguments
+#' @inheritParams sendFile
 #'
 #' @details
 #' \describe{
@@ -21,8 +15,18 @@ getEntry <- function(db, ...) {
   UseMethod("getEntry", db)
 }
 
+
+#' Rsync API
+#'
+#' API to use rsync as persistent file and object storage.
+#'
+#' @inheritParams sendFile
+#' @param entryName an entry that the get function will get, located on the
+#'     rsync deamon side / the local target directory.
+#' @param validate validates if entryName is identical in both locations.
+#' @param verbose FALSE. If set to TRUE, it prints details of the process.
 #' @export
-getEntry.default <- function(db, entryName, validate = TRUE, verbose = FALSE) {
+getEntry.default <- function(db, entryName, validate = TRUE, verbose = FALSE, ...) {
 
   args <- if (verbose == TRUE) "-ltvvx" else "-ltx"
 

@@ -4,7 +4,8 @@
 #'
 #' @param file (character) source
 #' @param to (character) target
-#' @param includes,excludes (character) with length >=1
+#' @param includes (character) with length >=1
+#' @param excludes (character) with length >=1
 #' @param args (character) arguments passed to rsync. Default is '-rltvx' and
 #'   works for most cases.
 #' @param pre (character) something which is pasted before the 'rsync' command.

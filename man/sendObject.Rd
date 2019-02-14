@@ -11,9 +11,6 @@ sendObject(db, ...)
 the target directory (remote or local) and eventually a password.}
 
 \item{...}{additional arguments}
-
-\item{object}{object in the environment, which shall be sent to a target
-directory}
 }
 \description{
 API to use rsync as persistent file and object storage.

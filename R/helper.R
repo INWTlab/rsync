@@ -20,6 +20,8 @@ print.RsyncD <- function(x, ...) {
   print(listEntries(x), ...)
 }
 
+
+#' @inheritParams  print.RsyncD
 #' @export
 print.RsyncL <- function(x, ...) {
   xchar <- as.character(x)
@@ -30,6 +32,7 @@ print.RsyncL <- function(x, ...) {
   print(listEntries(x), ...)
 }
 
+#' @inheritParams  print.RsyncD
 #' @export
 as.character.RsyncD <- function(x, ...) {
   x$password <- "****"
@@ -38,6 +41,7 @@ as.character.RsyncD <- function(x, ...) {
   ret
 }
 
+#' @inheritParams  print.RsyncD
 #' @export
 as.character.RsyncL <- function(x, ...) {
 
@@ -46,6 +50,17 @@ as.character.RsyncL <- function(x, ...) {
   ret
 }
 
+#' Rsync API
+#'
+#' API to use rsync as persistent file and object storage.
+#'
+#' @param dirName directory name
+#'
+#' @details
+#' \describe{
+#' lists the objects in a directory
+#' }
+#'
 #' @export
 listDir <- function(dirName) {
   dat <- base::list.files(dirName)

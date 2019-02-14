@@ -3,9 +3,6 @@
 #' API to use rsync as persistent file and object storage.
 #'
 #' @inheritParams sendFile
-#' @param object object in the environment, which shall be sent to a target
-#'     directory
-#'
 #'
 #' @details
 #' \describe{
@@ -18,8 +15,17 @@ sendObject <- function(db, ...) {
   UseMethod("sendObject", db)
 }
 
+#' Rsync API
+#'
+#' API to use rsync as persistent file and object storage.
+#' @inheritParams sendFile
+#' @param object object in the environment, which shall be sent to a target
+#'     directory
+#' @param objectName the object's name that is constructed from `object`
+#' @param validate TRUE. validates if entryName is identical in both locations.
+#' @param verbose FALSE. If set to TRUE, it prints details of the process.
 #' @export
-sendObject.default <- function(db, object, objectName = as.character(substitute(object)), validate = TRUE, verbose = FALSE ) {
+sendObject.default <- function(db, object, objectName = as.character(substitute(object)), validate = TRUE, verbose = FALSE, ...) {
 
   args <- if (verbose) "-ltvvx" else "-ltx"
 

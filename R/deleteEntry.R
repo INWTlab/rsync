@@ -3,7 +3,6 @@
 #' API to use rsync as persistent file and object storage.
 #'
 #' @inheritParams deleteAllEntries
-#' @param entryName entry that shall be deleted.
 #'
 #' @details
 #' \describe{
@@ -14,8 +13,15 @@ deleteEntry <- function(db, ...) {
   UseMethod("deleteEntry", db)
 }
 
+#' Rsync API
+#'
+#' API to use rsync as persistent file and object storage.
+#'
+#' @inheritParams deleteAllEntries.default
+#' @param entryName entry that shall be deleted.
+#'
 #' @export
-deleteEntry.default <- function(db, entryName, verbose = FALSE) {
+deleteEntry.default <- function(db, entryName, verbose = FALSE, ...) {
   if (length(entryName) == 0) return(db)
 
   on.exit(try(file.remove(emptyDir), silent = TRUE))
