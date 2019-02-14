@@ -7,5 +7,3 @@ sudo: enabled
 notifications:
   email:
     - david.berscheid@inwt-statistics.de
-
-script: mvn clean package -DskipTests=true
