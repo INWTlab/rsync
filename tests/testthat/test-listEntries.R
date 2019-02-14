@@ -15,7 +15,10 @@ save(list = "y", file = paste0(dirName, "/", "y.Rdata"))
 
 serverTestingRsyncL <- newRsync(from = dirName,
                                 to = dirName2)
-if (!is.null(source("~/.inwt/rsync/config.R"))) {
+
+
+suppressWarnings(try(source("~/.inwt/rsync/config.R"), silent=TRUE))
+if(!is.null(nameServer)){
   test_that("Entries rsyncD objects can be listet", {
 
     serverTestingRsyncD <- newRsync(from = dirName,
@@ -31,7 +34,6 @@ if (!is.null(source("~/.inwt/rsync/config.R"))) {
     invisible(deleteAllEntries(db = serverTestingRsyncD))
   })
 }
-
 test_that("Entries rsyncL objects can be listet", {
 
   # rsyncL

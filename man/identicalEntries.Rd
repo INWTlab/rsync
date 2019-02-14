@@ -7,7 +7,8 @@
 identicalEntries(db, ...)
 }
 \arguments{
-\item{db}{rsnc connection object}
+\item{db}{rsync object that contains information on the type of connection,
+the target directory (remote or local) and eventually a password.}
 
 \item{...}{additional arguments}
 

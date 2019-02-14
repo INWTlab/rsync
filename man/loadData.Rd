@@ -11,7 +11,7 @@ loadData(db, ...)
 
 \item{...}{additional arguments}
 
-\item{dataName}{name of rdata file}
+\item{dataName}{name of data file}
 
 \item{verbose}{FALSE. If set to TRUE, it prints details of the process.}
 }

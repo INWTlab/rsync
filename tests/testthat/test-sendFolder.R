@@ -25,7 +25,8 @@ serverTestingRsyncL <- newRsync(from = dirName,
                                 to = dirName2)
 
 
-if (!is.null(source("~/.inwt/rsync/config.R"))) {
+suppressWarnings(try(source("~/.inwt/rsync/confiig.R"), silent=TRUE))
+if(!is.null(nameServer)){
 test_that("sending a Folder with rsynD is working", {
 
   serverTestingRsyncD <- newRsync(from = dirName,
