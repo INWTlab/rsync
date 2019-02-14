@@ -73,9 +73,6 @@ if (!is.null(source("~/.inwt/rsync/config.R"))) {
     rm(jsonData)
     expectTrue(file.exists(paste0(dirName, '/','lst.json')))
     invisible(deleteAllEntries(db = serverTestingRsyncD))
-
-
-
   })
 }
 
