@@ -1,3 +1,5 @@
+[![Travis-CI Build Status](https://travis-ci.org//INWTlab/rsync.svg?branch=master)](https://travis-ci.org/INWTlab/rsync)
+
 ## Rsync as R-Package
 
 `rsync` is a open source file-copying tool that is freely available under the

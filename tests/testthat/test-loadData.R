@@ -37,7 +37,7 @@ serverTestingRsyncL <- newRsync(from = dirName,
 
 
 nameServer <- NULL
-suppressWarnings(try(source("~/.inwt/rsync/confiig.R"), silent=TRUE))
+suppressWarnings(try(source("~/.inwt/rsync/config.R"), silent=TRUE))
 if(!is.null(nameServer)){
   test_that("rdata for rsyncD can be loaded", {
 
