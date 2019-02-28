@@ -1,13 +1,14 @@
 Package: rsync
 Type: Package
 Title: API to use rsync
-Version: 0.2.0
+Version: 0.3.0
 Author: INWT Statistics GmbH
 Authors@R: c(person("Sebastian", "Warnholz", email = "sebastian.warnholz@inwt-statistics.de", role = c("aut", "cre")),
              person("Jonathan", "Bob", email = "jonathan.bob@inwt-statistics.de", role = c("aut")),
              person("David", "Berscheid", email = "david.berscheid@inwt-statistics.de", role = c("aut")))
 Description: The package provides an API to use rsync from R. It lets you easily
     synchronize and transfer files across computer systems or locations.
+SystemRequirements: rsync
 Depends:
     R (>= 3.4.0)
 Imports:
