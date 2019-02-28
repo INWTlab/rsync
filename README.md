@@ -153,10 +153,6 @@ getFile(dest, "x.Rdata")
 ```
 
 ```
-## Rsync successful: Local and host file are identical!
-```
-
-```
 ## Rsync server: 
 ##   dest: /home/sebastian/projects/rsync/destination
 ##   src: /home/sebastian/projects/rsync/source

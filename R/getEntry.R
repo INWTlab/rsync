@@ -10,7 +10,7 @@ getFile <- function(db, ...) {
 
 #' @rdname rsync
 #' @export
-getFile.default <- function(db, fileName, validate = TRUE, verbose = FALSE, ...) {
+getFile.default <- function(db, fileName, validate = FALSE, verbose = FALSE, ...) {
 
   args <- if (verbose == TRUE) "-ltvvx" else "-ltx"
 
