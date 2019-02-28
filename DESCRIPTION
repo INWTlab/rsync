@@ -15,7 +15,6 @@ Imports:
     data.table,
     jsonlite,
     openssl,
-    yaml,
     tools
 Suggests:
     testthat,

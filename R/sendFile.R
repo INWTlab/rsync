@@ -1,7 +1,5 @@
 #' @details
-#' \describe{
-#'   \code{sendFile} Sends a file to a rsync object.
-#' }
+#' \code{sendFile} Sends a file to a rsync object.
 #'
 #' @rdname rsync
 #' @export

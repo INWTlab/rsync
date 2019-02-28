@@ -1,8 +1,6 @@
 #' @details
-#' \describe{
-#'   \code{loadData}: sync and load the contents of a file. This can be a Rdata
-#'   file or a csv or json.
-#' }
+#' \code{loadData}: sync and load the contents of a file in \code{dest}. This
+#' can be a Rdata file or a csv or json. The file will be saved in \code{src}.
 #'
 #' @rdname rsync
 #' @export

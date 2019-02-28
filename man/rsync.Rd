@@ -20,9 +20,7 @@
 \alias{sendFile.default}
 \alias{sendObject}
 \alias{sendObject.default}
-\title{\describe{
-Deletes an entry.
-}}
+\title{\code{removeFile} Remove a file from \code{dest}.}
 \usage{
 getFile(db, ...)
 
@@ -91,35 +89,22 @@ Setup a rsync configuration. The configuration object can be used for access
 to a folder.
 }
 \details{
-\describe{
-  \code{getFile} downloads a file from a Rsync object. If validate is TRUE
-  the hash-sum of the remote file is compared to the local version. A warning
-  is issued should they differ.
-}
+\code{getFile} downloads a file from dest and saves it in src.
 
-\describe{
-  \code{loadData}: sync and load the contents of a file. This can be a Rdata
-  file or a csv or json.
-}
+\code{loadData}: sync and load the contents of a file in \code{dest}. This
+can be a Rdata file or a csv or json. The file will be saved in \code{src}.
 
-\describe{
-  \code{removeAllFiles} deletes all entries from a rsync object.
-}
+\code{removeAllFiles} remove all entries from \code{dest}. \code{src} will
+not be affected.
 
 \code{rsync} is a command line tool. For details see
   \url{https://rsync.samba.org/}.
 
-\describe{
-  \code{sendAllFiles} Sends all files in src to dest using \code{sendFile}.
-}
+\code{sendAllFiles} Sends all files in \code{src} to \code{dest} using \code{sendFile}.
 
-\describe{
-  \code{sendFile} Sends a file to a rsync object.
-}
+\code{sendFile} Sends a file to a rsync object.
 
-\describe{
 \code{sendObject} sends an object (from the environment)
   to a rsync target. This abstracts a pattern where you would use \link{save}
   followed by \code{sendFile}. The reverse is done using \code{getObject}
-}
 }

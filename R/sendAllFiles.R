@@ -1,7 +1,5 @@
 #' @details
-#' \describe{
-#'   \code{sendAllFiles} Sends all files in src to dest using \code{sendFile}.
-#' }
+#' \code{sendAllFiles} Sends all files in \code{src} to \code{dest} using \code{sendFile}.
 #'
 #' @rdname rsync
 #' @export

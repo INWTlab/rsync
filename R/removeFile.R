@@ -1,6 +1,4 @@
-#' \describe{
-#' Deletes an entry.
-#' }
+#' \code{removeFile} Remove a file from \code{dest}.
 #'
 #' @rdname rsync
 #' @export

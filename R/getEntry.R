@@ -1,9 +1,5 @@
 #' @details
-#' \describe{
-#'   \code{getFile} downloads a file from a Rsync object. If validate is TRUE
-#'   the hash-sum of the remote file is compared to the local version. A warning
-#'   is issued should they differ.
-#' }
+#' \code{getFile} downloads a file from dest and saves it in src.
 #'
 #' @rdname rsync
 #' @export

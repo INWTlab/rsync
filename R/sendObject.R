@@ -1,8 +1,7 @@
-#' @details \describe{
+#' @details
 #' \code{sendObject} sends an object (from the environment)
 #'   to a rsync target. This abstracts a pattern where you would use \link{save}
 #'   followed by \code{sendFile}. The reverse is done using \code{getObject}
-#' }
 #'
 #' @rdname rsync
 #' @export

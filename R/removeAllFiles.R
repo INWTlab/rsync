@@ -1,7 +1,6 @@
 #' @details
-#' \describe{
-#'   \code{removeAllFiles} deletes all entries from a rsync object.
-#' }
+#' \code{removeAllFiles} remove all entries from \code{dest}. \code{src} will
+#' not be affected.
 #'
 #' @rdname rsync
 #' @export

@@ -24,12 +24,13 @@ For further information about rsync, please visit https://rsync.samba.org/.
   
 ## Installation:
 
-The rsync package can be downloaded and installed by running the following
+The rsync R package can be downloaded and installed by running the following
 command from the R console:
 
 ```
 devtools::install_github("INWTlab/rsync")
 ```
+
 Make sure you have the `rsync` command line tool available.
 
 ## Settings / Classes
