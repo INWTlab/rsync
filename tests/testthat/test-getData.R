@@ -1,4 +1,4 @@
-context("loadData")
+context("getData")
 
 testthat::test_that("load data", {
 
@@ -26,7 +26,7 @@ testthat::test_that("load data", {
   invisible(removeAllFiles(con))
   invisible(sendFile(con, fileName = 'x.Rdata'))
   testthat::expect_true(nrow(listFiles(con)) == 1)
-  rdata <- loadData(con, fileName = 'x.Rdata')
+  rdata <- getData(con, fileName = 'x.Rdata')
   testthat::expect_true(objects(rdata) == "x")
   rm(rdata)
   testthat::expect_true(file.exists(getDestFile(con,'x.Rdata')))
@@ -35,14 +35,14 @@ testthat::test_that("load data", {
   invisible(removeAllFiles(con))
   invisible(sendFile(con, fileName = 'dat.csv'))
   testthat::expect_true(nrow(listFiles(con)) == 1)
-  csvData <- loadData(con, fileName = 'dat.csv')
+  csvData <- getData(con, fileName = 'dat.csv')
   testthat::expect_true(identical(dat, csvData))
 
   #json
   invisible(removeAllFiles(con))
   invisible(sendFile(con, fileName = 'lst.json'))
   testthat::expect_true(nrow(listFiles(con)) == 1)
-  jsonData <- loadData(con, fileName = 'lst.json')
+  jsonData <- getData(con, fileName = 'lst.json')
   testthat::expect_true(identical(jsonData, lst))
 
 })
