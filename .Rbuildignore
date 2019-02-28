@@ -3,3 +3,4 @@
 ^\.travis\.yml$
 ^scratch\.R$
 ^Readme\.Rmd$
+^codecov\.yml$

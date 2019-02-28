@@ -6,5 +6,7 @@ sudo: enabled
 
 notifications:
   email:
-    - david.berscheid@inwt-statistics.de
+    - sebastian.warnholz@inwt-statistics-de
 
+after_success:
+  - Rscript -e 'covr::codecov()'
