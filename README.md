@@ -1,4 +1,5 @@
 [![Travis-CI Build Status](https://travis-ci.org//INWTlab/rsync.svg?branch=master)](https://travis-ci.org/INWTlab/rsync)
+[![Coverage Status](https://img.shields.io/codecov/c/github/INWTlab/rsync/master.svg)](https://codecov.io/github/INWTlab/rsync?branch=master)
 
 ## Rsync as R-Package
 
