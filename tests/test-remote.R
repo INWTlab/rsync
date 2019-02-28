@@ -4,6 +4,7 @@ if (grepl("docker: command not found", dockerVersion)) {
   q(save = "no")
 }
 
+system("docker pull axiom/rsync-server")
 system("bash test-remote.sh", wait = FALSE)
 Sys.sleep(2)
 
