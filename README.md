@@ -180,35 +180,6 @@ src
 ## 1 x.Rdata 2019-02-28 12:30:51   61
 ```
 
-This really shines when we use a rsync daemon in a remote location.
 
-
-```
-## Rsync server: 
-##   dest: /home/sebastian/projects/rsync/source
-##   src: /home/sebastian/projects/rsync
-##   password: NULL 
-## Directory in destination:
-## [1] name         lastModified size        
-## <0 rows> (or 0-length row.names)
-```
-
-```
-## Rsync server: 
-##   dest: /home/sebastian/projects/rsync/destination
-##   src: /home/sebastian/projects/rsync/source
-##   password: NULL 
-## Directory in destination:
-## [1] name         lastModified size        
-## <0 rows> (or 0-length row.names)
-```
-
-```
-## [1] TRUE
-```
-
-```
-## [1] TRUE
-```
 
 

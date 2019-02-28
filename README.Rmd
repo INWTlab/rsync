@@ -76,9 +76,7 @@ getFile(dest, "x.Rdata")
 src
 ```
 
-This really shines when we use a rsync daemon in a remote location.
-
-```{r echo = FALSE}
+```{r echo = FALSE, results='hide'}
 # Clean-up
 removeAllFiles(src)
 removeAllFiles(dest)
