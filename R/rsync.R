@@ -29,7 +29,7 @@ rsync <- function(dest, src = getwd(), password = NULL) {
     is.null(password) || is.character(password) && length(password) == 1
   )
   src <- normalizePath(src, mustWork = TRUE)
-  dest <- if (grepl("^rsync://", pattern = dest))
+  dest <- if (grepl("^rsync://", dest))
     sub("/$", "", dest) else normalizePath(dest, mustWork = TRUE)
   ret <- list(
     dest = dest,

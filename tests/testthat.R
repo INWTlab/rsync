@@ -1,4 +1,5 @@
-library(testthat)
-library(rsync)
+library("rsync")
 
-test_check("rsync")
+if (requireNamespace("testthat", quietly = TRUE)) {
+  testthat::test_check("rsync")
+}
