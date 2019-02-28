@@ -11,4 +11,7 @@ test_that("list entries in dest", {
   invisible(removeAllFiles(con))
   testthat::expect_true(nrow(listFiles(con)) == 0)
 
+  testthat::expect_output(dat <- print(con))
+  testthat::expect_identical(dat, con)
+
 })

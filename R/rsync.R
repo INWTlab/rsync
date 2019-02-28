@@ -67,7 +67,8 @@ print.rsync <- function(x, ...) {
   xchar <- paste(xchar, collapse = "")
   cat("Rsync server:", xchar, "\n")
   cat("Directory in destination:\n")
-  print(listFiles(x), ...)
+  print(listFiles(x))
+  invisible(x)
 }
 
 #' @export
