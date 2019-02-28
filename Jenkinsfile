@@ -12,7 +12,7 @@ pipeline {
 
         stage('Testing with R-3.5.1') {
             agent { label 'test' }
-            when { not { branch 'depl' } }
+            // when { not { branch 'depl' } }
             steps {
                 sh '''
                 docker build --pull -t tmp-$CUR_PROJ .
@@ -24,7 +24,7 @@ pipeline {
 
         stage('Deploy R-package') {
             agent { label 'eh2' }
-            when { branch 'master' }
+            when { branch 'depl' }
             steps {
                 sh '''
                 rm -vf *.tar.gz
