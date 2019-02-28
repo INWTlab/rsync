@@ -1,21 +1,10 @@
-#' List entries
-#'
-#' List all entries in destination folder. Returns a data frame.
-#'
-#' @inheritParams sendFile
-#'
-#' @details
-#' \describe{
-#'   Lists entries of a Rsync object.
-#' }
-#'
-#'
+#' @rdname rsync
 #' @export
 listFiles <- function(db, ...) {
   UseMethod("listFiles", db)
 }
 
-#' @inheritParams sendFile
+#' @rdname rsync
 #' @export
 listFiles.default <- function(db, ...) {
   pre <- getPre(db)
@@ -32,6 +21,7 @@ listFiles.default <- function(db, ...) {
   dir <- dat::replace(dir, "date", gsub("/", "-", dir$date))
   dir <- dat::mutar(dir, lastModified ~ as.POSIXct(paste(date, time)))
   dir <- dat::mutar(dir, size ~ as.numeric(gsub(",", "", size)))
+  dir <- dat::mutar(dir, name ~ as.character(name))
   dir <- dat::extract(dir, c("name", "lastModified", "size"))
   dir
 }

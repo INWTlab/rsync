@@ -2,17 +2,16 @@
 #'
 #' Calls the CLI-program 'rsync'.
 #'
-#' @param file (character) source
-#' @param to (character) target
-#' @param includes (character) with length >=1
-#' @param excludes (character) with length >=1
+#' @param file (character) source.
+#' @param to (character) destination.
+#' @param includes,excludes (character) with length >=1 or (NULL).
 #' @param args (character) arguments passed to rsync. Default is '-rltvx' and
 #'   works for most cases.
-#' @param pre (character) something which is pasted before the 'rsync' command.
-#'   E.g. a password
-#' @param intern (logical) passed to \link{system}
+#' @param pre (character) something that is pasted in front of the 'rsync'
+#'   command. E.g. a password.
+#' @param intern (logical) passed to \link{system}.
 #'
-#' @rdname rsync
+#' @rdname rsynccli
 #' @export
 rsynccli <- function(file, to, includes = NULL, excludes = NULL, args = "-rltvx", pre = NULL, intern = FALSE) {
 

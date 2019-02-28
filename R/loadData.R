@@ -1,25 +1,16 @@
-#' Rsync API
-#'
-#' API to use rsync as persistent file and object storage.
-#'
-#' @inheritParams sendFile
-#'
 #' @details
 #' \describe{
-#'   Loads a rdata file from a Rsync object.
+#'   \code{loadData}: sync and load the contents of a file. This can be a Rdata
+#'   file or a csv or json.
 #' }
+#'
+#' @rdname rsync
 #' @export
 loadData <- function(db, ...) {
   UseMethod("loadData", db)
 }
 
-#' Rsync API
-#'
-#' API to use rsync as persistent file and object storage.
-#'
-#' @inheritParams sendFile
-#' @param fileName name of data file
-#' @param verbose FALSE. If set to TRUE, it prints details of the process.
+#' @rdname rsync
 #' @export
 loadData.default <- function(db, fileName, verbose = FALSE, ...) {
 

@@ -1,6 +1,6 @@
 context("listFiles")
 
-test_that("Entries rsyncL objects can be listet", {
+test_that("list entries in dest", {
 
   con <- setupTestEnvironment()
 

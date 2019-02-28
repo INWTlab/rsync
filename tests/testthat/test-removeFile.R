@@ -9,7 +9,7 @@ testthat::test_that("Removing files", {
   testthat::expect_true(nrow(listFiles(con)) == 0)
   invisible(sendFile(con, fileName = 'y.Rdata'))
   testthat::expect_true(nrow(listFiles(con)) == 1)
-  invisible(removeFile(con, entryName = 'y.Rdata'))
+  invisible(removeFile(con, fileName = 'y.Rdata'))
   testthat::expect_true(nrow(listFiles(con)) == 0)
 
 })

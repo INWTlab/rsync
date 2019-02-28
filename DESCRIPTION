@@ -11,22 +11,15 @@ Description: The package provides an API to use rsync from R. It lets you easily
 Depends:
     R (>= 3.4.0)
 Imports:
-    aoos,
     dat,
     data.table,
     jsonlite,
     openssl,
-    rvest,
-    tibble,
-    xml2,
-    utils,
     yaml,
     tools
 Suggests:
     testthat,
-    knitr,
-    rmarkdown,
-    dat
+    knitr
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

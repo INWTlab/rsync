@@ -1,22 +1,26 @@
-#' Rsync API
+#' API for the CLI program rsync
 #'
-#' Setup a rsync configuration. The configuration object can be used for remote
-#' or src access to a folder. For available methods, see the 'seeAlso' section
-#' of this documentation.
+#' Setup a rsync configuration. The configuration object can be used for access
+#' to a folder.
 #'
-#' @param src (character) the working directory, if not specified otherwise
-#' @param dest (character) the address to the rsync deamon. NULL for a
-#'   src rsync connection.
-#' @param password (character|NULL) the password to the corresponding target
-#'   server.
+#' @param dest (character) the address to the rsync daemon or a folder.
+#' @param src (character) a folder.
+#' @param password (character|NULL) a password in case a rsync daemon is used.
+#' @param db (rsync) an object of class 'rsync' initialized with \code{rsync}.
+#' @param fileName (character) a file name that exists in \code{src}
+#' @param validate (logical) if the file in dest and src should be validated
+#'   using a sha256 check sum.
+#' @param verbose (logical) if we use 'vorbose' as option in the cli.
+#' @param object (ANY) any R object you wish to store.
+#' @param objectName (character) the name used to store the object. The file
+#'   extension will always be a 'Rdata'.
+#' @param ... arguments passed to methods.
 #'
 #' @details
 #' \code{rsync} is a command line tool. For details see
 #'   \url{https://rsync.samba.org/}.
-#' @seealso \link{getFile}, \link{removeFile}, \link{listFiles},
-#'   \link{sendFile}, \link{sendFolder}, \link{sendObject}
 #'
-#' @rdname rsync-class
+#' @rdname rsync
 #' @export
 rsync <- function(dest, src = getwd(), password = NULL) {
   stopifnot(

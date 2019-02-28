@@ -6,6 +6,6 @@ testthat::test_that("validate identical entries", {
   removeAllFiles(con)
   sendFile(con, fileName = 'x.Rdata')
   testthat::expect_true(nrow(listFiles(con)) == 1)
-  identicalEntries(con, entryName = 'x.Rdata')
+  identicalEntries(con, fileName = 'x.Rdata')
 
 })
