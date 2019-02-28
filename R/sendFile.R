@@ -26,16 +26,17 @@ sendFile <- function(db, ...) {
 #' @param validate TRUE. validates if entryName is identical in both locations.
 #' @param verbose FALSE. If set to TRUE, it prints details of the process.
 #' @export
-sendFile.default <- function(db, fileName, validate = TRUE, verbose = FALSE, ...) {
+sendFile.default <- function(db, fileName, validate = FALSE, verbose = FALSE, ...) {
 
   args <- if (verbose == TRUE) "-ltvvx" else "-ltx"
 
-  file <- getLocalFile(db,fileName)
-  to <- db$to
+  file <- getSrcFile(db,fileName)
+  to <- getDest(db)
   pre <- getPre(db)
 
-  rsync(file, to, args = args, pre = pre)
+  rsynccli(file, to, args = args, pre = pre)
 
-  if ((validate) & (class(db)[1] != 'RsyncD'))
-    identicalEntries(db, fileName)
+  if (validate) identicalEntries(db, fileName)
+  db
+
 }

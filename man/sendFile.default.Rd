@@ -4,7 +4,7 @@
 \alias{sendFile.default}
 \title{Rsync API}
 \usage{
-\method{sendFile}{default}(db, fileName, validate = TRUE,
+\method{sendFile}{default}(db, fileName, validate = FALSE,
   verbose = FALSE, ...)
 }
 \arguments{

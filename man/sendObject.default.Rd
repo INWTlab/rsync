@@ -5,7 +5,7 @@
 \title{Rsync API}
 \usage{
 \method{sendObject}{default}(db, object,
-  objectName = as.character(substitute(object)), validate = TRUE,
+  objectName = as.character(substitute(object)), validate = FALSE,
   verbose = FALSE, ...)
 }
 \arguments{

@@ -59,11 +59,11 @@ con <- rsync::newRsync(from = "~/exampleFolder", to = "~/destinationFolder")
 
 ### Sending
 
-`listEntries` takes the *rsyncL* object `con` as input and returns the objects
+`listFiles` takes the *rsyncL* object `con` as input and returns the objects
 contained in the destination folder (`con$to`).
 
 ```
-rsync::listEntries(con)
+rsync::listFiles(con)
 ```
 
 Sending a file is done with `sendFile()`. Input arguments are the *rsyncL* object as well as `fileName`.
@@ -90,31 +90,31 @@ rsync::sendObject(con, obj = z)
 
 ### Deleting
 
-`deleteEntry()` deletes an entry in the destination folder. `entryName` defines the name of the entry. 
+`removeFile()` deletes an entry in the destination folder. `entryName` defines the name of the entry. 
 
 ```
-rsync::deleteEntry(con, entryName = "z.Rdata")
+rsync::removeFile(con, entryName = "z.Rdata")
 ```
 
-`deleteAllEntries()` deletes all entries in the destination folder of `con`.
+`removeAllFiles()` deletes all entries in the destination folder of `con`.
 
 ```
-rsync::deleteAllEntries(con)
+rsync::removeAllFiles(con)
 ```
 
 ### Retrieving
 
-`getEntry()` can be used to retrieve entries from a directory. `con` refers again to the *rsyncL* object and `entryName` to the entry in `con$to` that shall be retrieved. Optional are the arguments `validate=TRUE`, which validates whether both file versions are exactely identical, if set to `TRUE` and `verbose=FALSE`, 
+`getFile()` can be used to retrieve entries from a directory. `con` refers again to the *rsyncL* object and `entryName` to the entry in `con$to` that shall be retrieved. Optional are the arguments `validate=TRUE`, which validates whether both file versions are exactely identical, if set to `TRUE` and `verbose=FALSE`, 
 which gives out additional information about the process, if set to `TRUE`.
 
 ```
-rsync::getEntry(con, entryName)
+rsync::getFile(con, entryName)
 ```
 
-`loadData()` takes the *rsyncL* object as well as `dataName`, a charater object in the directory of `con$to`, containing the name of the object that shall be loaded. The function is capable of loading any of the following file extensions into the working environment: '.Rdata', '.csv', '.json'
+`loadData()` takes the *rsyncL* object as well as `fileName`, a charater object in the directory of `con$to`, containing the name of the object that shall be loaded. The function is capable of loading any of the following file extensions into the working environment: '.Rdata', '.csv', '.json'
 
 ```
-rsync::loadData(con, dataName = "x.json")
+rsync::loadData(con, fileName = "x.json")
 ```
 
 ## RsyncD Connection
@@ -135,10 +135,10 @@ Besides the initial specification of the *rsyncD* object, the usage of the remai
 
 ### Sending
 
-`listEntries` takes the *rsyncD* object as input and returns objects, contained in the destination folder (`con$to`). `con$to`has automatically been contructed from the arguments `con$host` and `con$name`.
+`listFiles` takes the *rsyncD* object as input and returns objects, contained in the destination folder (`con$to`). `con$to`has automatically been contructed from the arguments `con$host` and `con$name`.
 
 ```
-rsync::listEntries(con)
+rsync::listFiles(con)
 ```
 Sending a file is achieved via `sendFile()`. Input arguments are the *rsyncD* object as well as `fileName`, which is available in `con$from` and shall be synced to `con$to`.
 
@@ -163,30 +163,30 @@ rsync::sendObject(con, obj = z)
 
 ### Deleting
 
-`deleteEntry()` deletes an entry in the destination folder, of the rsync daemon. `entryName` defines the name of the entry. 
+`removeFile()` deletes an entry in the destination folder, of the rsync daemon. `entryName` defines the name of the entry. 
 
 ```
-rsync::deleteEntry(con, entryName = "z.Rdata")
+rsync::removeFile(con, entryName = "z.Rdata")
 ```
 
-`deleteAllEntries()` deletes all entries in the destination folder of `con`.
+`removeAllFiles()` deletes all entries in the destination folder of `con`.
 
 ```
-rsync::deleteAllEntries(con)
+rsync::removeAllFiles(con)
 ```
 
 
 ### Retrieving
 
-`getEntry()` can be used to retrieve entries from a rsync daemon. `con` refers again to the *rsyncD* object and `entryName` to the entry that shall be retrieved.
+`getFile()` can be used to retrieve entries from a rsync daemon. `con` refers again to the *rsyncD* object and `entryName` to the entry that shall be retrieved.
 
 ```
-rsync::getEntry(con, entryName)
+rsync::getFile(con, entryName)
 ```
 
-`loadData()` takes the *rsyncD* object as well as `dataName`, a charater object containing the name of the object that shall be loaded. 
+`loadData()` takes the *rsyncD* object as well as `fileName`, a charater object containing the name of the object that shall be loaded. 
 The function is capable of loading any of the following file extensions into the working environment: '.Rdata', '.csv', '.json'
 
 ```
-rsync::loadData(con, dataName = "x.json")
+rsync::loadData(con, fileName = "x.json")
 ```

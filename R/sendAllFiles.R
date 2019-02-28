@@ -11,8 +11,8 @@
 #' }
 #'
 #' @export
-sendFolder <- function(db, ...) {
-  UseMethod("sendFolder", db)
+sendAllFiles <- function(db, ...) {
+  UseMethod("sendAllFiles", db)
 }
 
 #' Rsync API
@@ -24,11 +24,10 @@ sendFolder <- function(db, ...) {
 #' @param validate TRUE. validates if entryName is identical in both locations.
 #' @param verbose FALSE. If set to TRUE, it prints details of the process.
 #' @export
-sendFolder.default <- function(db, folderName, validate = TRUE, verbose = FALSE, ...) {
-
-  dat <- listDir(paste0(tempdir(), '/', folderName))
-  entries <- levels(dat$Objects)
-  invisible(lapply(entries, sendFile, db = db, verbose = verbose))
-  listEntries(db)
-
+sendAllFiles.default <- function(db, validate = FALSE, verbose = FALSE, ...) {
+  src <- getSrc(db)
+  files <- listFiles(rsync(dest = getSrc(db)))
+  files <- files$name
+  invisible(lapply(files, sendFile, db = db, verbose = verbose, validate = validate))
+  db
 }

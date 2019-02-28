@@ -11,8 +11,8 @@
 #'   issued should they differ.
 #' }
 #' @export
-getEntry <- function(db, ...) {
-  UseMethod("getEntry", db)
+getFile <- function(db, ...) {
+  UseMethod("getFile", db)
 }
 
 
@@ -26,16 +26,17 @@ getEntry <- function(db, ...) {
 #' @param validate validates if entryName is identical in both locations.
 #' @param verbose FALSE. If set to TRUE, it prints details of the process.
 #' @export
-getEntry.default <- function(db, entryName, validate = TRUE, verbose = FALSE, ...) {
+getFile.default <- function(db, entryName, validate = TRUE, verbose = FALSE, ...) {
 
   args <- if (verbose == TRUE) "-ltvvx" else "-ltx"
 
-  file <- getHostFile(db, entryName)
-  to <- db$from
+  file <- getDestFile(db, entryName)
+  to <- getSrc(db)
   pre <- getPre(db)
 
-  rsync(file, to, args = args, pre = pre)
+  rsynccli(file, to, args = args, pre = pre)
 
-  if ((validate) & (class(db)[1] != 'RsyncD'))
-    identicalEntries(db, entryName)
+  if (validate) identicalEntries(db, entryName)
+
+  db
 }

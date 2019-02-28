@@ -27,20 +27,22 @@ identicalEntries <- function(db, ...) {
 #' @export
 identicalEntries.default <- function(db, entryName, ...) {
 
-  on.exit(try({close(locFile); close(hostFile)}, silent = TRUE))
+  on.exit(try({close(srcFile); close(destFile)}, silent = TRUE))
 
-  locFile <- file(paste0(db$from, '/', entryName), open = 'rb')
+  srcFile <- file(getSrcFile(db, entryName), open = 'rb')
 
   if (!is.null(class(db)[1]  == 'RsyncL')) {
-    hostFile <- file(paste0(db$to,'/', entryName), open = "rb")
+    destFile <- file(getDestFile(db, entryName), open = "rb")
   } else {
     stop('function not valid for type rsync deamon')
   }
 
-  if (base::identical(openssl::sha256(locFile), openssl::sha256(hostFile))) {
-    print("Rsync successful: Local and host file are identical!")
+  if (base::identical(openssl::sha256(srcFile), openssl::sha256(destFile))) {
+    message("Rsync successful: Local and host file are identical!")
+    TRUE
   } else {
-    warning("Local and host file are not identical!")
+    warning("Src and dest file are not identical!")
+    FALSE
   }
 }
 

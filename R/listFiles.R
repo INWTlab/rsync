@@ -11,17 +11,17 @@
 #'
 #'
 #' @export
-listEntries <- function(db, ...) {
-  UseMethod("listEntries", db)
+listFiles <- function(db, ...) {
+  UseMethod("listFiles", db)
 }
 
 #' @inheritParams sendFile
 #' @export
-listEntries.default <- function(db, ...) {
+listFiles.default <- function(db, ...) {
   pre <- getPre(db)
-  to <- getObj(db)
+  to <- getDest(db)
 
-  dir <- rsync(NULL, to, args = NULL, pre = pre, intern = TRUE)
+  dir <- rsynccli(NULL, to, args = NULL, pre = pre, intern = TRUE)
   dir <- dat::extract(dir, ~ !grepl("\\.$", .))
   if (length(dir) == 0) return(emptyDir())
 
@@ -32,7 +32,8 @@ listEntries.default <- function(db, ...) {
   dir <- dat::replace(dir, "date", gsub("/", "-", dir$date))
   dir <- dat::mutar(dir, lastModified ~ as.POSIXct(paste(date, time)))
   dir <- dat::mutar(dir, size ~ as.numeric(gsub(",", "", size)))
-  dat::extract(dir, c("name", "lastModified", "size"))
+  dir <- dat::extract(dir, c("name", "lastModified", "size"))
+  dir
 }
 
 emptyDir <- function() {

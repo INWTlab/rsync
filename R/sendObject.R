@@ -25,22 +25,16 @@ sendObject <- function(db, ...) {
 #' @param validate TRUE. validates if entryName is identical in both locations.
 #' @param verbose FALSE. If set to TRUE, it prints details of the process.
 #' @export
-sendObject.default <- function(db, object, objectName = as.character(substitute(object)), validate = TRUE, verbose = FALSE, ...) {
+sendObject.default <- function(db, object, objectName = as.character(substitute(object)), validate = FALSE, verbose = FALSE, ...) {
 
   args <- if (verbose) "-ltvvx" else "-ltx"
-
   assign(objectName, object)
-  dirName <- tempdir()
+  fileName <- paste0(objectName, ".Rdata")
   save(
     list = objectName,
-    file =  file <- paste0(dirName, "/", objectName, ".Rdata"),
+    file =  file <- getSrcFile(db, fileName),
     compress = TRUE
   )
-  to <- db$to
-  pre <- getPre(db)
+  sendFile(db, fileName, validate = validate, verbose = verbose, ...)
 
-  rsync(file, to, args = args, pre = pre)
-
-  if ((validate) & (class(db)[1] != 'RsyncD'))
-    identicalEntries(db, paste0(objectName, '.Rdata'))
 }
