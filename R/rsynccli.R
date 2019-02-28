@@ -20,11 +20,6 @@ rsynccli <- function(file, to, includes = NULL, excludes = NULL, args = "-rltvx"
     paste(paste0(s, " \"", x, "\""), collapse = " ")
   }
 
-  if (grepl("Windows", Sys.getenv("OS"))) {
-    cat("Sorry, this function can only be used in a linux environment!\n")
-    return(FALSE)
-  }
-
   includes <- constructArg(includes, "--include")
   excludes <- constructArg(excludes, "--exclude")
 

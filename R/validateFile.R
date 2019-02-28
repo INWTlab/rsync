@@ -1,4 +1,4 @@
-identicalEntries <- function(db, fileName, ...) {
+validateFile <- function(db, fileName, ...) {
 
   on.exit(try({close(srcFile); close(destFile)}, silent = TRUE))
 

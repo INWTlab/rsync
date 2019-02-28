@@ -19,7 +19,7 @@ sendFile.default <- function(db, fileName, validate = FALSE, verbose = FALSE, ..
 
   rsynccli(file, to, args = args, pre = pre)
 
-  if (validate) identicalEntries(db, fileName)
+  if (validate) validateFile(db, fileName)
   db
 
 }
