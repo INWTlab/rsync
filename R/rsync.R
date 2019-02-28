@@ -28,6 +28,9 @@ rsync <- function(dest, src = getwd(), password = NULL) {
     is.character(src) && length(src) == 1,
     is.null(password) || is.character(password) && length(password) == 1
   )
+  src <- normalizePath(src, mustWork = TRUE)
+  dest <- if (grepl("^rsync://", pattern = dest))
+    sub("/$", "", dest) else normalizePath(dest, mustWork = TRUE)
   ret <- list(
     dest = dest,
     src = src,
@@ -53,8 +56,8 @@ getSrcFile <- function(db, fileName) {
   paste0(sub("/+$", "", db$src), '/', fileName)
 }
 
-getDest <- function(db) db$dest
-getSrc <- function(db) db$src
+getDest <- function(db) paste0(db$dest, "/")
+getSrc <- function(db) paste0(db$src, "/")
 
 #' @export
 print.rsync <- function(x, ...) {
@@ -63,6 +66,7 @@ print.rsync <- function(x, ...) {
   xchar <- paste0("\n  ", xchar)
   xchar <- paste(xchar, collapse = "")
   cat("Rsync server:", xchar, "\n")
+  cat("Directory in destination:\n")
   print(listFiles(x), ...)
 }
 

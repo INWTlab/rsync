@@ -6,7 +6,6 @@
 GNU General Public License. This is a R package providing an API to rsync from
 R.
 
-
 ## Why use rsync:
 
 Rsync is a tool, which is used with Unix systems and allows efficient
@@ -21,173 +20,195 @@ Working with Rsync offers nice benefits, as it is:
 
 For further information about rsync, please visit https://rsync.samba.org/.
 
+Similar and very popular alternatives exist. E.g. in contrast to AWS S3 the
+solution here:
+
+- Is free,
+- fast(er), if you stay in your local network,
+- but, S3 provides versioning, which is very neat.
   
 ## Installation:
 
 The rsync R package can be downloaded and installed by running the following
 command from the R console:
 
-```
+
+```r
 devtools::install_github("INWTlab/rsync")
 ```
 
 Make sure you have the `rsync` command line tool available.
 
-## Settings / Classes
 
-We distinguish between different settings for which we use rsync:
+## Examples
 
-- sync between local directories: *RsyncL*
-- sync with a rsync daemon (eventually with a HTTP interface on top) and a local directory: *RsyncD*
-  
-These settings are represented by S3 classes in R. The list of methods follows below.
+You create a rsync configuration using:
 
 
-## RsyncL Connection
-
-### Setting up the Connection
-
-The first step of every `rsync` process is to initialize a rsync object. For
-establishing a local connection following arguements are needed:
-
-`from` defines the name of directory path of the file to be synced, not the file
-itself. `to` specifies the destination directory.
-
-```
-con <- rsync::newRsync(from = "~/exampleFolder", to = "~/destinationFolder")
+```r
+library(rsync)
+dir.create("destination")
+dir.create("source")
+dest <- rsync(dest = "destination", src = "source")
+dest
 ```
 
-
-### Sending
-
-`listFiles` takes the *rsyncL* object `con` as input and returns the objects
-contained in the destination folder (`con$to`).
-
 ```
-rsync::listFiles(con)
-```
-
-Sending a file is done with `sendFile()`. Input arguments are the *rsyncL* object as well as `fileName`.
-Optional are the arguments `validate=TRUE` which validates, whether both file versions are exactely identical, if set to `TRUE` and `verbose=FALSE`, 
-which gives out additional information about the process, if set to `TRUE`.
-
-```
-rsync::sendFile(con, fileName = "exampleFile.Rdata")
-```
-`sendFolder()` syncs the complete content of a folder between two local directories. `folder`specifies the name of the corresponding folder. Optional arguments are the same as in the `sendFile()` case.
-
-```
-rsync::sendFolder(con, folder = 'exampleFolder')
+## Rsync server: 
+##   dest: /home/sebastian/projects/rsync/destination
+##   src: /home/sebastian/projects/rsync/source
+##   password: NULL 
+## Directory in destination:
+## [1] name         lastModified size        
+## <0 rows> (or 0-length row.names)
 ```
 
-`sendObject()` syncs an object with a destination folder. It will create an
-'Rdata' file on the fly. `obj` specifies the object from the working environment.
-Optional arguments are as for `sendFile()`.
+In the case of an rsync daemon you can also supply a password. The way you think
+about transactions is that we have a destination folder with which we want to
+interact. All methods provided by this package will always operate on the
+destination. It will not change the source, in most cases. An exception is
+`sendObject`, that will also create a file in source.
 
-```
-z <- 3
-rsync::sendObject(con, obj = z)
-```
 
-### Deleting
-
-`removeFile()` deletes an entry in the destination folder. `fileName` defines the name of the entry. 
-
-```
-rsync::removeFile(con, fileName = "z.Rdata")
+```r
+x <- 1
+y <- 2
+sendObject(dest, x)
 ```
 
-`removeAllFiles()` deletes all entries in the destination folder of `con`.
-
 ```
-rsync::removeAllFiles(con)
-```
-
-### Retrieving
-
-`getFile()` can be used to retrieve entries from a directory. `con` refers again to the *rsyncL* object and `fileName` to the entry in `con$to` that shall be retrieved. Optional are the arguments `validate=TRUE`, which validates whether both file versions are exactely identical, if set to `TRUE` and `verbose=FALSE`, 
-which gives out additional information about the process, if set to `TRUE`.
-
-```
-rsync::getFile(con, fileName)
+## Rsync server: 
+##   dest: /home/sebastian/projects/rsync/destination
+##   src: /home/sebastian/projects/rsync/source
+##   password: NULL 
+## Directory in destination:
+##      name        lastModified size
+## 1 x.Rdata 2019-02-28 12:30:51   61
 ```
 
-`loadData()` takes the *rsyncL* object as well as `fileName`, a charater object in the directory of `con$to`, containing the name of the object that shall be loaded. The function is capable of loading any of the following file extensions into the working environment: '.Rdata', '.csv', '.json'
-
-```
-rsync::loadData(con, fileName = "x.json")
+```r
+sendObject(dest, y)
 ```
 
-## RsyncD Connection
-
-### Setting up the Connection
-Analogously to the *rsyncL* connection, a *rsyncD* object needs to be created as the first step of the `rsync` process.
-Therefore, call  `newRsync()` as follows: `from` is set to the working directory by default and specifies the local end of a rsync connection. Other local paths are possible.`host` specifies the adress of the rsync daemon. `name` refers to the server name and `password`intuetively to the server's password. 
-
 ```
-con <- rsync::newRsync(from = getwd(),
-                       host = 'rsync://user@example.de',
-                       name = 'someFolder',
-                       password  = 'password')
+## Rsync server: 
+##   dest: /home/sebastian/projects/rsync/destination
+##   src: /home/sebastian/projects/rsync/source
+##   password: NULL 
+## Directory in destination:
+##      name        lastModified size
+## 1 x.Rdata 2019-02-28 12:30:51   61
+## 2 y.Rdata 2019-02-28 12:30:51   60
 ```
 
-Besides the initial specification of the *rsyncD* object, the usage of the remaining functions are very similar to the case of *rsyncL*.
+We can see that we have added two new files. These two files now exist in the
+source directory and the destination. The following examples illustrate the core
+features of the package:
 
 
-### Sending
-
-`listFiles` takes the *rsyncD* object as input and returns objects, contained in the destination folder (`con$to`). `con$to`has automatically been contructed from the arguments `con$host` and `con$name`.
-
-```
-rsync::listFiles(con)
-```
-Sending a file is achieved via `sendFile()`. Input arguments are the *rsyncD* object as well as `fileName`, which is available in `con$from` and shall be synced to `con$to`.
-
-```
-rsync::sendFile(con, fileName = "exampleFile.Rdata")
+```r
+removeAllFiles(dest) # will not change source
 ```
 
-`sendFolder()` syncs the complete content from a folder of a local directory (`con$from`) to a rsync daemon (`con$to`). `folder` specifies the name of the corresponding folder.
-
 ```
-rsync::sendFolder(con, folder = 'exampleFolder')
-```
-
-`sendObject()` syncs an object from the working environment to a rsync daemon (`con$to`). It will create an
-'Rdata' file on the fly. `obj` specifies the object from the working environment.
-
-```
-z <- 3
-rsync::sendObject(con, obj = z)
+## Rsync server: 
+##   dest: /home/sebastian/projects/rsync/destination
+##   src: /home/sebastian/projects/rsync/source
+##   password: NULL 
+## Directory in destination:
+## [1] name         lastModified size        
+## <0 rows> (or 0-length row.names)
 ```
 
-
-### Deleting
-
-`removeFile()` deletes an entry in the destination folder, of the rsync daemon. `fileName` defines the name of the entry. 
-
-```
-rsync::removeFile(con, fileName = "z.Rdata")
+```r
+sendFile(dest, "x.Rdata") # so we can still send the files
 ```
 
-`removeAllFiles()` deletes all entries in the destination folder of `con`.
-
 ```
-rsync::removeAllFiles(con)
-```
-
-
-### Retrieving
-
-`getFile()` can be used to retrieve entries from a rsync daemon. `con` refers again to the *rsyncD* object and `fileName` to the entry that shall be retrieved.
-
-```
-rsync::getFile(con, fileName)
+## Rsync server: 
+##   dest: /home/sebastian/projects/rsync/destination
+##   src: /home/sebastian/projects/rsync/source
+##   password: NULL 
+## Directory in destination:
+##      name        lastModified size
+## 1 x.Rdata 2019-02-28 12:30:51   61
 ```
 
-`loadData()` takes the *rsyncD* object as well as `fileName`, a charater object containing the name of the object that shall be loaded. 
-The function is capable of loading any of the following file extensions into the working environment: '.Rdata', '.csv', '.json'
+```r
+removeAllFiles(src <- rsync("source")) # make the source a destination
+```
 
 ```
-rsync::loadData(con, fileName = "x.json")
+## Rsync server: 
+##   dest: /home/sebastian/projects/rsync/source
+##   src: /home/sebastian/projects/rsync
+##   password: NULL 
+## Directory in destination:
+## [1] name         lastModified size        
+## <0 rows> (or 0-length row.names)
 ```
+
+```r
+getFile(dest, "x.Rdata")
+```
+
+```
+## Rsync successful: Local and host file are identical!
+```
+
+```
+## Rsync server: 
+##   dest: /home/sebastian/projects/rsync/destination
+##   src: /home/sebastian/projects/rsync/source
+##   password: NULL 
+## Directory in destination:
+##      name        lastModified size
+## 1 x.Rdata 2019-02-28 12:30:51   61
+```
+
+```r
+src
+```
+
+```
+## Rsync server: 
+##   dest: /home/sebastian/projects/rsync/source
+##   src: /home/sebastian/projects/rsync
+##   password: NULL 
+## Directory in destination:
+##      name        lastModified size
+## 1 x.Rdata 2019-02-28 12:30:51   61
+```
+
+This really shines when we use a rsync daemon in a remote location.
+
+
+```
+## Rsync server: 
+##   dest: /home/sebastian/projects/rsync/source
+##   src: /home/sebastian/projects/rsync
+##   password: NULL 
+## Directory in destination:
+## [1] name         lastModified size        
+## <0 rows> (or 0-length row.names)
+```
+
+```
+## Rsync server: 
+##   dest: /home/sebastian/projects/rsync/destination
+##   src: /home/sebastian/projects/rsync/source
+##   password: NULL 
+## Directory in destination:
+## [1] name         lastModified size        
+## <0 rows> (or 0-length row.names)
+```
+
+```
+## [1] TRUE
+```
+
+```
+## [1] TRUE
+```
+
+

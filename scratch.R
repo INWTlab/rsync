@@ -1,3 +1,3 @@
 library("rsync")
 
-?rsync
+knitr::knit("README.Rmd", "README.md")

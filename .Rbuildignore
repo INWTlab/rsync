@@ -2,3 +2,4 @@
 ^\.Rproj\.user$
 ^\.travis\.yml$
 ^scratch\.R$
+^Readme\.Rmd$
