@@ -13,7 +13,5 @@ removeAllFiles <- function(db, ...) {
 removeAllFiles.default <- function(db, verbose = FALSE, ...) {
   dat <- listFiles(db)
   entries <- dat$name
-  lapply(entries, removeFile, db = db, verbose = verbose)
-  db
-
+  removeFile(db, entries, verbose = verbose, ...)
 }
