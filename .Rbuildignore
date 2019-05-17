@@ -4,3 +4,5 @@
 ^scratch\.R$
 ^Readme\.Rmd$
 ^codecov\.yml$
+^Jenkinsfile$
+^Dockerfile$
