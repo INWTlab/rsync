@@ -1,5 +1,5 @@
-dockerVersion <- system("docker --version", intern = TRUE)
-if (grepl("docker: command not found", dockerVersion)) {
+dockerVersion <- try(system("docker --version", intern = TRUE))
+if (inherits(dockerVersion, "try-error") || grepl("docker .* not found", dockerVersion)) {
   cat("Docker is not available for testing. Stop here.")
   q(save = "no")
 }
