@@ -1,9 +1,30 @@
 #' Connection object to a AWS S3 bucket
 #'
-#' @inheritParams rsync
-#' @param profile (NULL|character|list) the name of a profile or a list defining a
-#'   profile. In case of a list a new profile will be created which is
+#' Only methods specific to this class are documented here. For others the
+#' default will work.
+#'
+#' @param dest,src (character) an s3 bucket, e.g. \code{s3://my-bucket} or a
+#'   local directory
+#' @param profile (NULL|character|list) the name of a profile or a list defining
+#'   a profile. In case of a list a new profile will be created which is
 #'   persistent.
+#' @param force (logical) override profile if it exists.
+#' @param db (awss3) connection created with \code{awss3}
+#' @param fileName (character) a file name in dest/src
+#' @param validate (logical) if validation should take place
+#' @param verbose (logical) if TRUE print more information to the console
+#' @param ... arguments passed to method
+#'
+#' @examples
+#' \dontrun{
+#' awss3("s3://my-bucket", profile = list(
+#'   name = "my-profile", # the name of the profile to generate
+#'   aws_access_key_id = "my-access-key-id",
+#'   aws_secret_access_key = "my-secret-access-key",
+#'   region = "my-region"
+#' ))
+#' awss3("s3://my-bucket", profile = "my-profile")
+#' }
 #'
 #' @rdname awss3
 #' @export
@@ -60,7 +81,7 @@ as.character.awss3 <- function(x, ...) {
 }
 
 #' @export
-#' @rdname
+#' @rdname awss3
 profileCreate <- function(profile, force = FALSE) {
   name <- profile$name
   if (profileExists(name) & !force) return(TRUE)
