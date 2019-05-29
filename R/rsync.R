@@ -29,8 +29,8 @@ rsync <- function(dest, src = getwd(), password = NULL) {
     is.null(password) || is.character(password) && length(password) == 1
   )
   src <- normalizePath(src, mustWork = TRUE)
-  dest <- if (grepl("^rsync://", dest))
-    sub("/$", "", dest) else normalizePath(dest, mustWork = TRUE)
+  dest <- if (grepl(":", dest))
+     sub("/$", "", dest) else normalizePath(dest, mustWork = TRUE)
   ret <- list(
     dest = dest,
     src = src,
@@ -41,10 +41,19 @@ rsync <- function(dest, src = getwd(), password = NULL) {
 }
 
 getPre <- function(db) {
-  if (!is.null(db$password)) {
-    sprintf("RSYNC_PASSWORD=\"%s\"", db$password)
+  conType <- if (grepl("^rsync://", getDest(db))) {
+    "rsyncd"
+  } else if (grepl(":", getDest(db))) {
+    "ssh"
   } else {
+    "local"
+  }
+  if (conType == "local") {
     NULL
+  } else if (conType == "rsyncd" & !is.null(db$password)) {
+    sprintf("RSYNC_PASSWORD=\"%s\"", db$password)
+  } else if (conType == "ssh" & !is.null(db$ssh)) {
+    sprintf("RSYNC_RSH=\"%s\"", db$ssh)
   }
 }
 
@@ -61,8 +70,7 @@ getSrc <- function(db) paste0(db$src, "/")
 
 #' @export
 print.rsync <- function(x, ...) {
-  xchar <- as.character(x)
-  xchar <- paste(names(xchar), xchar, sep = ": ")
+  xchar <- paste(c("src", "dest"), c(getSrc(x), getDest(x)), sep = ": ")
   xchar <- paste0("\n  ", xchar)
   xchar <- paste(xchar, collapse = "")
   cat("Rsync server:", xchar, "\n")
