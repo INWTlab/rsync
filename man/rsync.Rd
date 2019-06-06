@@ -43,7 +43,7 @@ removeFile(db, ...)
 
 \method{removeFile}{default}(db, fileName, verbose = FALSE, ...)
 
-rsync(dest, src = getwd(), password = NULL)
+rsync(dest, src = getwd(), password = NULL, ssh = NULL)
 
 sendAllFiles(db, ...)
 
@@ -78,6 +78,10 @@ using a sha256 check sum.}
 \item{src}{(character) a folder.}
 
 \item{password}{(character|NULL) a password in case a rsync daemon is used.}
+
+\item{ssh}{(character|NULL) argument sets the environment variable
+\code{RSYNC_RSH} during the call. Can be used to further specify ssh
+settings.}
 
 \item{object}{(ANY) any R object you wish to store.}
 

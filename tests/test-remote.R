@@ -21,11 +21,22 @@ withSystemCall({
   dat <- listFiles(sendObject(con, x))
   stopifnot(nrow(dat) == 1)
 
+  ## rsyncd password in file
+  writeLines("pass", ".pass")
+  con <- rsync(
+    "rsync://user@localhost:8000/volume",
+    tempdir(),
+    password = ".pass")
+  x <- 1
+  dat <- listFiles(sendObject(con, x))
+  stopifnot(nrow(dat) == 1)
+  unlink(".pass")
+
   ## sshd
-  Sys.setenv(RSYNC_RSH="ssh -i./docker-root -oStrictHostKeyChecking=no -p20011")
   con <- rsync(
     "root@localhost:~",
-    tempdir()
+    tempdir(),
+    ssh = "ssh -i./docker-root -oStrictHostKeyChecking=no -p20011"
   )
   x <- 1
   dat <- listFiles(sendObject(con, x))

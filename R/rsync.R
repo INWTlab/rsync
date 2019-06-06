@@ -5,7 +5,8 @@
 #'
 #' @param dest (character) the address to the rsync daemon or a folder.
 #' @param src (character) a folder.
-#' @param password (character|NULL) a password in case a rsync daemon is used.
+#' @param password (character|NULL) a password or file name in case a rsync
+#'   daemon is used.
 #' @param db (rsync) an object of class 'rsync' initialized with \code{rsync}.
 #' @param fileName (character) a file name that exists in \code{src}
 #' @param validate (logical) if the file in dest and src should be validated
@@ -14,6 +15,9 @@
 #' @param object (ANY) any R object you wish to store.
 #' @param objectName (character) the name used to store the object. The file
 #'   extension will always be a 'Rdata'.
+#' @param ssh (character|NULL) argument sets the environment variable
+#'   \code{RSYNC_RSH} during the call. Can be used to further specify ssh
+#'   settings.
 #' @param ... arguments passed to methods.
 #'
 #' @details
@@ -22,7 +26,7 @@
 #'
 #' @rdname rsync
 #' @export
-rsync <- function(dest, src = getwd(), password = NULL) {
+rsync <- function(dest, src = getwd(), password = NULL, ssh = NULL) {
   stopifnot(
     is.character(dest) && length(dest) == 1,
     is.character(src) && length(src) == 1,
@@ -34,7 +38,8 @@ rsync <- function(dest, src = getwd(), password = NULL) {
   ret <- list(
     dest = dest,
     src = src,
-    password = password
+    password = password,
+    ssh = ssh
   )
   class(ret) <- "rsync"
   ret
@@ -42,7 +47,7 @@ rsync <- function(dest, src = getwd(), password = NULL) {
 
 getPre <- function(db) {
   conType <- if (grepl("^rsync://", getDest(db))) {
-    "rsyncd"
+    "rsync"
   } else if (grepl(":", getDest(db))) {
     "ssh"
   } else {
@@ -50,8 +55,10 @@ getPre <- function(db) {
   }
   if (conType == "local") {
     NULL
-  } else if (conType == "rsyncd" & !is.null(db$password)) {
-    sprintf("RSYNC_PASSWORD=\"%s\"", db$password)
+  } else if (conType == "rsync" & !is.null(db$password)) {
+    pwd <- db$password
+    pwd <- if (file.exists(pwd)) sprintf("$(cat %s)", pwd) else pwd
+    sprintf("RSYNC_PASSWORD=\"%s\"", pwd)
   } else if (conType == "ssh" & !is.null(db$ssh)) {
     sprintf("RSYNC_RSH=\"%s\"", db$ssh)
   }
