@@ -1,13 +1,15 @@
 #' Connection object to a AWS S3 bucket
 #'
 #' Only methods specific to this class are documented here. For others the
-#' default will work.
+#' default method will work. This connection provides the same interface as
+#' \link{rsync}.
 #'
 #' @param dest,src (character) an s3 bucket, e.g. \code{s3://my-bucket} or a
 #'   local directory
 #' @param profile (NULL|character|list) the name of a profile or a list defining
 #'   a profile. In case of a list a new profile will be created which is
-#'   persistent.
+#'   persistent. A profile is created using \code{aws configure} and stores
+#'   credentials for the user in plain text.
 #' @param force (logical) override profile if it exists.
 #' @param db (awss3) connection created with \code{awss3}
 #' @param fileName (character) a file name in dest/src

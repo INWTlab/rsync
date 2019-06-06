@@ -1,4 +1,4 @@
-context("awss3")
+testthat::context("awss3")
 
 setupS3TestEnvironment <- function() {
   randomName <- function() paste0(sample(letters, 10), collapse = "")
