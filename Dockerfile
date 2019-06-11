@@ -2,6 +2,12 @@ FROM inwt/r-batch:latest
 
 ADD . .
 
-RUN installPackage
+RUN apt-get -y update \
+  && apt-get install -y --no-install-recommends \
+    awscli \
+  && apt-get autoremove -y \
+  && apt-get autoclean -y \
+  && rm -rf /var/lib/apt/lists/* \
+  && installPackage
 
 CMD ["check"]

@@ -14,7 +14,7 @@ validateFile <- function(db, fileName, ...) {
   destFile <- file(getSrcFile(db1, fileName), open = "rb")
 
   if (base::identical(openssl::sha256(srcFile), openssl::sha256(destFile))) {
-    message("Rsync successful: Local and host file are identical!")
+    message("Sync successful: Local and host file are identical!")
     TRUE
   } else {
     warning("Src and dest file are not identical!")

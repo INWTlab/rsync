@@ -9,10 +9,30 @@ sendAllFiles <- function(db, ...) {
 
 #' @rdname rsync
 #' @export
-sendAllFiles.default <- function(db, validate = FALSE, verbose = FALSE, ...) {
+sendAllFiles.default <- function(db, verbose = FALSE, ...) {
+
+  args <- if (verbose) "-ltrvvx" else "-ltrx"
+
   src <- getSrc(db)
-  files <- listFiles(rsync(dest = getSrc(db)))
-  files <- files$name
-  invisible(lapply(files, sendFile, db = db, verbose = verbose, validate = validate))
+  dest <- getDest(db)
+  pre <- getPre(db)
+
+  rsynccli(src, dest, args = args, pre = pre)
   db
+}
+
+#' @rdname awss3
+#' @export
+sendAllFiles.awss3 <- function(db, verbose = FALSE, ...) {
+
+  args <- if (!verbose) "--quiet --no-progress --only-show-errors" else ""
+  args <- paste("sync", args)
+
+  src <- getSrc(db)
+  dest <- getDest(db)
+  profile <- getProfile(db)
+
+  awscli(src, dest, args = args, profile = profile)
+  db
+
 }
