@@ -77,7 +77,8 @@ using a sha256 check sum.}
 
 \item{src}{(character) a folder.}
 
-\item{password}{(character|NULL) a password in case a rsync daemon is used.}
+\item{password}{(character|NULL) a password or file name in case a rsync
+daemon is used.}
 
 \item{ssh}{(character|NULL) argument sets the environment variable
 \code{RSYNC_RSH} during the call. Can be used to further specify ssh
@@ -102,7 +103,17 @@ can be a Rdata file or a csv or json. The file will be saved in \code{src}.
 not be affected.
 
 \code{rsync} is a command line tool. For details see
-  \url{https://rsync.samba.org/}.
+  \url{https://rsync.samba.org/}. From the documentation:
+
+\emph{There are two different ways for rsync to contact a remote system:
+  using a remote-shell program as the transport (such as ssh or rsh) or
+  contacting an rsync daemon directly via TCP. The remote-shell transport is
+  used whenever the source or destination path contains a single colon (:)
+  separator after a host specification. Contacting an rsync daemon directly
+  happens when the source or destination path contains a double colon (::)
+  separator after a host specification, OR when an rsync:// URL is specified
+  (see also the "USING RSYNC-DAEMON FEATURES VIA A REMOTE-SHELL CONNECTION"
+  section for an exception to this latter rule).}
 
 \code{sendAllFiles} Sends all files in \code{src} to \code{dest} using \code{sendFile}.
 

@@ -22,7 +22,29 @@
 #'
 #' @details
 #' \code{rsync} is a command line tool. For details see
-#'   \url{https://rsync.samba.org/}.
+#'   \url{https://rsync.samba.org/}. From the documentation:
+#'
+#' \emph{There are two different ways for rsync to contact a remote system:
+#'   using a remote-shell program as the transport (such as ssh or rsh) or
+#'   contacting an rsync daemon directly via TCP. The remote-shell transport is
+#'   used whenever the source or destination path contains a single colon (:)
+#'   separator after a host specification. Contacting an rsync daemon directly
+#'   happens when the source or destination path contains a double colon (::)
+#'   separator after a host specification, OR when an rsync:// URL is specified
+#'   (see also the "USING RSYNC-DAEMON FEATURES VIA A REMOTE-SHELL CONNECTION"
+#'   section for an exception to this latter rule).}
+#'
+#' Currently the rsync interface in this package only allows for remote
+#'   locations in the destination.
+#'
+#' @examples
+#' \dontrun{
+#' ## Using rsync locally
+#' rsync("~/someFolder")
+#' ## Examples for remote connections
+#' rsync("rsync://user@host:port/volume", password = "~/my-pwd")
+#' rsync("user@host:~/", ssh = "ssh -i./my-identity-file")
+#' }
 #'
 #' @rdname rsync
 #' @export
