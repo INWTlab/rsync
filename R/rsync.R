@@ -39,8 +39,12 @@
 #'
 #' @examples
 #' \dontrun{
+#' ## Please consider examples in the Readme of this project. To get there run:
+#' browseURL("https://github.com/INWTlab/rsync")
+#'
 #' ## Using rsync locally
 #' rsync("~/someFolder")
+#'
 #' ## Examples for remote connections
 #' rsync("rsync://user@host:port/volume", password = "~/my-pwd")
 #' rsync("user@host:~/", ssh = "ssh -i./my-identity-file")
