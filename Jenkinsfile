@@ -14,11 +14,20 @@ pipeline {
             agent { label 'test' }
             // when { not { branch 'depl' } }
             steps {
-                sh '''
-                docker build --pull -t tmp-$CUR_PROJ .
-                docker run --rm --network host tmp-$CUR_PROJ check
-                docker rmi tmp-$CUR_PROJ
-                '''
+                withCredentials([
+                    file(credentialsId: 'rsync-aws-testing-config', variable: 'CONFIG'),
+                    file(credentialsId: 'rsync-aws-testing-credentials', variable: 'CREDENTIALS')]
+                ) {
+                    sh '''
+                    mkdir .aws
+                    cp -f $CREDENTIALS .aws/credentials
+                    cp -f $CONFIG .aws/config
+                    docker build --pull -t tmp-$CUR_PROJ .
+                    docker run --rm --network host tmp-$CUR_PROJ check
+                    docker rmi tmp-$CUR_PROJ
+                    '''
+                }
+                cleanWs()
             }
         }
 
