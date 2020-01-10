@@ -13,6 +13,7 @@ getFile <- function(db, ...) {
 getFile.default <- function(db, fileName, validate = FALSE, verbose = FALSE, ...) {
 
   args <- if (verbose == TRUE) "-ltvvx" else "-ltx"
+  args <- paste(args, getArgs(db))
 
   file <- getDestFile(db, fileName)
   to <- getSrc(db)

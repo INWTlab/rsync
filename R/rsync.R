@@ -74,8 +74,6 @@ rsync <- function(dest, src = getwd(), password = NULL, ssh = NULL) {
 getPre <- function(db) {
   conType <- if (grepl("^rsync://", getDest(db))) {
     "rsync"
-  } else if (grepl(":", getDest(db))) {
-    "ssh"
   } else {
     "local"
   }
@@ -85,8 +83,15 @@ getPre <- function(db) {
     pwd <- db$password
     pwd <- if (file.exists(pwd)) sprintf("$(cat %s)", pwd) else pwd
     sprintf("RSYNC_PASSWORD=\"%s\"", pwd)
-  } else if (conType == "ssh" & !is.null(db$ssh)) {
-    sprintf("RSYNC_RSH=\"%s\"", db$ssh)
+  }
+}
+
+getArgs <- function(db) {
+  ## put further command line arguments together
+  if (!is.null(db$ssh)) {
+    paste0("-e \"", db$ssh, "\"")
+  } else {
+    NULL
   }
 }
 

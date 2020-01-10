@@ -9,8 +9,9 @@ listFiles <- function(db, ...) {
 listFiles.default <- function(db, ...) {
   pre <- getPre(db)
   to <- getDest(db)
+  args <- getArgs(db)
 
-  dir <- rsynccli(NULL, to, args = NULL, pre = pre, intern = TRUE)
+  dir <- rsynccli(NULL, to, args = args, pre = pre, intern = TRUE)
   dir <- dat::extract(dir, ~ !grepl("\\.$", .))
   if (length(dir) == 0) return(emptyDir())
 

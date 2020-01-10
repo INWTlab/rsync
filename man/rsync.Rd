@@ -115,6 +115,9 @@ not be affected.
   (see also the "USING RSYNC-DAEMON FEATURES VIA A REMOTE-SHELL CONNECTION"
   section for an exception to this latter rule).}
 
+Currently the rsync interface in this package only allows for remote
+  locations in the destination.
+
 \code{sendAllFiles} Sends all files in \code{src} to \code{dest} using \code{sendFile}.
 
 \code{sendFile} Sends a file to a rsync object.
@@ -122,4 +125,18 @@ not be affected.
 \code{sendObject} sends an object (from the environment)
   to a rsync target. This abstracts a pattern where you would use \link{save}
   followed by \code{sendFile}. The reverse is done using \code{getObject}
+}
+\examples{
+\dontrun{
+## Please consider examples in the Readme of this project. To get there run:
+browseURL("https://github.com/INWTlab/rsync")
+
+## Using rsync locally
+rsync("~/someFolder")
+
+## Examples for remote connections
+rsync("rsync://user@host:port/volume", password = "~/my-pwd")
+rsync("user@host:~/", ssh = "ssh -i./my-identity-file")
+}
+
 }

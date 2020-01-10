@@ -12,6 +12,7 @@ sendFile <- function(db, ...) {
 sendFile.default <- function(db, fileName, validate = FALSE, verbose = FALSE, ...) {
 
   args <- if (verbose == TRUE) "-ltvvx" else "-ltx"
+  args <- paste(args, getArgs(db))
 
   file <- getSrcFile(db,fileName)
   to <- getDest(db)
