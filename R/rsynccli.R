@@ -35,4 +35,3 @@ rsynccli <- function(file, to, includes = NULL, excludes = NULL, args = "-rltvx"
 
   system(command, intern = intern, wait = TRUE, ignore.stdout = FALSE, ignore.stderr = FALSE)
 }
-

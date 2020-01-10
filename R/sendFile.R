@@ -11,14 +11,32 @@ sendFile <- function(db, ...) {
 #' @export
 sendFile.default <- function(db, fileName, validate = FALSE, verbose = FALSE, ...) {
 
-  args <- if (verbose == TRUE) "-ltvvx" else "-ltx"
+  args <- if (verbose == TRUE) "-ltrvvx" else "-ltrx"
   args <- paste(args, getArgs(db))
 
-  file <- getSrcFile(db,fileName)
-  to <- getDest(db)
+  src <- getSrc(db)
+  dest <- getDest(db)
   pre <- getPre(db)
 
-  rsynccli(file, to, args = args, pre = pre)
+  rsynccli(src, dest, args = args, pre = pre, excludes = "*", includes = fileName)
+
+  if (validate) validateFile(db, fileName)
+  db
+
+}
+
+#' @rdname awss3
+#' @export
+sendFile.awss3 <- function(db, fileName, validate = FALSE, verbose = FALSE, ...) {
+
+  args <- if (!verbose) "--quiet --no-progress --only-show-errors" else ""
+  args <- paste("sync", args)
+
+  src <- getSrc(db)
+  dest <- getDest(db)
+  profile <- getProfile(db)
+
+  awscli(src, dest, args = args, excludes = "*", includes = fileName, profile = profile)
 
   if (validate) validateFile(db, fileName)
   db
