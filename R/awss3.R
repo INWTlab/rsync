@@ -86,7 +86,7 @@ as.character.awss3 <- function(x, ...) {
 #' @rdname awss3
 profileCreate <- function(profile, force = FALSE) {
   name <- profile$name
-  if (profileExists(name) & !force) return(TRUE)
+  if (!force && profileExists(name)) return(TRUE)
   profile$name <- NULL
   for (el in names(profile)) {
     system(sprintf(
