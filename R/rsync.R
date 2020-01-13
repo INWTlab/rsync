@@ -15,9 +15,11 @@
 #' @param object (ANY) any R object you wish to store.
 #' @param objectName (character) the name used to store the object. The file
 #'   extension will always be a 'Rdata'.
-#' @param ssh (character|NULL) argument sets the environment variable
-#'   \code{RSYNC_RSH} during the call. Can be used to further specify ssh
-#'   settings.
+#' @param ssh (character|NULL) argument is passed as '-e' option on the command
+#'   line. Can be used to further specify ssh settings.
+#' @param sshProg (character|NULL) arguments sets the environment variable
+#'   'RSYNC_CONNECT_PROG' during the call. Can be used to setup a ssh connection
+#'   to a remote rsync daemon.
 #' @param ... arguments passed to methods.
 #'
 #' @details
@@ -37,6 +39,11 @@
 #' Currently the rsync interface in this package only allows for remote
 #'   locations in the destination.
 #'
+#' \emph{You may also establish a daemon connection using a program as a  proxy
+#' by setting the environment variable RSYNC_CONNECT_PROG to the commands
+#' you wish to run in place of making a direct socket connection.} This can be
+#' done using the \code{sshProg} argument.
+#'
 #' @examples
 #' \dontrun{
 #' ## Please consider examples in the Readme of this project. To get there run:
@@ -48,11 +55,13 @@
 #' ## Examples for remote connections
 #' rsync("rsync://user@host:port/volume", password = "~/my-pwd")
 #' rsync("user@host:~/", ssh = "ssh -i./my-identity-file")
+#' ### requires (netcat) on the host
+#' rsync("user@host::volume", sshProg = "ssh -i./my-identity-file host nc %H 873")
 #' }
 #'
 #' @rdname rsync
 #' @export
-rsync <- function(dest, src = getwd(), password = NULL, ssh = NULL) {
+rsync <- function(dest, src = getwd(), password = NULL, ssh = NULL, sshProg = NULL) {
   stopifnot(
     is.character(dest) && length(dest) == 1,
     is.character(src) && length(src) == 1,
@@ -65,17 +74,29 @@ rsync <- function(dest, src = getwd(), password = NULL, ssh = NULL) {
     dest = dest,
     src = src,
     password = password,
-    ssh = ssh
+    ssh = ssh,
+    sshProg = sshProg
   )
   class(ret) <- "rsync"
   ret
 }
 
 getPre <- function(db) {
-  conType <- if (grepl("^rsync://", getDest(db))) {
-    "rsync"
-  } else if (grepl(":", getDest(db))) {
-    "ssh"
+  pre <- if (!is.null(db$password)) {
+    pwd <- db$password
+    pwd <- if (file.exists(pwd)) sprintf("$(cat %s)", pwd) else pwd
+    sprintf("RSYNC_PASSWORD=\"%s\" ", pwd)
+  } else NULL
+  pre <- paste0(pre, if (!is.null(db$sshProg)) {
+    paste0("RSYNC_CONNECT_PROG=\"", db$sshProg, "\"")
+  })
+  pre
+}
+
+getArgs <- function(db) {
+  ## put further command line arguments together
+  if (!is.null(db$ssh)) {
+    paste0("-e \"", db$ssh, "\"")
   } else {
     "local"
   }

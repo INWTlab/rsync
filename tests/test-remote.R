@@ -41,4 +41,15 @@ withSystemCall({
   x <- 1
   dat <- listFiles(sendObject(con, x))
   stopifnot("x.Rdata" %in% dat$name)
+
+  ## sshd + rsyncd
+  con <- rsync(
+    "user@localhost::volume",
+    password = "pass",
+    tempdir(),
+    sshProg = "ssh -i./docker-root -oStrictHostKeyChecking=no -p20012 -l root localhost nc %H 873"
+  )
+  x <- 1
+  dat <- listFiles(sendObject(con, x))
+  stopifnot("x.Rdata" %in% dat$name)
 })

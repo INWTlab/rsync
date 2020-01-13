@@ -33,7 +33,8 @@ local directory}
 
 \item{profile}{(NULL|character|list) the name of a profile or a list defining
 a profile. In case of a list a new profile will be created which is
-persistent.}
+persistent. A profile is created using \code{aws configure} and stores
+credentials for the user in plain text.}
 
 \item{force}{(logical) override profile if it exists.}
 
@@ -49,7 +50,8 @@ persistent.}
 }
 \description{
 Only methods specific to this class are documented here. For others the
-default will work.
+default method will work. This connection provides the same interface as
+\link{rsync}.
 }
 \examples{
 \dontrun{

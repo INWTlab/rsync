@@ -16,6 +16,7 @@ removeFile.default <- function(db, fileName, verbose = FALSE, ...) {
   dir.create(emptyDir)
 
   args <- if (verbose) "-rvv --delete" else "-r --delete"
+  args <- paste(args, getArgs(db))
   pre <- getPre(db)
   to <- getDest(db)
   file <- emptyDir

@@ -11,7 +11,8 @@ sendFile <- function(db, ...) {
 #' @export
 sendFile.default <- function(db, fileName, validate = FALSE, verbose = FALSE, ...) {
 
-  args <- if (verbose) "-ltrvvx" else "-ltrx"
+  args <- if (verbose == TRUE) "-ltrvvx" else "-ltrx"
+  args <- paste(args, getArgs(db))
 
   src <- getSrc(db)
   dest <- getDest(db)
