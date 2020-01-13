@@ -98,16 +98,7 @@ getArgs <- function(db) {
   if (!is.null(db$ssh)) {
     paste0("-e \"", db$ssh, "\"")
   } else {
-    "local"
-  }
-  if (conType == "local") {
     NULL
-  } else if (conType == "rsync" & !is.null(db$password)) {
-    pwd <- db$password
-    pwd <- if (file.exists(pwd)) sprintf("$(cat %s)", pwd) else pwd
-    sprintf("RSYNC_PASSWORD=\"%s\"", pwd)
-  } else if (conType == "ssh" & !is.null(db$ssh)) {
-    sprintf("RSYNC_RSH=\"%s\"", db$ssh)
   }
 }
 
