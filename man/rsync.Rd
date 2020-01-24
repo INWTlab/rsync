@@ -43,7 +43,8 @@ removeFile(db, ...)
 
 \method{removeFile}{default}(db, fileName, verbose = FALSE, ...)
 
-rsync(dest, src = getwd(), password = NULL, ssh = NULL)
+rsync(dest, src = getwd(), password = NULL, ssh = NULL,
+  sshProg = NULL)
 
 sendAllFiles(db, ...)
 
@@ -79,9 +80,12 @@ using a sha256 check sum.}
 \item{password}{(character|NULL) a password or file name in case a rsync
 daemon is used.}
 
-\item{ssh}{(character|NULL) argument sets the environment variable
-\code{RSYNC_RSH} during the call. Can be used to further specify ssh
-settings.}
+\item{ssh}{(character|NULL) argument is passed as '-e' option on the command
+line. Can be used to further specify ssh settings.}
+
+\item{sshProg}{(character|NULL) arguments sets the environment variable
+'RSYNC_CONNECT_PROG' during the call. Can be used to setup a ssh connection
+to a remote rsync daemon.}
 
 \item{object}{(ANY) any R object you wish to store.}
 
@@ -114,6 +118,14 @@ not be affected.
   (see also the "USING RSYNC-DAEMON FEATURES VIA A REMOTE-SHELL CONNECTION"
   section for an exception to this latter rule).}
 
+Currently the rsync interface in this package only allows for remote
+  locations in the destination.
+
+\emph{You may also establish a daemon connection using a program as a  proxy
+by setting the environment variable RSYNC_CONNECT_PROG to the commands
+you wish to run in place of making a direct socket connection.} This can be
+done using the \code{sshProg} argument.
+
 \code{sendAllFiles} Sends all files in \code{src} to \code{dest} using \code{sendFile}.
 
 \code{sendFile} Sends a file to a rsync object.
@@ -121,4 +133,20 @@ not be affected.
 \code{sendObject} sends an object (from the environment)
   to a rsync target. This abstracts a pattern where you would use \link{save}
   followed by \code{sendFile}. The reverse is done using \code{getObject}
+}
+\examples{
+\dontrun{
+## Please consider examples in the Readme of this project. To get there run:
+browseURL("https://github.com/INWTlab/rsync")
+
+## Using rsync locally
+rsync("~/someFolder")
+
+## Examples for remote connections
+rsync("rsync://user@host:port/volume", password = "~/my-pwd")
+rsync("user@host:~/", ssh = "ssh -i./my-identity-file")
+### requires (netcat) on the host
+rsync("user@host::volume", sshProg = "ssh -i./my-identity-file host nc \%H 873")
+}
+
 }
