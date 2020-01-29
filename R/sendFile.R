@@ -11,14 +11,15 @@ sendFile <- function(db, ...) {
 #' @export
 sendFile.default <- function(db, fileName, validate = FALSE, verbose = FALSE, ...) {
 
+  stopifnot(length(fileName) == 1)
+
   args <- if (verbose == TRUE) "-ltrvvx" else "-ltrx"
   args <- paste(args, getArgs(db))
-
-  src <- getSrc(db)
+  src <- paste0(getSrc(db), fileName)
   dest <- getDest(db)
   pre <- getPre(db)
 
-  rsynccli(src, dest, args = args, pre = pre, excludes = "*", includes = fileName)
+  rsynccli(src, dest, args = args, pre = pre)
 
   if (validate) validateFile(db, fileName)
   db

@@ -13,7 +13,7 @@ sendAllFiles.default <- function(db, verbose = FALSE, ...) {
 
   args <- if (verbose) "-ltrvvx" else "-ltrx"
 
-  src <- getSrc(db)
+  src <- paste0(getSrc(db), "*")
   dest <- getDest(db)
   pre <- getPre(db)
 
