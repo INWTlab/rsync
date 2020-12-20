@@ -4,8 +4,15 @@
 \alias{rsynccli}
 \title{Interface to rsync cli-tool}
 \usage{
-rsynccli(file, to, includes = NULL, excludes = NULL, args = "-rltvx",
-  pre = NULL, intern = FALSE)
+rsynccli(
+  file,
+  to,
+  includes = NULL,
+  excludes = NULL,
+  args = "-rltvx",
+  pre = NULL,
+  intern = FALSE
+)
 }
 \arguments{
 \item{file}{(character) source.}

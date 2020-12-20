@@ -15,8 +15,7 @@ awss3(dest, src = getwd(), profile = NULL)
 
 profileCreate(profile, force = FALSE)
 
-\method{getFile}{awss3}(db, fileName, validate = FALSE,
-  verbose = FALSE, ...)
+\method{getFile}{awss3}(db, fileName, validate = FALSE, verbose = FALSE, ...)
 
 \method{listFiles}{awss3}(db, ...)
 
@@ -24,8 +23,7 @@ profileCreate(profile, force = FALSE)
 
 \method{sendAllFiles}{awss3}(db, verbose = FALSE, ...)
 
-\method{sendFile}{awss3}(db, fileName, validate = FALSE,
-  verbose = FALSE, ...)
+\method{sendFile}{awss3}(db, fileName, validate = FALSE, verbose = FALSE, ...)
 }
 \arguments{
 \item{dest, src}{(character) an s3 bucket, e.g. \code{s3://my-bucket} or a

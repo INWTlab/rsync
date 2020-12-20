@@ -36,6 +36,7 @@ testthat::test_that("load data", {
   invisible(sendFile(con, fileName = 'dat.csv'))
   testthat::expect_true(nrow(listFiles(con)) == 1)
   csvData <- getData(con, fileName = 'dat.csv')
+  csvData$date <- as.character(csvData$date)
   testthat::expect_true(identical(dat, csvData))
 
   #json

@@ -4,6 +4,7 @@ listFiles <- function(db, ...) {
   UseMethod("listFiles", db)
 }
 
+#' @import data.table
 #' @rdname rsync
 #' @export
 listFiles.default <- function(db, ...) {

@@ -28,8 +28,7 @@ getData(db, ...)
 
 getFile(db, ...)
 
-\method{getFile}{default}(db, fileName, validate = FALSE,
-  verbose = FALSE, ...)
+\method{getFile}{default}(db, fileName, validate = FALSE, verbose = FALSE, ...)
 
 listFiles(db, ...)
 
@@ -43,8 +42,7 @@ removeFile(db, ...)
 
 \method{removeFile}{default}(db, fileName, verbose = FALSE, ...)
 
-rsync(dest, src = getwd(), password = NULL, ssh = NULL,
-  sshProg = NULL)
+rsync(dest, src = getwd(), password = NULL, ssh = NULL, sshProg = NULL)
 
 sendAllFiles(db, ...)
 
@@ -52,14 +50,18 @@ sendAllFiles(db, ...)
 
 sendFile(db, ...)
 
-\method{sendFile}{default}(db, fileName, validate = FALSE,
-  verbose = FALSE, ...)
+\method{sendFile}{default}(db, fileName, validate = FALSE, verbose = FALSE, ...)
 
 sendObject(db, ...)
 
-\method{sendObject}{default}(db, object,
-  objectName = as.character(substitute(object)), validate = FALSE,
-  verbose = FALSE, ...)
+\method{sendObject}{default}(
+  db,
+  object,
+  objectName = as.character(substitute(object)),
+  validate = FALSE,
+  verbose = FALSE,
+  ...
+)
 }
 \arguments{
 \item{db}{(rsync) an object of class 'rsync' initialized with \code{rsync}.}
