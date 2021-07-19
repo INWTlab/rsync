@@ -1,7 +1,7 @@
 Package: rsync
 Type: Package
 Title: API to use rsync
-Version: 0.5.2
+Version: 0.5.3
 Author: INWT Statistics GmbH
 Authors@R: c(person("Sebastian", "Warnholz", email = "sebastian.warnholz@inwt-statistics.de", role = c("aut", "cre")),
              person("Jonathan", "Bob", email = "jonathan.bob@inwt-statistics.de", role = c("aut")),

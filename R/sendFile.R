@@ -10,7 +10,6 @@ sendFile <- function(db, ...) {
 #' @rdname rsync
 #' @export
 sendFile.default <- function(db, fileName, validate = FALSE, verbose = FALSE, ...) {
-
   stopifnot(length(fileName) == 1)
 
   args <- if (verbose == TRUE) "-ltrvvx" else "-ltrx"
@@ -23,13 +22,11 @@ sendFile.default <- function(db, fileName, validate = FALSE, verbose = FALSE, ..
 
   if (validate) validateFile(db, fileName)
   db
-
 }
 
 #' @rdname awss3
 #' @export
 sendFile.awss3 <- function(db, fileName, validate = FALSE, verbose = FALSE, ...) {
-
   args <- if (!verbose) "--quiet --no-progress --only-show-errors" else ""
   args <- paste("sync", args)
 
@@ -41,5 +38,4 @@ sendFile.awss3 <- function(db, fileName, validate = FALSE, verbose = FALSE, ...)
 
   if (validate) validateFile(db, fileName)
   db
-
 }
