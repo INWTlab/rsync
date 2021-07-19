@@ -6,3 +6,5 @@
 ^codecov\.yml$
 ^Jenkinsfile$
 ^Dockerfile$
+^\.aws$
+^\.github$
