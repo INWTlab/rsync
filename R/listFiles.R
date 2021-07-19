@@ -76,5 +76,5 @@ addMissingCol <- function(x) {
 
 toPOSIX <- function(x) {
   # whitespaces are NAs
-  as.POSIXct(ifelse(grepl(" *", x), NA, x))
+  as.POSIXct(ifelse(grepl("\\S", x), x, NA))
 }

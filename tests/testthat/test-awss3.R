@@ -29,6 +29,8 @@ testthat::test_that("create data", {
   on.exit(try(removeAllFiles(con)))
 
   invisible(sendAllFiles(con))
+  testthat::expect_equal(sum(is.na(listFiles(con)$lastModified)), 1)
+  testthat::expect_equal(sum(!is.na(listFiles(con)$lastModified)), 2)
   testthat::expect_equal(nrow(listFiles(con)), 3)
   testthat::expect_equal(getData(con, "x.Rdata"), list(x = 1))
   testthat::expect_equal(getData(con, "nestedFolder/y.Rdata"), list(y = 2))
