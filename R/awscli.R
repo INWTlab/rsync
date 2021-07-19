@@ -1,7 +1,8 @@
 awscli <- function(src, dest, includes = NULL, excludes = NULL, args = "", profile = NULL, intern = FALSE) {
-
   constructArg <- function(x, s) {
-    if (is.null(x)) return(x)
+    if (is.null(x)) {
+      return(x)
+    }
     paste(paste0(s, " \"", x, "\""), collapse = " ")
   }
 
@@ -21,6 +22,4 @@ awscli <- function(src, dest, includes = NULL, excludes = NULL, args = "", profi
   ## cat(command, "\n")
 
   system(command, intern = intern, wait = TRUE, ignore.stdout = FALSE, ignore.stderr = FALSE)
-
 }
-

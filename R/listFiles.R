@@ -14,7 +14,9 @@ listFiles.default <- function(db, ...) {
 
   dir <- rsynccli(NULL, to, args = args, pre = pre, intern = TRUE)
   dir <- dat::extract(dir, ~ !grepl("\\.$", .))
-  if (length(dir) == 0) return(emptyDir())
+  if (length(dir) == 0) {
+    return(emptyDir())
+  }
 
   dir <- strsplit(dir, " +")
   dir <- do.call(rbind, dir)
@@ -42,19 +44,37 @@ emptyDir <- function() {
 listFiles.awss3 <- function(db, ...) {
   dest <- getDest(db)
   profile <- getProfile(db)
-  if (!isS3Bucket(dest)) return(NextMethod())
+  if (!isS3Bucket(dest)) {
+    return(NextMethod())
+  }
   dir <- awscli(NULL, dest, args = "ls", profile = profile, intern = TRUE)
   dir <- dat::extract(dir, ~ !grepl("\\.$", .))
-  if (length(dir) == 0) return(emptyDir())
+  if (length(dir) == 0) {
+    return(emptyDir())
+  }
   dir <- strsplit(dir, " +")
+  dir <- lapply(dir, addMissingCol)
   dir <- do.call(rbind, dir)
   dir <- as.data.frame(dir)
   names(dir) <- c("date", "time", "size", "name")
   dir <- dat::replace(dir, "date", gsub("/", "-", dir$date))
-  dir <- dat::mutar(dir, lastModified ~ as.POSIXct(paste(date, time)))
-  dir <- dat::mutar(dir, size ~ as.numeric(gsub(",", "", size)))
+  dir <- dat::mutar(dir, lastModified ~ toPOSIX(paste(date, time)))
+  dir <- dat::mutar(dir, size ~ suppressWarnings(as.numeric(gsub(",", "", size))))
   dir <- dat::mutar(dir, name ~ as.character(name))
   dir <- dat::extract(dir, c("name", "lastModified", "size"))
   dir
 }
 
+addMissingCol <- function(x) {
+  if (length(x) == 3) {
+    c("", x)
+  } # add an empty time
+  else {
+    x
+  }
+}
+
+toPOSIX <- function(x) {
+  # whitespaces are NAs
+  as.POSIXct(ifelse(grepl(" *", x), NA, x))
+}

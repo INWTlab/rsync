@@ -9,7 +9,9 @@ removeFile <- function(db, ...) {
 #' @rdname rsync
 #' @export
 removeFile.default <- function(db, fileName, verbose = FALSE, ...) {
-  if (length(fileName) == 0) return(db)
+  if (length(fileName) == 0) {
+    return(db)
+  }
 
   on.exit(try(file.remove(emptyDir), silent = TRUE))
   emptyDir <- paste0(tempdir(), "/empty/")
@@ -23,26 +25,26 @@ removeFile.default <- function(db, fileName, verbose = FALSE, ...) {
 
   rsynccli(file, to, includes = fileName, excludes = "*", args = args, pre = pre)
   db
-
 }
 
 #' @rdname awss3
 #' @export
 removeFile.awss3 <- function(db, fileName, verbose = FALSE, ...) {
-  if (length(fileName) == 0) return(db)
+  if (length(fileName) == 0) {
+    return(db)
+  }
+
+  fileName <- gsub("/$", "/*", fileName)
 
   dest <- getDest(db)
   profile <- getProfile(db)
-  if (!isS3Bucket(dest)) return(NextMethod())
+  if (!isS3Bucket(dest)) {
+    return(NextMethod())
+  }
 
-  on.exit(try(file.remove(src), silent = TRUE))
-  src <- paste0(tempdir(), "/empty/")
-  dir.create(src)
+  args <- if (!verbose) "--quiet --only-show-errors --recursive" else "--recursive"
+  args <- paste("rm", args)
 
-  args <- if (!verbose) "--quiet --no-progress --only-show-errors" else ""
-  args <- paste("sync --delete", args)
-
-  awscli(src, dest, includes = fileName, excludes = "*", args = args, profile = profile)
+  awscli(NULL, dest, includes = fileName, excludes = "*", args = args, profile = profile)
   db
-
 }
