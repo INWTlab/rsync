@@ -1,6 +1,7 @@
 language: r
 cache: packages
-sudo: enabled
+services:
+  - docker
 
 notifications:
   email:
