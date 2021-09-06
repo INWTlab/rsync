@@ -1,4 +1,4 @@
-[![Travis-CI Build Status](https://travis-ci.org//INWTlab/rsync.svg?branch=master)](https://travis-ci.org/INWTlab/rsync)
+[![Travis-CI Build Status](https://app.travis-ci.com/INWTlab/rsync.svg?branch=master)](https://app.travis-ci.com/github/INWTlab/rsync)
 [![Coverage Status](https://img.shields.io/codecov/c/github/INWTlab/rsync/master.svg)](https://codecov.io/github/INWTlab/rsync?branch=master)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/rsync)](https://cran.r-project.org/package=rsync)
 ![Downloads](https://cranlogs.r-pkg.org/badges/rsync)
@@ -17,8 +17,8 @@ used for making backups, copying files or mirroring them.
 
 Working with Rsync offers nice benefits, as it is:
   - fast
-  - works remotly and locally 
-  - minimizes data transfer, as it only transfers the changes within the files 
+  - works remotly and locally
+  - minimizes data transfer, as it only transfers the changes within the files
   - supports copying links, devices, owners, groups, and permissions
 
 For further information about rsync, please visit https://rsync.samba.org/.
@@ -29,7 +29,7 @@ solution here:
 - Is free,
 - fast(er), if you stay in your local network,
 - but, S3 provides versioning, which is very neat.
-  
+
 ## Installation:
 
 The rsync R package can be downloaded and installed by running the following
@@ -58,12 +58,11 @@ dest
 
 ```
 ## Rsync server: 
-##   dest: /home/sebastian/projects/rsync/destination
-##   src: /home/sebastian/projects/rsync/source
-##   password: NULL 
+##   src: /home/lswarnholz/projects/rsync/source/
+##   dest: /home/lswarnholz/projects/rsync/destination/ 
 ## Directory in destination:
 ## [1] name         lastModified size        
-## <0 rows> (or 0-length row.names)
+## <0 Zeilen> (oder row.names mit Länge 0)
 ```
 
 In the case of an rsync daemon you can also supply a password. The way you think
@@ -81,12 +80,11 @@ sendObject(dest, x)
 
 ```
 ## Rsync server: 
-##   dest: /home/sebastian/projects/rsync/destination
-##   src: /home/sebastian/projects/rsync/source
-##   password: NULL 
+##   src: /home/lswarnholz/projects/rsync/source/
+##   dest: /home/lswarnholz/projects/rsync/destination/ 
 ## Directory in destination:
 ##      name        lastModified size
-## 1 x.Rdata 2019-02-28 12:30:51   61
+## 1 x.Rdata 2021-09-06 22:15:38   70
 ```
 
 ```r
@@ -95,13 +93,12 @@ sendObject(dest, y)
 
 ```
 ## Rsync server: 
-##   dest: /home/sebastian/projects/rsync/destination
-##   src: /home/sebastian/projects/rsync/source
-##   password: NULL 
+##   src: /home/lswarnholz/projects/rsync/source/
+##   dest: /home/lswarnholz/projects/rsync/destination/ 
 ## Directory in destination:
 ##      name        lastModified size
-## 1 x.Rdata 2019-02-28 12:30:51   61
-## 2 y.Rdata 2019-02-28 12:30:51   60
+## 1 x.Rdata 2021-09-06 22:15:38   70
+## 2 y.Rdata 2021-09-06 22:15:38   69
 ```
 
 We can see that we have added two new files. These two files now exist in the
@@ -115,12 +112,11 @@ removeAllFiles(dest) # will not change source
 
 ```
 ## Rsync server: 
-##   dest: /home/sebastian/projects/rsync/destination
-##   src: /home/sebastian/projects/rsync/source
-##   password: NULL 
+##   src: /home/lswarnholz/projects/rsync/source/
+##   dest: /home/lswarnholz/projects/rsync/destination/ 
 ## Directory in destination:
 ## [1] name         lastModified size        
-## <0 rows> (or 0-length row.names)
+## <0 Zeilen> (oder row.names mit Länge 0)
 ```
 
 ```r
@@ -129,12 +125,11 @@ sendFile(dest, "x.Rdata") # so we can still send the files
 
 ```
 ## Rsync server: 
-##   dest: /home/sebastian/projects/rsync/destination
-##   src: /home/sebastian/projects/rsync/source
-##   password: NULL 
+##   src: /home/lswarnholz/projects/rsync/source/
+##   dest: /home/lswarnholz/projects/rsync/destination/ 
 ## Directory in destination:
 ##      name        lastModified size
-## 1 x.Rdata 2019-02-28 12:30:51   61
+## 1 x.Rdata 2021-09-06 22:15:38   70
 ```
 
 ```r
@@ -143,12 +138,11 @@ removeAllFiles(src <- rsync("source")) # make the source a destination
 
 ```
 ## Rsync server: 
-##   dest: /home/sebastian/projects/rsync/source
-##   src: /home/sebastian/projects/rsync
-##   password: NULL 
+##   src: /home/lswarnholz/projects/rsync/
+##   dest: /home/lswarnholz/projects/rsync/source/ 
 ## Directory in destination:
 ## [1] name         lastModified size        
-## <0 rows> (or 0-length row.names)
+## <0 Zeilen> (oder row.names mit Länge 0)
 ```
 
 ```r
@@ -157,12 +151,11 @@ getFile(dest, "x.Rdata")
 
 ```
 ## Rsync server: 
-##   dest: /home/sebastian/projects/rsync/destination
-##   src: /home/sebastian/projects/rsync/source
-##   password: NULL 
+##   src: /home/lswarnholz/projects/rsync/source/
+##   dest: /home/lswarnholz/projects/rsync/destination/ 
 ## Directory in destination:
 ##      name        lastModified size
-## 1 x.Rdata 2019-02-28 12:30:51   61
+## 1 x.Rdata 2021-09-06 22:15:38   70
 ```
 
 ```r
@@ -171,14 +164,11 @@ src
 
 ```
 ## Rsync server: 
-##   dest: /home/sebastian/projects/rsync/source
-##   src: /home/sebastian/projects/rsync
-##   password: NULL 
+##   src: /home/lswarnholz/projects/rsync/
+##   dest: /home/lswarnholz/projects/rsync/source/ 
 ## Directory in destination:
 ##      name        lastModified size
-## 1 x.Rdata 2019-02-28 12:30:51   61
+## 1 x.Rdata 2021-09-06 22:15:38   70
 ```
-
-
 
 

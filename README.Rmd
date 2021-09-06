@@ -1,4 +1,4 @@
-[![Travis-CI Build Status](https://travis-ci.org//INWTlab/rsync.svg?branch=master)](https://travis-ci.org/INWTlab/rsync)
+[![Travis-CI Build Status](https://app.travis-ci.com/INWTlab/rsync.svg?branch=master)](https://app.travis-ci.com/github/INWTlab/rsync)
 [![Coverage Status](https://img.shields.io/codecov/c/github/INWTlab/rsync/master.svg)](https://codecov.io/github/INWTlab/rsync?branch=master)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/rsync)](https://cran.r-project.org/package=rsync)
 ![Downloads](https://cranlogs.r-pkg.org/badges/rsync)
@@ -17,8 +17,8 @@ used for making backups, copying files or mirroring them.
 
 Working with Rsync offers nice benefits, as it is:
   - fast
-  - works remotly and locally 
-  - minimizes data transfer, as it only transfers the changes within the files 
+  - works remotly and locally
+  - minimizes data transfer, as it only transfers the changes within the files
   - supports copying links, devices, owners, groups, and permissions
 
 For further information about rsync, please visit https://rsync.samba.org/.
@@ -29,7 +29,7 @@ solution here:
 - Is free,
 - fast(er), if you stay in your local network,
 - but, S3 provides versioning, which is very neat.
-  
+
 ## Installation:
 
 The rsync R package can be downloaded and installed by running the following
@@ -86,5 +86,3 @@ removeAllFiles(dest)
 file.remove("destination")
 file.remove("source")
 ```
-
-
