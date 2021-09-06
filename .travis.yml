@@ -11,6 +11,7 @@ after_success:
   - test $TRAVIS_PULL_REQUEST == "false" &&
     test $TRAVIS_BRANCH == "master" &&
     bash deploy.sh
+
 env:
   global:
     secure: D/wjzBAixgCxqAai0ra/laFHs2+mh1uKEHqqYYUmSxFNEJ+z2GKqkKPEbnGFkOWZegA9WeSw8UXsdo3nNPV5kzPB2Pm+h6M42HVQirAwtfiNMLhBeH4xR4cZRJNcNBMjLxvwDOWxnWq7sRaZC/u6bEMIBOKzISGh20c7azyjBeK3p4Ae+viPZRhHALfEmgD8FdCbPbxL0aP0x3fe7z1g0/hDnBa7QM87AKxNxUAUZvSPGcd8TFZ/A99tiTnSXyzjRfhRo8Vv0bFSEwca9DtnNytVewqoiEndgTNl+62SfRjRMf3/E6utnH0ltfORCGWM3zc6hzpvM2OfnIyRyiwobKpK/QvHCWX5xAHaxSUZCilcwNJxSaJiyHj4cVG5tdVFCiQz0B0ztPyDGBRzV60EN+KyJ6bMDmlzTg9YDYJFwzCvbACYFkpHw1xmK1ilNKC1XAAtZxUyhcBE18jjhqLgh8AOpxjG8m6Y0xZdbiYd45pDLo8htSrKruqQsyJSMWnhX+nNJrF46BUAOP9phRI883lZVEIwAXxiu/+h+Gfkchj2FFOCCpzeUnYdivAJZKJSVKNGBsaeFb27JV7fsin3gcDEMtjfhNlgXZw1Q14CcqOvrMhyYOoYjeFkFmm8d0aLitfRwdP0l3S+FPc9hRCwulVOpRBL7jjHid3ITo6nR+s=
