@@ -1,3 +1,8 @@
+if (identical(Sys.getenv("TRAVIS"), "true")) {
+  cat("Skip these tests on Travis CI.")
+  # they take too long and we get a timeout.
+  q(save = "no")
+}
 dockerVersion <- try(system("docker --version", intern = TRUE))
 if (inherits(dockerVersion, "try-error") || grepl("docker .* not found", dockerVersion)) {
   cat("Docker is not available for testing. Stop here.")
@@ -27,7 +32,8 @@ withSystemCall({
   con <- rsync(
     "rsync://user@localhost:8000/volume",
     tempFolder(),
-    password = "pass")
+    password = "pass"
+  )
   checkLength(rsync::removeAllFiles(con), 0)
   x <- 1
   checkLength(sendObject(con, x), 1)
@@ -41,7 +47,8 @@ withSystemCall({
   con <- rsync(
     "rsync://user@localhost:8000/volume",
     tempFolder(),
-    password = ".pass")
+    password = ".pass"
+  )
   checkLength(rsync::removeAllFiles(con), 0)
   x <- 1
   dat <- listFiles(sendObject(con, x))
@@ -72,5 +79,4 @@ withSystemCall({
   dat <- listFiles(sendObject(con, x))
   stopifnot("x.Rdata" %in% dat$name)
   unlink(tempFolder())
-
 })
