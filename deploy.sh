@@ -10,6 +10,7 @@ addToDrat(){
   git config user.email "sebastian.warnholz@inwt-statistics.de"
   git config --global push.default simple
 
+  Rscript -e "install.packages('drat')"
   Rscript -e "drat::insertPackage('$PKG_REPO/$PKG_TARBALL', \
     repodir = '.', \
     commit='Travis update: build $TRAVIS_BUILD_NUMBER')"
