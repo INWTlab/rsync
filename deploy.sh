@@ -11,9 +11,9 @@ addToDrat(){
   git config --global push.default simple
 
   Rscript -e "install.packages('drat')"
-  Rscript -e "drat::insertPackage('$PKG_REPO/$PKG_TARBALL', \
-    repodir = '.', \
-    commit='Travis update: build $TRAVIS_BUILD_NUMBER')"
+  Rscript -e "drat::insertPackage('$PKG_REPO/$PKG_TARBALL', repodir = '.')"
+  git add --all
+  git commit -m "Travis update: build $TRAVIS_BUILD_NUMBER"
   git push 2> /tmp/err.txt
 
 }
