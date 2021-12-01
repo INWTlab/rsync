@@ -19,6 +19,10 @@ listFiles.default <- function(db, ...) {
   }
 
   dir <- strsplit(dir, " +")
+  dir <- lapply(
+    dir,
+    function(x) c(x[1:4], paste(x[5:length(x)], collapse = " "))
+  )
   dir <- do.call(rbind, dir)
   dir <- as.data.frame(dir)
   names(dir) <- c("permission", "size", "date", "time", "name")
@@ -41,18 +45,21 @@ emptyDir <- function() {
 
 #' @rdname awss3
 #' @export
-listFiles.awss3 <- function(db, ...) {
+listFiles.awss3 <- function(db, recursive = FALSE, ...) {
   dest <- getDest(db)
   profile <- getProfile(db)
   if (!isS3Bucket(dest)) {
     return(NextMethod())
   }
-  dir <- awscli(NULL, dest, args = "ls", profile = profile, intern = TRUE)
+  args <- if (recursive) "ls --recursive" else "ls"
+  dir <- awscli(NULL, dest, args = args, profile = profile, intern = TRUE)
   dir <- dat::extract(dir, ~ !grepl("\\.$", .))
   if (length(dir) == 0) {
     return(emptyDir())
   }
   dir <- strsplit(dir, " +")
+  dir <- lapply(dir, collapseFileNamesWithSpaces)
+
   dir <- lapply(dir, addMissingCol)
   dir <- do.call(rbind, dir)
   dir <- as.data.frame(dir)
@@ -72,6 +79,15 @@ addMissingCol <- function(x) {
   else {
     x
   }
+}
+
+collapseFileNamesWithSpaces <- function(x) {
+  if (any(x == "PRE")) {
+    posOfName <- 3
+  } else {
+    posOfName <- 4
+  }
+  c(x[1:(posOfName - 1)], paste(sub("/$", "", x[posOfName:length(x)]), collapse = " "))
 }
 
 toPOSIX <- function(x) {

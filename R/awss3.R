@@ -15,6 +15,7 @@
 #' @param fileName (character) a file name in dest/src
 #' @param validate (logical) if validation should take place
 #' @param verbose (logical) if TRUE print more information to the console
+#' @param recursive (logical) if TRUE print full names for files in sub folders
 #' @param ... arguments passed to method
 #'
 #' @examples
@@ -38,10 +39,16 @@ awss3 <- function(dest, src = getwd(), profile = NULL) {
       (is.character(profile) && length(profile) == 1 && profileExists(profile)) ||
       (is.list(profile) && is.character(profile$name))
   )
-  src <- if (isS3Bucket(src)) sub("/$", "", src)
-         else normalizePath(src, mustWork = TRUE)
-  dest <- if (isS3Bucket(dest)) sub("/$", "", dest)
-          else normalizePath(dest, mustWork = TRUE)
+  src <- if (isS3Bucket(src)) {
+    sub("/$", "", src)
+  } else {
+    normalizePath(src, mustWork = TRUE)
+  }
+  dest <- if (isS3Bucket(dest)) {
+    sub("/$", "", dest)
+  } else {
+    normalizePath(dest, mustWork = TRUE)
+  }
   if (is.list(profile)) {
     profileCreate(profile, force = TRUE)
     profile <- profile$name
@@ -86,7 +93,9 @@ as.character.awss3 <- function(x, ...) {
 #' @rdname awss3
 profileCreate <- function(profile, force = FALSE) {
   name <- profile$name
-  if (!force && profileExists(name)) return(TRUE)
+  if (!force && profileExists(name)) {
+    return(TRUE)
+  }
   profile$name <- NULL
   for (el in names(profile)) {
     system(sprintf(

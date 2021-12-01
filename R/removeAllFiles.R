@@ -11,7 +11,7 @@ removeAllFiles <- function(db, ...) {
 #' @rdname rsync
 #' @export
 removeAllFiles.default <- function(db, verbose = FALSE, ...) {
-  dat <- listFiles(db)
+  dat <- listFiles(db, recursive = TRUE)
   entries <- dat$name
   removeFile(db, entries, verbose = verbose, ...)
 }

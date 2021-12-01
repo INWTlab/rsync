@@ -9,6 +9,8 @@ awscli <- function(src, dest, includes = NULL, excludes = NULL, args = "", profi
   includes <- constructArg(includes, "--include")
   excludes <- constructArg(excludes, "--exclude")
   profile <- if (is.null(profile)) "" else paste("--profile", profile)
+  dest <- paste("\"", dest, "\"", sep = "")
+  src <- if (!is.null(src)) paste("\"", src, "\"", sep = "") else NULL
 
   command <- paste(
     "aws s3",
@@ -19,7 +21,7 @@ awscli <- function(src, dest, includes = NULL, excludes = NULL, args = "", profi
     src,
     dest
   )
-  ## cat(command, "\n")
+  # cat(command, "\n")
 
   system(command, intern = intern, wait = TRUE, ignore.stdout = FALSE, ignore.stderr = FALSE)
 }

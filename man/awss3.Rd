@@ -17,7 +17,7 @@ profileCreate(profile, force = FALSE)
 
 \method{getFile}{awss3}(db, fileName, validate = FALSE, verbose = FALSE, ...)
 
-\method{listFiles}{awss3}(db, ...)
+\method{listFiles}{awss3}(db, recursive = FALSE, ...)
 
 \method{removeFile}{awss3}(db, fileName, verbose = FALSE, ...)
 
@@ -45,6 +45,8 @@ credentials for the user in plain text.}
 \item{verbose}{(logical) if TRUE print more information to the console}
 
 \item{...}{arguments passed to method}
+
+\item{recursive}{(logical) if TRUE print full names for files in sub folders}
 }
 \description{
 Only methods specific to this class are documented here. For others the
