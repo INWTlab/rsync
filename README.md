@@ -40,8 +40,15 @@ command from the R console:
 devtools::install_github("INWTlab/rsync")
 ```
 
-Make sure you have the `rsync` command line tool available.
+Make sure you have the `rsync` command line tool available. Alternatively you 
+can use the INWTLab drat repository by adding
 
+```r
+options(repos = c(getOption("repos"), INWTLab = "https://inwtlab.github.io/drat/"))
+install.packages("rsync")
+```
+
+to your configuration.
 
 ## Examples
 
