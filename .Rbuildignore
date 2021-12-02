@@ -10,3 +10,4 @@
 ^\.github$
 ^deploy\.sh$
 ^\.prettierignore$
+^\.lintr$
