@@ -14,5 +14,5 @@ test_that("list entries in dest", {
   testthat::expect_identical(dat, con)
 
   invisible(sendAllFiles(con))
-  testthat::expect_true(nrow(listFiles(con)) == 4)
+  testthat::expect_true(nrow(listFiles(con)) == 5)
 })

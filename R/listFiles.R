@@ -66,9 +66,9 @@ listFiles.awss3 <- function(db, recursive = FALSE, ...) {
   if (length(dir) == 0) {
     return(emptyDir())
   }
-  dir <- strsplit(dir, " +")
-  dir <- lapply(dir, collapseFileNamesWithSpaces)
 
+  dir <- lapply(dir, strsplitOnSpaceForAWSS3)
+  dir <- lapply(dir, sub, pattern = "/$", replacement = "")
   dir <- lapply(dir, addMissingCol)
   dir <- do.call(rbind, dir)
   dir <- as.data.frame(dir)
@@ -90,13 +90,12 @@ addMissingCol <- function(x) {
   }
 }
 
-collapseFileNamesWithSpaces <- function(x) {
-  if (any(x == "PRE")) {
-    posOfName <- 3
+strsplitOnSpaceForAWSS3 <- function(x) {
+  if (grepl("PRE", x)) {
+    c("", strsplitOnSpace(x, 2))
   } else {
-    posOfName <- 4
+    strsplitOnSpace(x, 4)
   }
-  c(x[1:(posOfName - 1)], paste(sub("/$", "", x[posOfName:length(x)]), collapse = " "))
 }
 
 toPOSIX <- function(x) {

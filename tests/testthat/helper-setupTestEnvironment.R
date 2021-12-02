@@ -11,6 +11,8 @@ setupTestEnvironment <- function() {
   dir.create(nestedFolder)
   nestedFolderWithSpace <- paste0(dirName, "nested folder/")
   dir.create(nestedFolderWithSpace)
+  nestedFolderWithTwoSpaces <- paste0(dirName, "nested  folder/")
+  dir.create(nestedFolderWithTwoSpaces)
 
   # create some files
   x <- 1
