@@ -18,7 +18,8 @@ listFiles.default <- function(db, ...) {
     return(emptyDir())
   }
 
-  dir <- as.data.frame(do.call(rbind, strsplit_spaces_first_n(dir, n = 5)))
+  dir <- lapply(dir, strsplitOnSpace, maxSplits = 5)
+  dir <- as.data.frame(do.call(rbind, dir))
   names(dir) <- c("permission", "size", "date", "time", "name")
   dir <- dat::replace(dir, "date", gsub("/", "-", dir$date))
   dir <- dat::mutar(dir, lastModified ~ as.POSIXct(paste(date, time)))
@@ -28,15 +29,18 @@ listFiles.default <- function(db, ...) {
   dir
 }
 
-## split on whitespaces, but only using at most the first (n - 1) splits (to give at most n output columns)
-strsplit_spaces_first_n <- function(txt, n) {
-    lapply(txt, function(z) {
-        ## how many splits could we have on this text?
-        nsplits <- length(gregexpr("[[:space:]]+", z)[[1]])
-        ## split at most that many times
-        rgxp <- paste(c(rep("([^[:space:]]+)", min(nsplits, n - 1)), "(.*)"), collapse = "[[:space:]]+")
-        regmatches(z, regexec(rgxp, z))[[1]][-1]
-    })
+
+strsplitOnSpace <- function(txt, maxSplits) {
+  # split on whitespaces, but only using at most the first (maxSplits - 1)
+  # splits (to give at most maxSplits output columns)
+  possibleSplits <- length(gregexpr("[[:space:]]+", txt)[[1]])
+  nSplits <- min(possibleSplits, maxSplits - 1)
+  # Regular expression to extract whitespace seperated fields
+  rgxp <- paste(
+    c(rep("([^[:space:]]+)", nSplits), "(.*)"),
+    collapse = "[[:space:]]+"
+  )
+  regmatches(txt, regexec(rgxp, txt))[[1]][-1]
 }
 
 emptyDir <- function() {
