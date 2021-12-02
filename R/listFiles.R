@@ -18,13 +18,7 @@ listFiles.default <- function(db, ...) {
     return(emptyDir())
   }
 
-  dir <- strsplit(dir, " +")
-  dir <- lapply(
-    dir,
-    function(x) c(x[1:4], paste(x[5:length(x)], collapse = " "))
-  )
-  dir <- do.call(rbind, dir)
-  dir <- as.data.frame(dir)
+  dir <- as.data.frame(do.call(rbind, strsplit_spaces_first_n(dir, n = 5)))
   names(dir) <- c("permission", "size", "date", "time", "name")
   dir <- dat::replace(dir, "date", gsub("/", "-", dir$date))
   dir <- dat::mutar(dir, lastModified ~ as.POSIXct(paste(date, time)))
@@ -32,6 +26,17 @@ listFiles.default <- function(db, ...) {
   dir <- dat::mutar(dir, name ~ as.character(name))
   dir <- dat::extract(dir, c("name", "lastModified", "size"))
   dir
+}
+
+## split on whitespaces, but only using at most the first (n - 1) splits (to give at most n output columns)
+strsplit_spaces_first_n <- function(txt, n) {
+    lapply(txt, function(z) {
+        ## how many splits could we have on this text?
+        nsplits <- length(gregexpr("[[:space:]]+", z)[[1]])
+        ## split at most that many times
+        rgxp <- paste(c(rep("([^[:space:]]+)", min(nsplits, n - 1)), "(.*)"), collapse = "[[:space:]]+")
+        regmatches(z, regexec(rgxp, z))[[1]][-1]
+    })
 }
 
 emptyDir <- function() {
