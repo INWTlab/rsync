@@ -6,5 +6,5 @@ test_that("send all files", {
   invisible(removeAllFiles(con))
 
   sendAllFiles(con)
-  testthat::expect_true(nrow(listFiles(con)) == 4)
+  testthat::expect_true(nrow(listFiles(con)) == 5)
 })
