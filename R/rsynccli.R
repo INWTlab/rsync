@@ -14,14 +14,17 @@
 #' @rdname rsynccli
 #' @export
 rsynccli <- function(file, to, includes = NULL, excludes = NULL, args = "-rltvx", pre = NULL, intern = FALSE) {
-
   constructArg <- function(x, s) {
-    if (is.null(x)) return(x)
+    if (is.null(x)) {
+      return(x)
+    }
     paste(paste0(s, " \"", x, "\""), collapse = " ")
   }
 
   includes <- constructArg(includes, "--include")
   excludes <- constructArg(excludes, "--exclude")
+  to <- gsub(" ", "\\\\ ", to)
+  file <- if (!is.null(file)) gsub(" ", "\\\\ ", file) else NULL
 
   command <- paste(
     pre,

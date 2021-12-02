@@ -10,4 +10,6 @@ testthat::test_that("get files", {
   getFile(con, fileName = "x.Rdata")
   testthat::expect_true(file.exists(getSrcFile(con, "x.Rdata")))
 
+  invisible(sendAllFiles(con))
+  getFile(con, fileName = "nested folder/y.Rdata")
 })

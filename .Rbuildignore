@@ -9,3 +9,5 @@
 ^\.aws$
 ^\.github$
 ^deploy\.sh$
+^\.prettierignore$
+^\.lintr$

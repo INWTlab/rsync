@@ -1,12 +1,11 @@
 context("listFiles")
 
 test_that("list entries in dest", {
-
   con <- setupTestEnvironment()
 
   invisible(removeAllFiles(con))
-  invisible(sendFile(con, fileName = 'x.Rdata'))
-  invisible(sendFile(con, fileName = 'y.Rdata'))
+  invisible(sendFile(con, fileName = "x.Rdata"))
+  invisible(sendFile(con, fileName = "y.Rdata"))
   testthat::expect_true(nrow(listFiles(con)) == 2)
   invisible(removeAllFiles(con))
   testthat::expect_true(nrow(listFiles(con)) == 0)
@@ -14,4 +13,6 @@ test_that("list entries in dest", {
   testthat::expect_output(dat <- print(con))
   testthat::expect_identical(dat, con)
 
+  invisible(sendAllFiles(con))
+  testthat::expect_true(nrow(listFiles(con)) == 5)
 })
