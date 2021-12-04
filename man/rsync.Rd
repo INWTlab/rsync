@@ -46,7 +46,7 @@ rsync(dest, src = getwd(), password = NULL, ssh = NULL, sshProg = NULL)
 
 sendAllFiles(db, ...)
 
-\method{sendAllFiles}{default}(db, verbose = FALSE, ...)
+\method{sendAllFiles}{default}(db, verbose = FALSE, delete = FALSE, ...)
 
 sendFile(db, ...)
 
@@ -88,6 +88,9 @@ line. Can be used to further specify ssh settings.}
 \item{sshProg}{(character|NULL) arguments sets the environment variable
 'RSYNC_CONNECT_PROG' during the call. Can be used to setup a ssh connection
 to a remote rsync daemon.}
+
+\item{delete}{(logical) if TRUE, delete files in \code{dest} that do not
+exist in \code{src}}
 
 \item{object}{(ANY) any R object you wish to store.}
 

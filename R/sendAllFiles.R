@@ -9,9 +9,10 @@ sendAllFiles <- function(db, ...) {
 
 #' @rdname rsync
 #' @export
-sendAllFiles.default <- function(db, verbose = FALSE, ...) {
+sendAllFiles.default <- function(db, verbose = FALSE, delete = FALSE, ...) {
 
   args <- if (verbose) "-ltrvvx" else "-ltrx"
+  if (delete) args <- paste(args, "--delete")
 
   src <- paste0(getSrc(db), ".")
   dest <- getDest(db)
@@ -23,9 +24,10 @@ sendAllFiles.default <- function(db, verbose = FALSE, ...) {
 
 #' @rdname awss3
 #' @export
-sendAllFiles.awss3 <- function(db, verbose = FALSE, ...) {
+sendAllFiles.awss3 <- function(db, verbose = FALSE, delete = FALSE, ...) {
 
   args <- if (!verbose) "--quiet --no-progress --only-show-errors" else ""
+  if (delete) args <- paste(args, "--delete")
   args <- paste("sync", args)
 
   src <- getSrc(db)

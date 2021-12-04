@@ -21,7 +21,7 @@ profileCreate(profile, force = FALSE)
 
 \method{removeFile}{awss3}(db, fileName, verbose = FALSE, ...)
 
-\method{sendAllFiles}{awss3}(db, verbose = FALSE, ...)
+\method{sendAllFiles}{awss3}(db, verbose = FALSE, delete = FALSE, ...)
 
 \method{sendFile}{awss3}(db, fileName, validate = FALSE, verbose = FALSE, ...)
 }
@@ -47,6 +47,9 @@ credentials for the user in plain text.}
 \item{...}{arguments passed to method}
 
 \item{recursive}{(logical) if TRUE print full names for files in sub folders}
+
+\item{delete}{(logical) if TRUE, delete files in \code{dest} that do not
+exist in \code{src}}
 }
 \description{
 Only methods specific to this class are documented here. For others the

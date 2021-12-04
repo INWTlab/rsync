@@ -11,6 +11,8 @@
 #' @param fileName (character) a file name that exists in \code{src}
 #' @param validate (logical) if the file in dest and src should be validated
 #'   using a sha256 check sum.
+#' @param delete (logical) if TRUE, delete files in \code{dest} that do not
+#'   exist in \code{src}
 #' @param verbose (logical) if we use 'vorbose' as option in the cli.
 #' @param object (ANY) any R object you wish to store.
 #' @param objectName (character) the name used to store the object. The file
