@@ -14,8 +14,6 @@
 #' @param db (awss3) connection created with \code{awss3}
 #' @param fileName (character) a file name in dest/src
 #' @param validate (logical) if validation should take place
-#' @param delete (logical) if TRUE, delete files in \code{dest} that do not
-#'   exist in \code{src}
 #' @param verbose (logical) if TRUE print more information to the console
 #' @param recursive (logical) if TRUE print full names for files in sub folders
 #' @param ... arguments passed to method
