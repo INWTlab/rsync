@@ -12,9 +12,30 @@ test_that("sync all files (with delete)", {
 
   ## send, with no delete
   sendAllFiles(con)
-  testthat::expect_true(nrow(listFiles(con)) == 9)
+  testthat::expect_true(nrow(listFiles(con)) == 10)
 
   ## now with delete
   syncAllFiles(con)
-  testthat::expect_true(nrow(listFiles(con)) == 5)
+  testthat::expect_true(nrow(listFiles(con)) == 6)
+})
+
+test_that("sync all files (with delete) on AWS S3", {
+  testthat::skip_if(!profileExists("testing"))
+  removeFileFromSrc <- function(con, file) {
+    file <- paste0(getSrc(con), file)
+    unlink(file, recursive = TRUE)
+  }
+  con <- setupS3TestEnvironment()
+  invisible(removeAllFiles(con))
+
+  ## send, with no delete
+  sendAllFiles(con)
+  testthat::expect_true(nrow(listFiles(con)) == 6)
+
+  ## remove some files and sync
+  removeFileFromSrc(con, "nested folder")
+  removeFileFromSrc(con, ".y.Rdata")
+  removeFileFromSrc(con, "y.Rdata")
+  syncAllFiles(con)
+  testthat::expect_true(nrow(listFiles(con)) == 3)
 })
