@@ -20,6 +20,7 @@ setupTestEnvironment <- function() {
   save(list = "x", file = paste0(dirName, "x.Rdata"))
   save(list = "y", file = paste0(dirName, "y.Rdata"))
   save(list = "y", file = paste0(nestedFolderWithSpace, "y.Rdata"))
+  save(list = "x", file = paste0(dirName, ".x.Rdata"))
 
   rsync(
     src = dirName,
