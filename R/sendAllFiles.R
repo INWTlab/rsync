@@ -9,22 +9,13 @@ sendAllFiles <- function(db, ...) {
 
 #' @rdname rsync
 #' @export
-sendAllFiles.default <- function(db, verbose = FALSE, ...) {
-
-  args <- if (verbose) "-ltrvvx" else "-ltrx"
-
-  src <- paste0(getSrc(db), ".")
-  dest <- getDest(db)
-  pre <- getPre(db)
-
-  rsynccli(src, dest, args = args, pre = pre)
-  db
+sendAllFiles.default <- function(db, ...) {
+  sendFile(db, fileName = ".", ...)
 }
 
 #' @rdname awss3
 #' @export
 sendAllFiles.awss3 <- function(db, verbose = FALSE, ...) {
-
   args <- if (!verbose) "--quiet --no-progress --only-show-errors" else ""
   args <- paste("sync", args)
 
@@ -34,5 +25,4 @@ sendAllFiles.awss3 <- function(db, verbose = FALSE, ...) {
 
   awscli(src, dest, args = args, profile = profile)
   db
-
 }

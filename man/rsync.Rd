@@ -48,7 +48,7 @@ rsync(dest, src = getwd(), password = NULL, ssh = NULL, sshProg = NULL)
 
 sendAllFiles(db, ...)
 
-\method{sendAllFiles}{default}(db, verbose = FALSE, ...)
+\method{sendAllFiles}{default}(db, ...)
 
 sendFile(db, ...)
 
