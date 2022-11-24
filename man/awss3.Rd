@@ -24,7 +24,7 @@ profileCreate(profile, force = FALSE)
 
 \method{sendAllFiles}{awss3}(db, verbose = FALSE, ...)
 
-\method{sendFile}{awss3}(db, fileName, validate = FALSE, verbose = FALSE, ...)
+\method{sendFile}{awss3}(db, fileName, validate = FALSE, verbose = FALSE, args = "", ...)
 
 \method{syncAllFiles}{awss3}(db, verbose = FALSE, ...)
 }
@@ -50,6 +50,8 @@ credentials for the user in plain text.}
 \item{...}{arguments passed to method}
 
 \item{recursive}{(logical) if TRUE print full names for files in sub folders}
+
+\item{args}{(character) pass additional args to aws cli. Currently only implemented for sendFile}
 }
 \description{
 Only methods specific to this class are documented here. For others the

@@ -20,4 +20,8 @@ testthat::test_that("create data", {
   testthat::expect_equal(nrow(listFiles(con, recursive = TRUE)), 7)
   testthat::expect_equal(sum(!is.na(listFiles(con, recursive = TRUE)$lastModified)), 7)
   testthat::expect_equal(nrow(listFiles(removeAllFiles(con))), 0)
+
+  invisible(try(removeAllFiles(con)))
+  invisible(sendFile(con, "x.Rdata", args = "--dryrun"))
+  testthat::expect_equal(nrow(listFiles(con)), 0)
 })
