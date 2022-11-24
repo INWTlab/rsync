@@ -23,5 +23,6 @@ testthat::test_that("create data", {
 
   invisible(try(removeAllFiles(con)))
   invisible(sendFile(con, "x.Rdata", args = "--dryrun"))
+  invisible(sendFile(con, "x.Rdata", verbose = TRUE, args = "--dryrun"))
   testthat::expect_equal(nrow(listFiles(con)), 0)
 })
