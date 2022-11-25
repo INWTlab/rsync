@@ -28,8 +28,8 @@ sendFile.default <- function(db, fileName, validate = FALSE, verbose = FALSE, ..
 
 #' @rdname awss3
 #' @export
-sendFile.awss3 <- function(db, fileName, validate = FALSE, verbose = FALSE, ...) {
-  args <- if (!verbose) "--quiet --no-progress --only-show-errors" else ""
+sendFile.awss3 <- function(db, fileName, validate = FALSE, verbose = FALSE, args = "", ...) {
+  args <- if (!verbose) paste("--quiet --no-progress --only-show-errors", args) else args
   args <- paste("sync", args)
 
   src <- getSrc(db)

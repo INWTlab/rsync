@@ -16,6 +16,7 @@
 #' @param validate (logical) if validation should take place
 #' @param verbose (logical) if TRUE print more information to the console
 #' @param recursive (logical) if TRUE print full names for files in sub folders
+#' @param args (character) pass additional args to aws cli. Currently only implemented for sendFile
 #' @param ... arguments passed to method
 #'
 #' @examples
