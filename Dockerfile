@@ -4,7 +4,7 @@ ADD . .
 
 RUN apt-get -y update \
   && apt-get install -y --no-install-recommends \
-    awscli \
+    awscli git \
   && apt-get autoremove -y \
   && apt-get autoclean -y \
   && rm -rf /var/lib/apt/lists/* \
