@@ -1,6 +1,6 @@
 validateFile <- function(db, fileName, ...) {
 
-  on.exit(try({close(srcFile); close(destFile)}, silent = TRUE))
+  on.exit(try({close(srcFile);close(destFile);unlink(db1$src, recursive = TRUE)}, silent = TRUE))
 
   # We download the file a second time into a different location. Then we
   # compare if this file is identical to what we have in src. Other options
@@ -20,6 +20,5 @@ validateFile <- function(db, fileName, ...) {
     warning("Src and dest file are not identical!")
     FALSE
   }
+
 }
-
-
