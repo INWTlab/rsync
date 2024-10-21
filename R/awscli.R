@@ -24,7 +24,5 @@ awscli <- function(src, dest, includes = NULL, excludes = NULL, args = "", profi
   # cat(command, "\n")
 
   status <- system(command, intern = intern, wait = TRUE, ignore.stdout = FALSE, ignore.stderr = FALSE)
-  if (intern) status <- attr(status, "status")
-  stopifnot(status == 0)
-  TRUE
+  checkForStatus(status)
 }
