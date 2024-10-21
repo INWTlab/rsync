@@ -36,5 +36,14 @@ rsynccli <- function(file, to, includes = NULL, excludes = NULL, args = "-rltvx"
     to
   )
 
-  system(command, intern = intern, wait = TRUE, ignore.stdout = FALSE, ignore.stderr = FALSE)
+  status <- system(command, intern = intern, wait = TRUE, ignore.stdout = FALSE, ignore.stderr = FALSE)
+  checkForStatus(status)
+}
+
+checkForStatus <- function(status) {
+  if (!is.null(attr(status, "status"))) {
+    status <- attr(status, "status")
+  }
+  stopifnot(status == 0)
+  TRUE
 }
