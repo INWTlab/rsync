@@ -19,5 +19,5 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.DRAT_GH_TOKEN }}
         run: |
-          curl https://raw.githubusercontent.com/INWTlab/drat/main/deploy.sh > deploy.sh
+          curl https://raw.githubusercontent.com/INWTlab/drat/gh-pages/deploy.sh > deploy.sh
           docker run -v $PWD:/pwd -e GH_TOKEN=$GH_TOKEN -e TRAVIS_BUILD_NUMBER=GH_BUILD test-build bash /pwd/deploy.sh
