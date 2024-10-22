@@ -1,0 +1,24 @@
+name: Deploy to drat
+
+on:
+  workflow_run:
+    workflows: ["R-CMD-check"]
+    types:
+      - completed
+    branches: main
+  workflow_dispatch: # run workflow manually
+
+
+jobs:
+  drat:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - uses: mikemahoney218/upload-to-drat-repo@v0.3
+        with:
+          drat_repo: 'INWTlab/drat'
+          token: "${{ secrets.GH_ACTION_DRAT }}"
+          commit_message: "update ${{ github.event.repository.name }} on drat"
+          commit_email: "brother-mfc@inwt-statistics.de"
+          archive: true
+
