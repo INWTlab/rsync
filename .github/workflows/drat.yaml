@@ -1,26 +1,28 @@
+name: Deploy to drat
+
 on:
+  workflow_run:
+    workflows: ["R-CMD-check"]
+    types:
+      - completed
   push:
   pull_request:
   workflow_dispatch: # run workflow manually
 
-name: R-CMD-check
 
 jobs:
-  R-CMD-check:
+  drat:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }} && github.ref == 'refs/heads/main'$
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Build and test
-        run: |
-          docker build -t test-build . && docker run test-build
-
       - uses: mikemahoney218/upload-to-drat-repo@v0.3
-        if: success() && github.ref == 'refs/heads/main'
         with:
           drat_repo: 'INWTlab/drat'
           token: "${{ secrets.GH_ACTION_DRAT }}"
-          commit_message: "deploy to drat - update dbtools via gh actions"
+          commit_message: "update ${{ github.event.repository.name }} on drat"
           commit_email: "brother-mfc@inwt-statistics.de"
           archive: true
+
