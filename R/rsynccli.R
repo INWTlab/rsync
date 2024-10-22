@@ -40,12 +40,19 @@ rsynccli <- function(file, to, includes = NULL, excludes = NULL, args = "-rltvx"
   checkForStatus(status)
 }
 
-checkForStatus <- function(status) {
-  if (!is.null(attr(status, "status"))) {
-    status <- attr(status, "status")
+checkForStatus <- function(result) {
+  if (is.character(result) && is.null(attr(result, "status"))) {
+    sys_output <- result
+    return(sys_output)
   }
-  if (status != 0) {
-    stop("Command failed with status: ", status)
+
+  if (is.numeric(result)) {
+    status <- result
+  } else {
+    status <- if (!is.null(attr(result, "status"))) attr(result, "status") else 0
   }
-  TRUE
+
+  if (status != 0) stop("Command failed with status: ", status)
+
+  return(status)
 }
