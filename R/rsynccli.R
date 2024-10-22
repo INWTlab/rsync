@@ -44,6 +44,8 @@ checkForStatus <- function(status) {
   if (!is.null(attr(status, "status"))) {
     status <- attr(status, "status")
   }
-  stopifnot(status == 0)
+  if (status != 0) {
+    stop("Command failed with status: ", status)
+  }
   TRUE
 }
