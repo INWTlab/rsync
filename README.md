@@ -1,7 +1,4 @@
-[![Travis-CI Build Status](https://app.travis-ci.com/INWTlab/rsync.svg?branch=master)](https://app.travis-ci.com/github/INWTlab/rsync)
-[![Coverage Status](https://img.shields.io/codecov/c/github/INWTlab/rsync/master.svg)](https://codecov.io/github/INWTlab/rsync?branch=master)
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/rsync)](https://cran.r-project.org/package=rsync)
-![Downloads](https://cranlogs.r-pkg.org/badges/rsync)
+[![R-CMD-check](https://github.com/INWTlab/rsync/actions/workflows/R-CMD-check.yaml/badge.svg?branch=main)](https://github.com/INWTlab/rsync/actions/workflows/R-CMD-check.yaml)
 
 ## Rsync as R-Package
 
@@ -36,26 +33,19 @@ The rsync R package can be downloaded and installed by running the following
 command from the R console:
 
 
-```r
+``` r
 devtools::install_github("INWTlab/rsync")
 ```
 
-Make sure you have the `rsync` command line tool available. Alternatively you 
-can use the INWTLab drat repository by adding
+Make sure you have the `rsync` command line tool available.
 
-```r
-options(repos = c(getOption("repos"), INWTLab = "https://inwtlab.github.io/drat/"))
-install.packages("rsync")
-```
-
-to your configuration.
 
 ## Examples
 
 You create a rsync configuration using:
 
 
-```r
+``` r
 library(rsync)
 dir.create("destination")
 dir.create("source")
@@ -65,11 +55,11 @@ dest
 
 ```
 ## Rsync server: 
-##   src: /home/lswarnholz/projects/rsync/source/
-##   dest: /home/lswarnholz/projects/rsync/destination/ 
+##   src: /home/ljabel/Dokumente/git-work/INWTlab/rsync/source/
+##   dest: /home/ljabel/Dokumente/git-work/INWTlab/rsync/destination/ 
 ## Directory in destination:
 ## [1] name         lastModified size        
-## <0 Zeilen> (oder row.names mit Länge 0)
+## <0 rows> (or 0-length row.names)
 ```
 
 In the case of an rsync daemon you can also supply a password. The way you think
@@ -79,7 +69,7 @@ destination. It will not change the source, in most cases. An exception is
 `sendObject`, that will also create a file in source.
 
 
-```r
+``` r
 x <- 1
 y <- 2
 sendObject(dest, x)
@@ -87,25 +77,25 @@ sendObject(dest, x)
 
 ```
 ## Rsync server: 
-##   src: /home/lswarnholz/projects/rsync/source/
-##   dest: /home/lswarnholz/projects/rsync/destination/ 
+##   src: /home/ljabel/Dokumente/git-work/INWTlab/rsync/source/
+##   dest: /home/ljabel/Dokumente/git-work/INWTlab/rsync/destination/ 
 ## Directory in destination:
 ##      name        lastModified size
-## 1 x.Rdata 2021-09-06 22:15:38   70
+## 1 x.Rdata 2024-10-23 11:41:07   70
 ```
 
-```r
+``` r
 sendObject(dest, y)
 ```
 
 ```
 ## Rsync server: 
-##   src: /home/lswarnholz/projects/rsync/source/
-##   dest: /home/lswarnholz/projects/rsync/destination/ 
+##   src: /home/ljabel/Dokumente/git-work/INWTlab/rsync/source/
+##   dest: /home/ljabel/Dokumente/git-work/INWTlab/rsync/destination/ 
 ## Directory in destination:
 ##      name        lastModified size
-## 1 x.Rdata 2021-09-06 22:15:38   70
-## 2 y.Rdata 2021-09-06 22:15:38   69
+## 1 x.Rdata 2024-10-23 11:41:07   70
+## 2 y.Rdata 2024-10-23 11:41:07   69
 ```
 
 We can see that we have added two new files. These two files now exist in the
@@ -113,69 +103,69 @@ source directory and the destination. The following examples illustrate the core
 features of the package:
 
 
-```r
+``` r
 removeAllFiles(dest) # will not change source
 ```
 
 ```
 ## Rsync server: 
-##   src: /home/lswarnholz/projects/rsync/source/
-##   dest: /home/lswarnholz/projects/rsync/destination/ 
+##   src: /home/ljabel/Dokumente/git-work/INWTlab/rsync/source/
+##   dest: /home/ljabel/Dokumente/git-work/INWTlab/rsync/destination/ 
 ## Directory in destination:
 ## [1] name         lastModified size        
-## <0 Zeilen> (oder row.names mit Länge 0)
+## <0 rows> (or 0-length row.names)
 ```
 
-```r
+``` r
 sendFile(dest, "x.Rdata") # so we can still send the files
 ```
 
 ```
 ## Rsync server: 
-##   src: /home/lswarnholz/projects/rsync/source/
-##   dest: /home/lswarnholz/projects/rsync/destination/ 
+##   src: /home/ljabel/Dokumente/git-work/INWTlab/rsync/source/
+##   dest: /home/ljabel/Dokumente/git-work/INWTlab/rsync/destination/ 
 ## Directory in destination:
 ##      name        lastModified size
-## 1 x.Rdata 2021-09-06 22:15:38   70
+## 1 x.Rdata 2024-10-23 11:41:07   70
 ```
 
-```r
+``` r
 removeAllFiles(src <- rsync("source")) # make the source a destination
 ```
 
 ```
 ## Rsync server: 
-##   src: /home/lswarnholz/projects/rsync/
-##   dest: /home/lswarnholz/projects/rsync/source/ 
+##   src: /home/ljabel/Dokumente/git-work/INWTlab/rsync/
+##   dest: /home/ljabel/Dokumente/git-work/INWTlab/rsync/source/ 
 ## Directory in destination:
 ## [1] name         lastModified size        
-## <0 Zeilen> (oder row.names mit Länge 0)
+## <0 rows> (or 0-length row.names)
 ```
 
-```r
+``` r
 getFile(dest, "x.Rdata")
 ```
 
 ```
 ## Rsync server: 
-##   src: /home/lswarnholz/projects/rsync/source/
-##   dest: /home/lswarnholz/projects/rsync/destination/ 
+##   src: /home/ljabel/Dokumente/git-work/INWTlab/rsync/source/
+##   dest: /home/ljabel/Dokumente/git-work/INWTlab/rsync/destination/ 
 ## Directory in destination:
 ##      name        lastModified size
-## 1 x.Rdata 2021-09-06 22:15:38   70
+## 1 x.Rdata 2024-10-23 11:41:07   70
 ```
 
-```r
+``` r
 src
 ```
 
 ```
 ## Rsync server: 
-##   src: /home/lswarnholz/projects/rsync/
-##   dest: /home/lswarnholz/projects/rsync/source/ 
+##   src: /home/ljabel/Dokumente/git-work/INWTlab/rsync/
+##   dest: /home/ljabel/Dokumente/git-work/INWTlab/rsync/source/ 
 ## Directory in destination:
 ##      name        lastModified size
-## 1 x.Rdata 2021-09-06 22:15:38   70
+## 1 x.Rdata 2024-10-23 11:41:07   70
 ```
 
 

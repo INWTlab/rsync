@@ -23,5 +23,6 @@ awscli <- function(src, dest, includes = NULL, excludes = NULL, args = "", profi
   )
   # cat(command, "\n")
 
-  system(command, intern = intern, wait = TRUE, ignore.stdout = FALSE, ignore.stderr = FALSE)
+  status <- system(command, intern = intern, wait = TRUE, ignore.stdout = FALSE, ignore.stderr = FALSE)
+  checkSystemResult(status)
 }
