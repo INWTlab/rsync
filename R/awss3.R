@@ -61,7 +61,7 @@ awss3 <- function(dest, src = getwd(), profile = NULL, endpoint_url = NULL) {
     dest = dest,
     src = src,
     profile = profile,
-    endpoint = endpoint_url
+    endpoint_url = endpoint_url
   )
   class(ret) <- "awss3"
   ret
