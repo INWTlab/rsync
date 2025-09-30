@@ -10,7 +10,7 @@
 #'   a profile. In case of a list a new profile will be created which is
 #'   persistent. A profile is created using \code{aws configure} and stores
 #'   credentials for the user in plain text.
-#' @param enpoint_url (NULL|character) The enpoint URL for S3-compatible providers like
+#' @param endpoint_url (NULL|character) The endpoint URL for S3-compatible providers like
 #'   Hetzner. E.g. 'https://fsn1.your-objectstorage.com'.
 #' @param force (logical) override profile if it exists.
 #' @param db (awss3) connection created with \code{awss3}
