@@ -62,7 +62,7 @@ listFiles.awss3 <- function(db, recursive = FALSE, ...) {
     return(NextMethod())
   }
   args <- if (recursive) "ls --recursive" else "ls"
-  dir <- awscli(NULL, dest, args = args, profile = profile, enpoint_url = endpoint_url, intern = TRUE)
+  dir <- awscli(NULL, dest, args = args, profile = profile, endpoint_url = endpoint_url, intern = TRUE)
   dir <- dat::extract(dir, ~ !grepl("\\.$", .))
   if (length(dir) == 0) {
     return(emptyDir())
