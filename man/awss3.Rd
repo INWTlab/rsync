@@ -12,7 +12,7 @@
 \alias{syncAllFiles.awss3}
 \title{Connection object to a AWS S3 bucket}
 \usage{
-awss3(dest, src = getwd(), profile = NULL)
+awss3(dest, src = getwd(), profile = NULL, endpoint_url = NULL)
 
 profileCreate(profile, force = FALSE)
 
@@ -52,6 +52,9 @@ credentials for the user in plain text.}
 \item{recursive}{(logical) if TRUE print full names for files in sub folders}
 
 \item{args}{(character) pass additional args to aws cli. Currently only implemented for sendFile}
+
+\item{enpoint_url}{(NULL|character) The enpoint URL for S3-compatible providers like
+Hetzner. E.g. 'https://fsn1.your-objectstorage.com'.}
 }
 \description{
 Only methods specific to this class are documented here. For others the
