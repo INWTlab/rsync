@@ -37,6 +37,9 @@ a profile. In case of a list a new profile will be created which is
 persistent. A profile is created using \code{aws configure} and stores
 credentials for the user in plain text.}
 
+\item{endpoint_url}{(NULL|character) The endpoint URL for S3-compatible providers like
+Hetzner. E.g. 'https://fsn1.your-objectstorage.com'.}
+
 \item{force}{(logical) override profile if it exists.}
 
 \item{db}{(awss3) connection created with \code{awss3}}
@@ -52,9 +55,6 @@ credentials for the user in plain text.}
 \item{recursive}{(logical) if TRUE print full names for files in sub folders}
 
 \item{args}{(character) pass additional args to aws cli. Currently only implemented for sendFile}
-
-\item{enpoint_url}{(NULL|character) The enpoint URL for S3-compatible providers like
-Hetzner. E.g. 'https://fsn1.your-objectstorage.com'.}
 }
 \description{
 Only methods specific to this class are documented here. For others the
