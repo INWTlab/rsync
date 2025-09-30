@@ -35,8 +35,9 @@ sendFile.awss3 <- function(db, fileName, validate = FALSE, verbose = FALSE, args
   src <- getSrc(db)
   dest <- getDest(db)
   profile <- getProfile(db)
+  endpoint_url <- db$endpoint_url
 
-  awscli(src, dest, args = args, excludes = "*", includes = fileName, profile = profile)
+  awscli(src, dest, args = args, excludes = "*", includes = fileName, profile = profile, endpoint_url = endpoint_url)
 
   if (validate) validateFile(db, fileName)
   db
