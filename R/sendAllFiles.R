@@ -22,7 +22,8 @@ sendAllFiles.awss3 <- function(db, verbose = FALSE, ...) {
   src <- getSrc(db)
   dest <- getDest(db)
   profile <- getProfile(db)
+  endpoint_url <- db$endpoint_url
 
-  awscli(src, dest, args = args, profile = profile)
+  awscli(src, dest, args = args, profile = profile, endpoint_url = endpoint_url)
   db
 }

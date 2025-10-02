@@ -10,7 +10,6 @@ getFile <- function(db, ...) {
 #' @rdname rsync
 #' @export
 getFile.default <- function(db, fileName, validate = FALSE, verbose = FALSE, ...) {
-
   args <- if (verbose == TRUE) "-ltrvvx" else "-ltrx"
   args <- paste(args, getArgs(db))
 
@@ -28,15 +27,15 @@ getFile.default <- function(db, fileName, validate = FALSE, verbose = FALSE, ...
 #' @rdname awss3
 #' @export
 getFile.awss3 <- function(db, fileName, validate = FALSE, verbose = FALSE, ...) {
-
   args <- if (!verbose) "--quiet --no-progress --only-show-errors" else ""
   args <- paste("sync ", args)
 
   dest <- getDest(db)
   src <- getSrc(db)
   profile <- getProfile(db)
+  endpoint_url <- db$endpoint_url
 
-  awscli(dest, src, args = args, excludes = "*", includes = fileName, profile = profile)
+  awscli(dest, src, args = args, excludes = "*", includes = fileName, profile = profile, endpoint_url = endpoint_url)
 
   if (validate) validateFile(db, fileName)
 

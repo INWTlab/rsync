@@ -12,7 +12,7 @@
 \alias{syncAllFiles.awss3}
 \title{Connection object to a AWS S3 bucket}
 \usage{
-awss3(dest, src = getwd(), profile = NULL)
+awss3(dest, src = getwd(), profile = NULL, endpoint_url = NULL)
 
 profileCreate(profile, force = FALSE)
 
@@ -36,6 +36,9 @@ local directory}
 a profile. In case of a list a new profile will be created which is
 persistent. A profile is created using \code{aws configure} and stores
 credentials for the user in plain text.}
+
+\item{endpoint_url}{(NULL|character) The endpoint URL for S3-compatible providers like
+Hetzner. E.g. 'https://fsn1.your-objectstorage.com'.}
 
 \item{force}{(logical) override profile if it exists.}
 

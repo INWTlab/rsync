@@ -1,4 +1,4 @@
-awscli <- function(src, dest, includes = NULL, excludes = NULL, args = "", profile = NULL, intern = FALSE) {
+awscli <- function(src, dest, includes = NULL, excludes = NULL, args = "", profile = NULL, endpoint_url = NULL, intern = FALSE) {
   constructArg <- function(x, s) {
     if (is.null(x)) {
       return(x)
@@ -9,6 +9,7 @@ awscli <- function(src, dest, includes = NULL, excludes = NULL, args = "", profi
   includes <- constructArg(includes, "--include")
   excludes <- constructArg(excludes, "--exclude")
   profile <- if (is.null(profile)) "" else paste("--profile", profile)
+  endpoint <- if (is.null(endpoint_url)) "" else paste("--endpoint-url", endpoint_url)
   dest <- paste("\"", dest, "\"", sep = "")
   src <- if (!is.null(src)) paste("\"", src, "\"", sep = "") else NULL
 
@@ -18,6 +19,7 @@ awscli <- function(src, dest, includes = NULL, excludes = NULL, args = "", profi
     excludes,
     includes,
     profile,
+    endpoint,
     src,
     dest
   )

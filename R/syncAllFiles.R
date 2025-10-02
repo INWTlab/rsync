@@ -10,7 +10,6 @@ syncAllFiles <- function(db, ...) {
 #' @rdname rsync
 #' @export
 syncAllFiles.default <- function(db, verbose = FALSE, ...) {
-
   args <- if (verbose) "-ltrvvx" else "-ltrx"
   args <- paste(args, "--delete")
 
@@ -25,15 +24,14 @@ syncAllFiles.default <- function(db, verbose = FALSE, ...) {
 #' @rdname awss3
 #' @export
 syncAllFiles.awss3 <- function(db, verbose = FALSE, ...) {
-
   args <- if (!verbose) "--quiet --no-progress --only-show-errors" else ""
   args <- paste("sync", args, "--delete")
 
   src <- getSrc(db)
   dest <- getDest(db)
   profile <- getProfile(db)
+  endpoint_url <- db$endpoint_url
 
-  awscli(src, dest, args = args, profile = profile)
+  awscli(src, dest, args = args, profile = profile, endpoint_url = endpoint_url)
   db
-
 }

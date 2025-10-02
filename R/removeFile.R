@@ -38,6 +38,7 @@ removeFile.awss3 <- function(db, fileName, verbose = FALSE, ...) {
 
   dest <- getDest(db)
   profile <- getProfile(db)
+  endpoint_url <- db$endpoint_url
   if (!isS3Bucket(dest)) {
     return(NextMethod())
   }
@@ -45,6 +46,6 @@ removeFile.awss3 <- function(db, fileName, verbose = FALSE, ...) {
   args <- if (!verbose) "--quiet --only-show-errors --recursive" else "--recursive"
   args <- paste("rm", args)
 
-  awscli(NULL, dest, includes = fileName, excludes = "*", args = args, profile = profile)
+  awscli(NULL, dest, includes = fileName, excludes = "*", args = args, profile = profile, endpoint_url = endpoint_url)
   db
 }

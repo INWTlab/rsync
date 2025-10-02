@@ -57,11 +57,12 @@ emptyDir <- function() {
 listFiles.awss3 <- function(db, recursive = FALSE, ...) {
   dest <- getDest(db)
   profile <- getProfile(db)
+  endpoint_url <- db$endpoint_url
   if (!isS3Bucket(dest)) {
     return(NextMethod())
   }
   args <- if (recursive) "ls --recursive" else "ls"
-  dir <- awscli(NULL, dest, args = args, profile = profile, intern = TRUE)
+  dir <- awscli(NULL, dest, args = args, profile = profile, endpoint_url = endpoint_url, intern = TRUE)
   dir <- dat::extract(dir, ~ !grepl("\\.$", .))
   if (length(dir) == 0) {
     return(emptyDir())

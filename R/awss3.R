@@ -10,6 +10,8 @@
 #'   a profile. In case of a list a new profile will be created which is
 #'   persistent. A profile is created using \code{aws configure} and stores
 #'   credentials for the user in plain text.
+#' @param endpoint_url (NULL|character) The endpoint URL for S3-compatible providers like
+#'   Hetzner. E.g. 'https://fsn1.your-objectstorage.com'.
 #' @param force (logical) override profile if it exists.
 #' @param db (awss3) connection created with \code{awss3}
 #' @param fileName (character) a file name in dest/src
@@ -32,13 +34,14 @@
 #'
 #' @rdname awss3
 #' @export
-awss3 <- function(dest, src = getwd(), profile = NULL) {
+awss3 <- function(dest, src = getwd(), profile = NULL, endpoint_url = NULL) {
   stopifnot(
     is.character(dest) && length(dest) == 1,
     is.character(src) && length(src) == 1,
     is.null(profile) ||
       (is.character(profile) && length(profile) == 1 && profileExists(profile)) ||
-      (is.list(profile) && is.character(profile$name))
+      (is.list(profile) && is.character(profile$name)),
+    is.null(endpoint_url) || is.character(endpoint_url) && length(endpoint_url) == 1
   )
   src <- if (isS3Bucket(src)) {
     sub("/$", "", src)
@@ -57,7 +60,8 @@ awss3 <- function(dest, src = getwd(), profile = NULL) {
   ret <- list(
     dest = dest,
     src = src,
-    profile = profile
+    profile = profile,
+    endpoint_url = endpoint_url
   )
   class(ret) <- "awss3"
   ret
