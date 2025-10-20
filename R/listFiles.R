@@ -13,7 +13,7 @@ listFiles.default <- function(db, ...) {
   args <- getArgs(db)
 
   dir <- rsynccli(NULL, to, args = args, pre = pre, intern = TRUE)
-  dir <- dat::extract(dir, ~ !grepl("\\.$", .))
+  dir <- dat::extract(dir, ~!grepl("(0\\s$)|(\\.$)", .))
   if (length(dir) == 0) {
     return(emptyDir())
   }
@@ -63,7 +63,7 @@ listFiles.awss3 <- function(db, recursive = FALSE, ...) {
   }
   args <- if (recursive) "ls --recursive" else "ls"
   dir <- awscli(NULL, dest, args = args, profile = profile, endpoint_url = endpoint_url, intern = TRUE)
-  dir <- dat::extract(dir, ~ !grepl("\\.$", .))
+  dir <- dat::extract(dir, ~!grepl("(0\\s$)|(\\.$)", .))
   if (length(dir) == 0) {
     return(emptyDir())
   }
